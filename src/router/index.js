@@ -86,6 +86,30 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/bannerAndTagSetting',
+    component: Layout,
+    redirect: '/bannerAndTagSetting/bannerSetting',
+    name: 'bannerAndTagSetting',
+    meta: {
+      title: '首页功能配置',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'bannerSetting',
+        component: () => import('@/views/bannerAndTagSetting/bannerSetting'),
+        name: 'bannerSetting',
+        meta: { title: '系统广告功能配置', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'tagSetting',
+        component: () => import('@/views/bannerAndTagSetting/tagSetting'),
+        name: 'tagSetting',
+        meta: { title: '系统标签功能配置', icon: '', noCache: true, roles: ['admin']  }
+      }
+    ]
+  },
+  {
     path: '/hotWords',
     component: Layout,
     children: [
@@ -106,18 +130,6 @@ export const asyncRouterMap = [
         component: () => import('@/views/BusinessInforMt/BusinessInforMt'),
         name: 'BusinessInforMt',
         meta: { title: '企业信息维护', icon: 'table', noCache: true, roles: ['admin'] }
-      }
-    ]
-  },
-  {
-    path: '/participles',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/participles/participles'),
-        name: 'participles',
-        meta: { title: '分词库管理', icon: 'table', noCache: true, roles: ['admin']  }
       }
     ]
   },
