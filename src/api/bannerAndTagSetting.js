@@ -1,4 +1,4 @@
-import { fetchPost } from './request'
+import { fetchPost, fetchGet } from './request'
 import qs from 'qs'
 
 /**
@@ -111,4 +111,13 @@ export function systemTagDown(params) {
 export function systemTagDelete(params) {
   const paramsString = qs.stringify(params)
   return fetchPost('/system/tag/delete', paramsString)
+}
+
+/**
+ * 服务类目选择列表
+ * @function businessTypeList
+ * @type 'get'
+ */
+export function businessTypeList() {
+  return fetchGet('/firm/business_type/list')
 }

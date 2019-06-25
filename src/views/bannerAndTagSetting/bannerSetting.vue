@@ -51,7 +51,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="跳转目标" width="120px" align="center">
+      <el-table-column label="跳转目标" width="250px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.jumpUrl }}</span>
         </template>
@@ -81,13 +81,13 @@
 
         <el-form-item label="跳转类型：" prop="jumpType">
           <el-select v-model="temp.jumpType" placeholder="跳转类型" clearable style="width: 250px" class="filter-item">
-            <el-option v-for="(item,index) in jumpTypeList" :key="item+index" :label="item.name" :value="item.id"/>
+            <el-option v-for="(item,index) in jumpTypeList" :key="item.id+index" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
 
         <el-form-item v-if="temp.jumpType == 1" label="跳转页面：" prop="pageUrl">
-          <el-select v-model="temp.pageUrl" placeholder="跳转页面" clearable style="width: 250px" class="filter-item">
-            <el-option v-for="(item,index) in pageUrlList" :key="item+index" :label="item.name" :value="item.id"/>
+          <el-select v-model="temp.pageUrl" placeholder="跳转页面" @change="pageUrlChange" clearable style="width: 250px" class="filter-item">
+            <el-option v-for="(item,index) in pageUrlList" :key="item.id+index" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
 
@@ -96,19 +96,19 @@
         </el-form-item>
 
         <el-form-item v-if="temp.jumpType == 3" label="选择服务：">
-          <el-select style="width: 150px" v-model="temp.firstCode" clearable placeholder="请选择一级服务">
-            <el-option v-for="item in firstCodeList" :key="item+index" :label="item.name" :value="item.id"> </el-option>
+          <el-select style="width: 150px" v-model="temp.serviceType.firstCode" @change="firstCodeChange" clearable placeholder="请选择一级服务">
+            <el-option v-for="(item,index) in firstCodeList" :key="item.name+index" :label="item.name" :value="item.code"> </el-option>
           </el-select>
-          <el-select style="width: 150px" v-model="temp.secondCode" clearable placeholder="请选择二级服务">
-            <el-option v-for="item in secondCodeList" :key="item+index" :label="item.name" :value="item.id"> </el-option>
+          <el-select style="width: 150px" v-model="temp.serviceType.secondCode" clearable placeholder="请选择二级服务">
+            <el-option v-for="(item,index) in secondCodeList" :key="item.name+index" :label="item.name" :value="item.code"> </el-option>
           </el-select>
-          <!-- <el-select style="width: 150px" v-model="temp.thirdCode" clearable placeholder="请选择三级服务">
-            <el-option v-for="item in thirdCodeList" :key="item+index" :label="item.name" :value="item.id"> </el-option>
+          <!-- <el-select style="width: 150px" v-model="temp.serviceType.thirdCode" clearable placeholder="请选择三级服务">
+            <el-option v-for="(item,index) in thirdCodeList" :key="item+index" :label="item.name" :value="item.id"> </el-option>
           </el-select> -->
         </el-form-item>
 
         <el-form-item v-if="temp.jumpType == 4" label="选择公司：" prop="firmId">
-          <el-select v-model="temp.firmId" placeholder="选择公司" clearable style="width: 250px" class="filter-item">
+          <el-select v-model="temp.firm.id" placeholder="选择公司" clearable style="width: 250px" class="filter-item">
             <el-option v-for="(item,index) in firmIdList" :key="item+index" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import { systemBannerList, systemBannerSave, systemBannerPublish, systemBannerDown, systemBannerDelete } from '@/api/bannerAndTagSetting'
+import { systemBannerList, systemBannerSave, systemBannerPublish, systemBannerDown, systemBannerDelete, businessTypeList } from '@/api/bannerAndTagSetting'
 import { jumpTypeFilters, statusFilters } from '@/filters/index'
 import global from '@/utils/global'
 import waves from '@/directive/waves' // Waves directive
@@ -159,27 +159,33 @@ export default {
       statusList: global.statusList,
       jumpTypeList: global.jumpTypeList,
       pageUrlList: [
-        {name: '原生普通页面', id: 1},
-        {name: 'h5链接', id: 2},
-        {name: '服务搜索页', id: 3},
-        {name: '公司详情页', id: 4}
+        {name: '原生普通页面', id: "1"},
+        {name: 'h5链接', id: "2"},
+        {name: '服务搜索页', id: "3"},
+        {name: '公司详情页', id: "4"}
       ],
       firstCodeList: [],
       secondCodeList: [],
       thirdCodeList: [],
       firmIdList: [],
       temp: {
+        id: '',
         sensorsTitle: '',
         icon: '',
         jumpType: undefined,
         jumpUrl: '',
         needLogin: false,
         pageUrl: '',
-        firstCode: '',
-        secondCode: '',
-        thirdCode: '',
-        firmId: '',
-        saveAndRelease: false
+        serviceType: {
+          firstCode: '',
+          secondCode: '',
+          thirdCode: '',
+        },
+        firm: {
+          id: ''
+        },
+        saveAndRelease: false,
+        sortIndex: 1
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -194,6 +200,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getBusinessTypeList()
   },
   methods: {
     // 获取列表
@@ -264,17 +271,23 @@ export default {
     //重置表单
     resetTemp() {
       this.temp = {
+        id: '',
         sensorsTitle: '',
         icon: '',
         jumpType: undefined,
         jumpUrl: '',
-        needLogin: undefined,
+        needLogin: false,
         pageUrl: '',
-        firstCode: '',
-        secondCode: '',
-        thirdCode: '',
-        firmId: '',
-        saveAndRelease: false
+        serviceType: {
+          firstCode: '',
+          secondCode: '',
+          thirdCode: ''
+        },
+        firm: {
+          id: ''
+        },
+        saveAndRelease: false,
+        sortIndex: 1
       }
     },
     //唤起新建
@@ -290,7 +303,24 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          systemBannerSave(this.temp).then((response) => {
+          let params = {
+            sensorsTitle: this.temp.sensorsTitle,
+            icon: this.temp.icon,
+            jumpType: this.temp.jumpType,
+            needLogin: this.temp.needLogin,
+            saveAndRelease: this.temp.saveAndRelease,
+            sortIndex: this.temp.sortIndex
+          }
+          if (this.temp.jumpType == 1) {
+            params.pageUrl = this.temp.pageUrl
+          }else if(this.temp.jumpType == 2) {
+            params.jumpUrl = this.temp.jumpUrl
+          }else if(this.temp.jumpType == 3){
+            params.serviceType = this.temp.serviceType
+          }else if(this.temp.jumpType == 4){
+            params.firm = this.temp.firm
+          }
+          systemBannerSave(params).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
@@ -314,23 +344,77 @@ export default {
     },
     // 编辑
     handleEdit(row) {
-      this.temp = {
-        id: row.id,
-        sensorsTitle: row.sensorsTitle,
-        icon: row.icon,
-        jumpType: row.jumpType,
-        jumpUrl: row.jumpUrl,
-        needLogin: row.needLogin,
-        pageUrl: row.pageUrl,
-        firstCode: row.firstCode,
-        secondCode: row.secondCode,
-        thirdCode: row.thirdCode,
-        firmId: row.firmId
+      this.resetTemp()
+      this.temp.id = row.id
+      this.temp.sensorsTitle = row.sensorsTitle
+      this.temp.icon = row.icon
+      this.temp.jumpType = row.jumpType
+      this.temp.needLogin = row.needLogin
+      this.temp.sortIndex = row.sortIndex
+      if (row.jumpType == 1) {
+        this.temp.pageUrl = row.pageUrl
+      }
+      if (row.jumpType == 2) {
+        this.temp.jumpUrl = row.jumpUrl
+      }
+      if (row.jumpType == 3) {
+        for(let i=0;i<this.firstCodeList.length;i++){
+          if(this.firstCodeList[i].code == row.serviceType.firstCode) {
+            this.secondCodeList = this.firstCodeList[i].children
+          }
+        }
+        this.temp.serviceType = row.serviceType
+      }
+      if (row.jumpType == 4) {
+        this.temp.firm = row.firm
       }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    editData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          let params = {
+            id: this.temp.id,
+            sensorsTitle: this.temp.sensorsTitle,
+            icon: this.temp.icon,
+            jumpType: this.temp.jumpType,
+            needLogin: this.temp.needLogin,
+            saveAndRelease: this.temp.saveAndRelease,
+            sortIndex: this.temp.sortIndex
+          }
+          if (this.temp.jumpType == 1) {
+            params.pageUrl = this.temp.pageUrl
+          }else if(this.temp.jumpType == 2) {
+            params.jumpUrl = this.temp.jumpUrl
+          }else if(this.temp.jumpType == 3){
+            params.serviceType = this.temp.serviceType
+          }else if(this.temp.jumpType == 4){
+            params.firm = this.temp.firm
+          }
+          systemBannerSave(params).then((response) => {
+            if (response.code == 0) {
+              this.$notify({
+                title: '成功',
+                message: '修改成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.dialogFormVisible = false
+            } else {
+              this.$message({
+                message: "修改失败",
+                type: 'error',
+                showClose: true,
+                duration: 1000
+              })
+            }
+            this.getList()
+          })
+        }
       })
     },
     // 删除
@@ -359,6 +443,24 @@ export default {
           this.getList()
         })
       })
+    },
+    getBusinessTypeList () {
+      businessTypeList().then(res => {
+        if(res.code == 0) {
+          this.firstCodeList = res.data
+        }
+      })
+    },
+    firstCodeChange(value) {
+      this.temp.serviceType.secondCode = ''
+      for(let i=0;i<this.firstCodeList.length;i++){
+        if(this.firstCodeList[i].code == value) {
+          this.secondCodeList = this.firstCodeList[i].children
+        }
+      }
+    },
+    pageUrlChange(){
+      this.$forceUpdate()
     }
   }
 }

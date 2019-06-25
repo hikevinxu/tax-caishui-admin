@@ -51,21 +51,18 @@ const user = {
     LoginByUsername({ commit }, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
-        // const params = {
-        //   username: username,
-        //   password: userInfo.password
-        // }
-        commit('SET_TOKEN', '1234')
-        setToken('1234')
-        resolve()
-        // loginByUsername(params).then(response => {
-        //   const data = response.data
-        //   commit('SET_TOKEN', data.token)
-        //   setToken(response.data.token)
-        //   resolve()
-        // }).catch(error => {
-        //   reject(error)
-        // })
+        const params = {
+          username: username,
+          password: userInfo.password
+        }
+        loginByUsername(params).then(response => {
+          const data = response.data
+          commit('SET_TOKEN', data.token)
+          setToken(response.data.token)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
       })
     },
 
