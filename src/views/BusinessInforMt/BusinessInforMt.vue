@@ -120,7 +120,7 @@
           <el-input style="width: 300px" v-model="temp.firmContactTell" placeholder="请输入联系电话" />
         </el-form-item>
         <el-form-item label="公司简介：" >
-          <el-input type="textarea" style="width: 350px" v-model="temp.firmDesc" placeholder="请输入公司简介" />
+          <el-input type="textarea" style="width: 500px" rows="3" v-model="temp.firmDesc" placeholder="请输入公司简介" />
         </el-form-item>
         <el-form-item label="主营业务：">
           <el-table
@@ -249,6 +249,8 @@ export default {
     handleCreate(){
       this.getBusinessTypeList()
       this.resetTemp()
+      this.cityList = []
+      this.areaList = []
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
