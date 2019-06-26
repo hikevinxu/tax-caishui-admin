@@ -465,6 +465,12 @@ export default {
       }
     },
     provinceChange(val){
+      this.cityList = []
+      this.areaList = []
+      this.temp.cityName = ''
+      this.temp.cityCode = ''
+      this.temp.areaName = ''
+      this.temp.areaCode = ''
       if (val == '') {
         this.temp.provinceName = ''
         this.temp.provinceCode = ''
@@ -475,15 +481,12 @@ export default {
         return item.code === val
       })
       this.temp.provinceName = obj.name
-      this.cityList = []
-      this.areaList = []
-      this.temp.cityName = ''
-      this.temp.cityCode = ''
-      this.temp.areaName = ''
-      this.temp.areaCode = ''
       this.cityList = obj.cityList
     },
     cityChange(val){
+      this.areaList = []
+      this.temp.areaName = ''
+      this.temp.areaCode = ''
       if (val == '') {
         this.temp.cityName = ''
         this.temp.cityCode = ''
@@ -494,9 +497,6 @@ export default {
         return item.code === val 
       })
       this.temp.cityName = obj.name
-      this.areaList = []
-      this.temp.areaName = ''
-      this.temp.areaCode = ''
       this.areaList = obj.cityList
     },
     areaChange(val){

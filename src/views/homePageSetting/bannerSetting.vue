@@ -114,7 +114,7 @@
         </el-form-item>
 
         <el-form-item label="排序：" prop="sortIndex">
-          <el-input-number v-model="temp.sortIndex" :min="1" :max="10" label="描述文字"></el-input-number>
+          <el-input-number v-model="temp.sortIndex" :min="1" label="描述文字"></el-input-number>
         </el-form-item>
 
         <el-form-item label="跳转是否需要登录：" prop="jumpType">
@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import { systemBannerList, systemBannerSave, systemBannerPublish, systemBannerDown, systemBannerDelete, businessTypeList } from '@/api/bannerAndTagSetting'
+import { systemBannerList, systemBannerSave, systemBannerPublish, systemBannerDown, systemBannerDelete, businessTypeList } from '@/api/homePageSetting'
 import { jumpTypeFilters, statusFilters } from '@/filters/index'
 import global from '@/utils/global'
 import waves from '@/directive/waves' // Waves directive

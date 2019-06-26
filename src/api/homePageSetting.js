@@ -2,7 +2,7 @@ import { fetchPost, fetchGet } from './request'
 import qs from 'qs'
 
 /**
- * 获取android版本列表
+ * 获取banner列表
  * @function systemBannerList
  * @type 'post'
  * @param pageNum Number 页码
@@ -14,18 +14,16 @@ export function systemBannerList(params) {
 }
 
 /**
- * 获取ios版本列表
+ * 新增banner
  * @function systemBannerSave
  * @type 'post'
- * @param pageNum Number 页码
- * @param pageSize Number 一页多少条
  */
 export function systemBannerSave(params) {
   return fetchPost('/system/banner/save', params)
 }
 
 /**
- * 撤回新版本
+ * 上架banner
  * @function systemBannerPublish
  * @type 'post'
  * @param id String 版本id
@@ -36,7 +34,7 @@ export function systemBannerPublish(params) {
 }
 
 /**
- * 撤回新版本
+ * 下架banner
  * @function systemBannerDown
  * @type 'post'
  * @param id String 版本id
@@ -47,7 +45,7 @@ export function systemBannerDown(params) {
 }
 
 /**
- * 撤回新版本
+ * 删除banner
  * @function systemBannerDelete
  * @type 'post'
  * @param id String 版本id
@@ -58,7 +56,7 @@ export function systemBannerDelete(params) {
 }
 
 /**
- * 获取android版本列表
+ * 获取热门标签列表
  * @function systemTagList
  * @type 'post'
  * @param pageNum Number 页码
@@ -70,18 +68,16 @@ export function systemTagList(params) {
 }
 
 /**
- * 获取ios版本列表
+ * 新增热门标签
  * @function systemTagSave
  * @type 'post'
- * @param pageNum Number 页码
- * @param pageSize Number 一页多少条
  */
 export function systemTagSave(params) {
   return fetchPost('/system/tag/save', params)
 }
 
 /**
- * 撤回新版本
+ * 上架热门标签
  * @function systemTagPublish
  * @type 'post'
  * @param id String 版本id
@@ -92,7 +88,7 @@ export function systemTagPublish(params) {
 }
 
 /**
- * 撤回新版本
+ * 下架热门标签
  * @function systemTagDown
  * @type 'post'
  * @param id String 版本id
@@ -103,7 +99,7 @@ export function systemTagDown(params) {
 }
 
 /**
- * 撤回新版本
+ * 删除热门标签
  * @function systemTagDelete
  * @type 'post'
  * @param id String 版本id
@@ -114,6 +110,40 @@ export function systemTagDelete(params) {
 }
 
 /**
+ * 热门城市列表
+ * @function hotCityList
+ * @type 'get'
+ */
+export function hotCityList() {
+  return fetchGet('/hot_city/list')
+}
+
+/**
+ * 新增热门城市
+ * @function hotCitySave
+ * @type 'post'
+ * @param provinceName String 省份名字
+ * @param provinceCode Number 省份code
+ * @param cityCode Number 城市code
+ * @param cityName String 城市名字
+ * @param sortIndex Number 排序
+ */
+export function hotCitySave(params) {
+  return fetchPost('/hot_city/save', params)
+}
+
+/**
+ * 删除热门城市
+ * @function hotCityDelete
+ * @type 'post'
+ * @param id String 版本id
+ */
+export function hotCityDelete(params) {
+  const paramsString = qs.stringify(params)
+  return fetchPost('/hot_city/delete', paramsString)
+}
+
+/**
  * 服务类目选择列表
  * @function businessTypeList
  * @type 'get'
@@ -121,3 +151,5 @@ export function systemTagDelete(params) {
 export function businessTypeList() {
   return fetchGet('/firm/business_type/list')
 }
+
+

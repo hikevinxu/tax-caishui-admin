@@ -86,10 +86,10 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/bannerAndTagSetting',
+    path: '/homePageSetting',
     component: Layout,
-    redirect: '/bannerAndTagSetting/bannerSetting',
-    name: 'bannerAndTagSetting',
+    redirect: '/homePageSetting/bannerSetting',
+    name: 'homePageSetting',
     meta: {
       title: '首页功能配置',
       icon: 'table'
@@ -97,15 +97,21 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'bannerSetting',
-        component: () => import('@/views/bannerAndTagSetting/bannerSetting'),
+        component: () => import('@/views/homePageSetting/bannerSetting'),
         name: 'bannerSetting',
         meta: { title: '系统广告功能配置', icon: '', noCache: true, roles: ['admin']  }
       },
       {
         path: 'tagSetting',
-        component: () => import('@/views/bannerAndTagSetting/tagSetting'),
+        component: () => import('@/views/homePageSetting/tagSetting'),
         name: 'tagSetting',
         meta: { title: '系统标签功能配置', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'citySetting',
+        component: () => import('@/views/homePageSetting/hotCitySetting'),
+        name: 'citySetting',
+        meta: { title: '热门城市功能配置', icon: '', noCache: true, roles: ['admin']  }
       }
     ]
   },
