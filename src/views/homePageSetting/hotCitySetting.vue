@@ -49,7 +49,7 @@
         </el-form-item>
 
         <el-form-item label="排序：" prop="sortIndex">
-          <el-input-number v-model="temp.sortIndex" :min="1" label="描述文字"></el-input-number>
+          <el-input-number v-model="temp.sortIndex" :min="0" label="描述文字"></el-input-number>
         </el-form-item>
 
       </el-form>
@@ -78,7 +78,7 @@ export default {
         provinceName: '',
         cityCode: '',
         cityName: '',
-        sortIndex: 1
+        sortIndex: 0
       },
       provinceList: [],
       cityList: [],
@@ -117,7 +117,7 @@ export default {
         provinceName: '',
         cityCode: '',
         cityName: '',
-        sortIndex: 1
+        sortIndex: 0
       }
     },
     //唤起新建
