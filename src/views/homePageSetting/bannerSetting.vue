@@ -76,7 +76,7 @@
         </el-form-item>
 
         <el-form-item label="Banner图：" prop="icon">
-          <Upload v-model="temp.icon"/>
+          <Upload type="banner" v-model="temp.icon"/>
         </el-form-item>
 
         <el-form-item label="跳转类型：" prop="jumpType">
@@ -141,7 +141,7 @@ import global from '@/utils/global'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import Upload from '@/components/Upload/singleImage4'
+import Upload from '@/components/Upload/uploadImg'
 export default {
   name: 'participles',
   components: { Pagination, Upload },
