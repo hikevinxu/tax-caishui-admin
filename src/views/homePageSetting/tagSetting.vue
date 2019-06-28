@@ -55,7 +55,10 @@
         <template slot-scope="scope">
           <el-tag v-if="scope.row.jumpType == 1">{{ scope.row.pageUrl | pageUrlFilters }}</el-tag>
           <el-tag v-if="scope.row.jumpType == 2">{{ scope.row.jumpUrl }}</el-tag>
-          <el-tag v-if="scope.row.jumpType == 3">{{ scope.row.serviceType.firstName }}/{{ scope.row.serviceType.secondName }}</el-tag>
+          <span v-if="scope.row.jumpType == 3">
+            <el-tag v-if="scope.row.serviceType.firstName">{{ scope.row.serviceType.firstName }}</el-tag>
+            <el-tag type="danger" v-if="scope.row.serviceType.secondName">{{ scope.row.serviceType.secondName }}</el-tag>
+          </span>
           <el-tag v-if="scope.row.jumpType == 4">{{ scope.row.firm.firmName }}</el-tag>
         </template>
       </el-table-column>
