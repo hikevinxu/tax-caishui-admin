@@ -129,7 +129,8 @@
             style="width: 100%">
             <el-table-column label="一级类目" align="center" width="200">
               <template slot-scope="scope">
-                <el-checkbox disabled v-model="scope.row.checked" :label="scope.row.name" border size="mini"></el-checkbox>
+                <!-- <el-checkbox disabled v-model="scope.row.checked" :label="scope.row.name" border size="mini"></el-checkbox> -->
+                <span>{{scope.row.name}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="二级类目">
@@ -264,7 +265,7 @@ export default {
           let arr = []
           for(let i=0;i<this.firstCodeList.length;i++){
             if(this.firstCodeList[i].checked == true){
-              arr.push(this.firstCodeList[i].code)
+              // arr.push(this.firstCodeList[i].code)
               for(let j=0;j<this.firstCodeList[i].children.length;j++){
                 if(this.firstCodeList[i].children[j].checked == true) {
                   arr.push(this.firstCodeList[i].children[j].code)
@@ -298,6 +299,8 @@ export default {
     },
     handleEdit(row) {
       this.resetTemp()
+      this.cityList = []
+      this.areaList = []
       let params = {
         id: row.id
       }
@@ -308,22 +311,30 @@ export default {
           this.temp.firmAddress = res.data.firmAddress
           this.temp.firmContactTell = res.data.firmContactTell
           this.temp.firmDesc = res.data.firmDesc
-          this.temp.provinceCode = res.data.provinceCode
-          this.temp.provinceName = res.data.provinceName
-          this.temp.cityCode = res.data.cityCode
-          this.temp.cityName = res.data.cityName
+          this.temp.provinceCode = res.data.provinceCode || ''
+          this.temp.provinceName = res.data.provinceName || ''
+          this.temp.cityCode = res.data.cityCode || ''
+          this.temp.cityName = res.data.cityName || ''
           var city = {}
-          city = this.provinceList.find(function(item){
-            return item.code === res.data.provinceCode 
-          })
-          this.cityList = city.cityList
-          this.temp.areaCode = res.data.areaCode
-          this.temp.areaName = res.data.areaName
+          if (this.temp.provinceCode != '') {
+            city = this.provinceList.find(function(item){
+              return item.code === res.data.provinceCode 
+            })
+            if (city.cityList) {
+              this.cityList = city.cityList
+            }
+          }
+          this.temp.areaCode = res.data.areaCode || ''
+          this.temp.areaName = res.data.areaName || ''
           var area = {}
-          area = this.cityList.find(function(item){
-            return item.code === res.data.cityCode
-          })
-          this.areaList = area.cityList
+          if (this.temp.cityCode != '' && this.cityList) {
+            area = this.cityList.find(function(item){
+              return item.code === res.data.cityCode
+            })
+            if (area.cityList) {
+              this.areaList = area.cityList
+            }
+          }
           this.firstCodeList = res.data.businessTypes
           this.dialogStatus = 'update'
           this.dialogFormVisible = true
@@ -339,7 +350,7 @@ export default {
           let arr = []
           for(let i=0;i<this.firstCodeList.length;i++){
             if(this.firstCodeList[i].checked == true){
-              arr.push(this.firstCodeList[i].code)
+              // arr.push(this.firstCodeList[i].code)
               for(let j=0;j<this.firstCodeList[i].children.length;j++){
                 if(this.firstCodeList[i].children[j].checked == true) {
                   arr.push(this.firstCodeList[i].children[j].code)

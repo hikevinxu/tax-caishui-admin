@@ -108,9 +108,10 @@
         </el-form-item>
 
         <el-form-item v-if="temp.jumpType == 4" label="选择公司：" prop="firmId">
-          <el-select v-model="temp.firm.id" placeholder="选择公司" clearable style="width: 250px" class="filter-item">
+          <!-- <el-select v-model="temp.firm.id" placeholder="选择公司" clearable style="width: 250px" class="filter-item">
             <el-option v-for="(item,index) in firmIdList" :key="item+index" :label="item.name" :value="item.id"/>
-          </el-select>
+          </el-select> -->
+          <el-input type="number" style="width: 200px" v-model="temp.firm.id" placeholder="请输入公司ID" />
         </el-form-item>
 
         <el-form-item label="排序：" prop="sortIndex">
@@ -158,12 +159,7 @@ export default {
       },
       statusList: global.statusList,
       jumpTypeList: global.jumpTypeList,
-      pageUrlList: [
-        {name: '原生普通页面', id: "1"},
-        {name: 'h5链接', id: "2"},
-        {name: '服务搜索页', id: "3"},
-        {name: '公司详情页', id: "4"}
-      ],
+      pageUrlList: global.pageUrlList,
       firstCodeList: [],
       secondCodeList: [],
       thirdCodeList: [],

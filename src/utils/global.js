@@ -9,6 +9,9 @@ const global = {
     {name: '待上架',id: 0},
     {name: '已上架',id: 1},
     {name: '已下架',id: -1}
+  ],
+  pageUrlList: [
+    {name: '关于我们', id: "main/me/set/aboutUs"}
   ]
 }
 export default global
