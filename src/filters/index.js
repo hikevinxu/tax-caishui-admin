@@ -44,3 +44,19 @@ export function statusFilters(status) {
       break;
   }
 }
+/**
+ * 原生页面过滤器
+ * @function pageUrlFilters
+ * @param status Number 上下架状态码
+ */
+export function pageUrlFilters(status) {
+  switch (status) {
+    case "main/me/set/aboutUs":
+      return '关于我们'
+      break;
+    default: 
+      return ''
+      break;
+  }
+}
+

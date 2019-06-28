@@ -53,7 +53,10 @@
 
       <el-table-column label="跳转目标" width="250px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.jumpUrl }}</span>
+          <el-tag v-if="scope.row.jumpType == 1">{{ scope.row.pageUrl | pageUrlFilters }}</el-tag>
+          <el-tag v-if="scope.row.jumpType == 2">{{ scope.row.jumpUrl }}</el-tag>
+          <el-tag v-if="scope.row.jumpType == 3">{{ scope.row.serviceType.firstName }}/{{ scope.row.serviceType.secondName }}</el-tag>
+          <el-tag v-if="scope.row.jumpType == 4">{{ scope.row.firm.firmName }}</el-tag>
         </template>
       </el-table-column>
       
@@ -112,6 +115,7 @@
             <el-option v-for="(item,index) in firmIdList" :key="item+index" :label="item.name" :value="item.id"/>
           </el-select> -->
           <el-input type="number" style="width: 200px" v-model="temp.firm.id" placeholder="请输入公司ID" />
+          <el-tag type="danger" v-if="temp.firm.firmName">{{ temp.firm.firmName }}</el-tag>
         </el-form-item>
 
         <el-form-item label="排序：" prop="sortIndex">
@@ -137,7 +141,7 @@
 
 <script>
 import { systemBannerList, systemBannerSave, systemBannerPublish, systemBannerDown, systemBannerDelete, businessTypeList } from '@/api/homePageSetting'
-import { jumpTypeFilters, statusFilters } from '@/filters/index'
+import { jumpTypeFilters, statusFilters, pageUrlFilters } from '@/filters/index'
 import global from '@/utils/global'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
