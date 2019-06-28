@@ -3,12 +3,12 @@ import qs from 'qs'
 
 /**
  * 获取词条列表
- * @function hoWordList
+ * @function hotWordList
  * @type 'post'
- * @param username String
- * @param password String
+ * @param pageNum Number
+ * @param pageSize Number
  */
-export function hoWordList(params) {
+export function hotWordList(params) {
   return fetchPost('/hot_word/list', params)
 }
 
