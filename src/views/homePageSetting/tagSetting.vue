@@ -17,9 +17,15 @@
       fit
       highlight-current-row
       style="width: 100%;">
-      <el-table-column label="序号" prop="id" align="center" width="80px">
+      <el-table-column label="ID" prop="id" align="center" width="80px">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column v-if="listQuery.status == 1" label="排序序号" prop="id" align="center" width="80px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sortIndex }}</span>
         </template>
       </el-table-column>
 
