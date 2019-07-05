@@ -115,30 +115,30 @@ export const asyncRouterMap = [
       }
     ]
   },
-  {
-    path: '/hotWords',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/hotWordsSetting/hotWordsSetting'),
-        name: 'hotWords',
-        meta: { title: '热门词条管理', icon: 'table', noCache: true, roles: ['admin'] }
-      }
-    ]
-  },
-  {
-    path: '/BusinessInforMt',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/BusinessInforMt/BusinessInforMt'),
-        name: 'BusinessInforMt',
-        meta: { title: '企业信息维护', icon: 'table', noCache: true, roles: ['admin'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/hotWords',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/hotWordsSetting/hotWordsSetting'),
+  //       name: 'hotWords',
+  //       meta: { title: '热门词条管理', icon: 'table', noCache: true, roles: ['admin'] }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/BusinessInforMt',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/BusinessInforMt/BusinessInforMt'),
+  //       name: 'BusinessInforMt',
+  //       meta: { title: '企业信息维护', icon: 'table', noCache: true, roles: ['admin'] }
+  //     }
+  //   ]
+  // },
   {
     path: '/appUpdate',
     component: Layout,
