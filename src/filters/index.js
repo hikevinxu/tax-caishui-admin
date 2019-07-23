@@ -1,42 +1,62 @@
-// set function parseTime,formatTime to filter
-export { parseTime, formatTime } from '@/utils'
-
-function pluralize(time, label) {
-  if (time === 1) {
-    return time + label
+/**
+ * 跳转类型过滤器
+ * @function jumpTypeFilters
+ * @param jumpType Number 跳转类型
+ */
+export function jumpTypeFilters(jumpType) {
+  switch (jumpType) {
+    case 1:
+      return '原生普通页面'
+      break;
+    case 2:
+      return 'h5链接'
+      break;
+    case 3:
+      return '服务搜索页'
+      break;
+    case 4:
+      return '公司详情页'
+      break;
+    default: 
+      return ''
+      break;
   }
-  return time + label + 's'
 }
 
-export function timeAgo(time) {
-  const between = Date.now() / 1000 - Number(time)
-  if (between < 3600) {
-    return pluralize(~~(between / 60), ' minute')
-  } else if (between < 86400) {
-    return pluralize(~~(between / 3600), ' hour')
-  } else {
-    return pluralize(~~(between / 86400), ' day')
+/**
+ * 上下架过滤器
+ * @function statusFilters
+ * @param status Number 上下架状态码
+ */
+export function statusFilters(status) {
+  switch (status) {
+    case 0:
+      return '待上架'
+      break;
+    case 1:
+      return '已上架'
+      break;
+    case 2:
+      return '已下架'
+      break;
+    default: 
+      return ''
+      break;
+  }
+}
+/**
+ * 原生页面过滤器
+ * @function pageUrlFilters
+ * @param status Number 上下架状态码
+ */
+export function pageUrlFilters(status) {
+  switch (status) {
+    case "main/me/set/aboutUs":
+      return '关于我们'
+      break;
+    default: 
+      return ''
+      break;
   }
 }
 
-/* 数字 格式化*/
-export function numberFormatter(num, digits) {
-  const si = [
-    { value: 1E18, symbol: 'E' },
-    { value: 1E15, symbol: 'P' },
-    { value: 1E12, symbol: 'T' },
-    { value: 1E9, symbol: 'G' },
-    { value: 1E6, symbol: 'M' },
-    { value: 1E3, symbol: 'k' }
-  ]
-  for (let i = 0; i < si.length; i++) {
-    if (num >= si[i].value) {
-      return (num / si[i].value + 0.1).toFixed(digits).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, '$1') + si[i].symbol
-    }
-  }
-  return num.toString()
-}
-
-export function toThousandFilter(num) {
-  return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
-}

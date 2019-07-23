@@ -101,11 +101,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       }
-    ]),
-    new ZipPlugin({
-      path: path.resolve(config.build.assetsRoot,'../deploy/prod'),
-      filename: 'dist.zip'
-    })
+    ])
   ],
   optimization: {
     splitChunks: {
@@ -188,6 +184,14 @@ if (config.build.generateAnalyzerReport || config.build.bundleAnalyzerReport) {
       })
     )
   }
+}
+if (process.env.env_config == 'prod') {
+  webpackConfig.plugins.push(
+    new ZipPlugin({
+      path: path.resolve(config.build.assetsRoot, '../deploy/prod'),
+      filename: 'dist.zip'
+    })
+  )
 }
 
 module.exports = webpackConfig

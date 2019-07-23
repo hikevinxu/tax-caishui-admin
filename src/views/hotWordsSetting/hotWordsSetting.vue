@@ -11,7 +11,7 @@
       fit
       highlight-current-row
       style="width: 100%;">
-      <el-table-column label="序号" prop="id" align="center" width="80px">
+      <el-table-column label="ID" prop="id" align="center" width="80px">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { hoWordList, hotStatus, hotSave, hotDelete } from '@/api/hotWordsSetting'
+import { hotWordList, hotStatus, hotSave, hotDelete } from '@/api/hotWordsSetting'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 export default {
@@ -105,7 +105,7 @@ export default {
      */
     getList() {
       this.listLoading = true
-      hoWordList(this.listQuery).then(response => {
+      hotWordList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         for (var i = 0; i < this.list.length; i++) {
