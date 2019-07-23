@@ -5,5 +5,5 @@ export function getToken() {
 }
 
 export function upLoadPicFromWeApp(params) {
-  return fetchPost('/oss/upload', params)
+  return fetchPost('/fileupload/upload', params)
 }

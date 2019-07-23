@@ -36,7 +36,7 @@ export function statusFilters(status) {
     case 1:
       return '已上架'
       break;
-    case -1:
+    case 2:
       return '已下架'
       break;
     default: 
