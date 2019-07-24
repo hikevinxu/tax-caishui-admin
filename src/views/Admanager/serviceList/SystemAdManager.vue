@@ -1,6 +1,6 @@
 <template>
   <div class="SystemAdManager">
-    <System-Ad type="serviceList" v-on:func="show" />
+    <System-Ad type="serviceList" typeId="005" elementType="2" relateType="3" v-on:func="show" />
   </div>
 </template>
 <script>

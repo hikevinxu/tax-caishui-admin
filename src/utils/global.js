@@ -8,11 +8,12 @@ const global = {
   statusList: [
     {name: '待上架',id: 0},
     {name: '已上架',id: 1},
-    {name: '已下架',id: 2}
+    {name: '已下架',id: 2},
+    {name: '已过期',id: 3}
   ],
   pageUrlList: [
-    {name: '公司详情页', id: "1"},
-    {name: '服务详情页', id: "2"}
+    {name: '公司详情页', id: "main/home/queryService/company"},
+    {name: '服务详情页', id: "main/home/queryService/servicer"}
   ]
 }
 export default global

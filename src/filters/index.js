@@ -39,11 +39,50 @@ export function statusFilters(status) {
     case 2:
       return '已下架'
       break;
+    case 3:
+      return '已过期'
+      break;
     default: 
       return ''
       break;
   }
 }
+
+/**
+ * 上下架过滤器
+ * @function statusFilters
+ * @param status Number 上下架状态码
+ */
+export function validFilters(valid) {
+  switch (valid) {
+    case true:
+      return '已生效'
+      break;
+    case false:
+      return '未生效'
+      break;
+  }
+}
+
+/**
+ * 
+ * @function goTypeFilters
+ * @param goType Number 跳转类型
+ */
+export function goTypeFilters(goType) {
+  switch (goType) {
+    case 1:
+      return 'H5URL'
+      break;
+    case 2:
+      return '原生'
+      break;
+    case 3:
+      return '无跳转'
+      break;
+  }
+}
+
 /**
  * 原生页面过滤器
  * @function pageUrlFilters
@@ -51,8 +90,11 @@ export function statusFilters(status) {
  */
 export function pageUrlFilters(status) {
   switch (status) {
-    case "main/me/set/aboutUs":
-      return '关于我们'
+    case "main/home/queryService/company":
+      return '公司详情页'
+      break;
+    case "main/home/queryService/servicer":
+      return '服务详情页'
       break;
     default: 
       return ''

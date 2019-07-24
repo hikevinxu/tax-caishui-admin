@@ -189,7 +189,7 @@ export default {
         this.temp.provinceCode = ''
         return
       }
-      var obj = {};
+      var obj = {}
       obj = this.provinceList.find(function(item){
         return item.code === val
       })

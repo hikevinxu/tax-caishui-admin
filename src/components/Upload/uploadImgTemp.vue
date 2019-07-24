@@ -39,10 +39,13 @@ export default {
   name: 'SingleImageUpload3',
   props: {
     value: {
-      type: String,
-      default: ''
-    },
-    type: String
+      type: Object,
+      default: function(){
+        return {
+          imgUrl: ''
+        }
+      }
+    }
   },
   data() {
     return {
@@ -52,7 +55,7 @@ export default {
   },
   computed: {
     imageUrl() {
-      return this.value
+      return this.value.imgUrl
       console.log(this.value)
     }
   },
@@ -85,12 +88,21 @@ export default {
     },
     upload (item) {
       let formData = new FormData()
-      formData.append('file', item.file)
-      formData.append('type', this.type)
+      formData.append('files', item.file)
       upLoadPicFromWeApp(formData).then(res => {
         if (res.code == 0) {
-          this.tempUrl = res.data
-          this.emitInput(this.tempUrl)
+          // this.tempUrl = res.data[0].fileId
+          // this.emitInput(this.tempUrl)
+          let oFileReader = new FileReader()
+          oFileReader.readAsDataURL(item.file)
+          oFileReader.onloadend = (e) => {
+            this.tempUrl = e.target.result
+            let param = {
+              imgUrl: e.target.result,
+              fileId: res.data[0].fileId
+            }
+            this.emitInput(param)
+          }
         }
       }).catch(err => {
         this.$message.error('上传失败，请重新上传')

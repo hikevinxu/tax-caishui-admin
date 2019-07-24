@@ -149,7 +149,7 @@ import global from '@/utils/global'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import Upload from '@/components/Upload/uploadImg'
+import Upload from '@/components/Upload/uploadImgTemp'
 export default {
   name: 'participles',
   components: { Pagination, Upload },
