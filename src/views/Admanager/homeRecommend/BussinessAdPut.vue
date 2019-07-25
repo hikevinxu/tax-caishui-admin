@@ -1,6 +1,6 @@
 <template>
   <div class="bussinessAdPut">
-    <Bussinessput-List type="homeRecommend" v-on:func="show" />
+    <Bussinessput-List type="homeRecommend" typeId="002" elementType="1" relateType="1" elementNum="4" v-on:func="show" />
   </div>
 </template>
 <script>

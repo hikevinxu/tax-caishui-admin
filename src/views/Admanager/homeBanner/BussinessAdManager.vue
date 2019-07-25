@@ -1,6 +1,6 @@
 <template>
   <div class="homeBanner_bussinessAd">
-    <Bussiness-Ad type="homeBanner" typeId="001" v-on:func="show" />
+    <Bussiness-Ad type="homeBanner" typeId="001" elementType="1" relateType="1" v-on:func="show" />
   </div>
 </template>
 <script>

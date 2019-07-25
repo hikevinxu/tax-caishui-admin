@@ -1,6 +1,6 @@
 <template>
   <div class="SystemAdManager">
-    <System-Ad type="homeRecommend" v-on:func="show" />
+    <System-Ad type="homeRecommend" typeId="002" elementType="1" relateType="1" v-on:func="show" />
   </div>
 </template>
 <script>

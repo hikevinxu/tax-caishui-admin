@@ -1,6 +1,6 @@
 <template>
   <div class="SystemAdManager">
-    <System-Ad type="homeBanner" v-on:func="show" />
+    <System-Ad type="homeBanner" typeId="001" elementType="1" relateType="1" v-on:func="show" />
   </div>
 </template>
 <script>
