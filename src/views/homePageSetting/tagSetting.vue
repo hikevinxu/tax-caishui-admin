@@ -62,16 +62,20 @@
           <Upload v-model="uploadImg"/>
         </el-form-item>
 
-        <el-form-item label="选择服务：">
+        <el-form-item label="选择服务：" v-show="!selectDis">
           <el-select :disabled="selectDis" style="width: 150px" v-model="serviceType.firstCode" @change="firstCodeChange" clearable placeholder="请选择一级服务">
             <el-option v-for="(item,index) in firstCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
           </el-select>
-          <el-select :disabled="selectDis" style="width: 150px" v-model="serviceType.secondCode" @change="secondCodeChange" clearable placeholder="请选择二级服务">
+          <el-select v-show="showSend" :disabled="selectDis" style="width: 150px" v-model="serviceType.secondCode" @change="secondCodeChange" clearable placeholder="请选择二级服务">
             <el-option v-for="(item,index) in secondCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
           </el-select>
            <el-select  v-show="showThird" style="width: 150px" v-model="serviceType.thirdCode" @change="thirdCodeChange" clearable placeholder="请选择三级服务">
             <el-option v-for="(item,index) in thirdCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
           </el-select>
+        </el-form-item>
+
+        <el-form-item label="服务名字：" v-show="selectDis">
+          <span style="font-weight: 500;color: red;font-size: 18px;">{{ temp.name }}</span>
         </el-form-item>
 
       </el-form>
@@ -112,6 +116,7 @@ export default {
       ],
       jumpTypeList: global.jumpTypeList,
       firstCodeList: [],
+      showSend: false,
       secondCodeList: [],
       showThird: false,
       selectDis: false,
@@ -218,7 +223,7 @@ export default {
     // 上升
     handleIncr(row) {
       const id = row.id
-      this.$confirm('确认排序上升?', '提示', {}).then(() => {
+      // this.$confirm('确认排序上升?', '提示', {}).then(() => {
         let query = {
           id: id
         }
@@ -240,12 +245,12 @@ export default {
           }
           this.getList()
         })
-      })
+      // })
     },
     // 下降
     handleDecr(row) {
       const id = row.id
-      this.$confirm('确认排序下降?', '提示', {}).then(() => {
+      // this.$confirm('确认排序下降?', '提示', {}).then(() => {
         let query = {
           id: id
         }
@@ -267,7 +272,7 @@ export default {
           }
           this.getList()
         })
-      })
+      // })
     },
     //重置表单
     resetTemp() {
@@ -284,6 +289,11 @@ export default {
     handleCreate() {
       this.resetTemp()
       this.selectDis = false
+      this.showSend = false
+      this.serviceType.firstCode = ''
+      this.serviceType.secondCode = ''
+      this.serviceType.thirdCode = ''
+      this.showThird = false
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -296,12 +306,17 @@ export default {
         if (valid) {
           let serviceCode,
               name
-          if(this.showThird = true){
-            serviceCode = this.serviceType.thirdCode
-            name = this.thirdName
+          if(this.serviceType.firstCode == ''){
+              serviceCode = ''
+              name = '全部'
           }else{
-            serviceCode = this.serviceType.secondCode
-            name = this.secondName
+            if(this.showThird == true){
+              serviceCode = this.serviceType.thirdCode
+              name = this.thirdName
+            }else{
+              serviceCode = this.serviceType.secondCode
+              name = this.secondName
+            }
           }
           let params = {
             id: '',
@@ -415,12 +430,16 @@ export default {
       }
       businessTypeList().then(res => {
         if(res.code == 0) {
-          this.firstCodeList = res.data
+          this.firstCodeList = [{name:'全部',code: ''}].concat(res.data)
           console.log(res)
         }
       })
     },
     firstCodeChange(value) {
+      this.showThird = false
+      if(this.serviceType.firstCode != ''){
+        this.showSend = true
+      }
       this.serviceType.secondCode = ''
       let data = {
         parentCode: this.serviceType.firstCode
