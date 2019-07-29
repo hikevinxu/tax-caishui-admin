@@ -148,8 +148,8 @@ export function hotCityDelete(params) {
  * @function businessTypeList
  * @type 'get'
  */
-export function businessTypeList() {
-  return fetchGet('/firm/business_type/list')
+export function businessTypeList(params) {
+  return fetchGet('/serviceType/list', params)
 }
 
 
