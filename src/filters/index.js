@@ -50,6 +50,22 @@ export function statusFilters(status) {
 
 /**
  * 上下架过滤器
+ * @function 
+ * @param status Number 上下架状态码
+ */
+export function shelfFilters(status) {
+  switch (status) {
+    case true:
+      return '已上架'
+      break;
+    case false:
+      return '已下架'
+      break;
+  }
+}
+
+/**
+ * 上下架过滤器
  * @function statusFilters
  * @param status Number 上下架状态码
  */

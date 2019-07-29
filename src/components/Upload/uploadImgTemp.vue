@@ -36,7 +36,7 @@
 import { getToken, upLoadPicFromWeApp } from '@/api/qiniu'
 
 export default {
-  name: 'SingleImageUpload3',
+  name: 'uploadImgTemp',
   props: {
     value: {
       type: Object,
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     rmImage() {
-      this.emitInput('')
+      this.emitInput({})
     },
     emitInput(val) {
       this.$emit('input', val)
