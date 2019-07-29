@@ -223,7 +223,7 @@ export default {
     // 上升
     handleIncr(row) {
       const id = row.id
-      this.$confirm('确认排序上升?', '提示', {}).then(() => {
+      // this.$confirm('确认排序上升?', '提示', {}).then(() => {
         let query = {
           id: id
         }
@@ -245,12 +245,12 @@ export default {
           }
           this.getList()
         })
-      })
+      // })
     },
     // 下降
     handleDecr(row) {
       const id = row.id
-      this.$confirm('确认排序下降?', '提示', {}).then(() => {
+      // this.$confirm('确认排序下降?', '提示', {}).then(() => {
         let query = {
           id: id
         }
@@ -272,7 +272,7 @@ export default {
           }
           this.getList()
         })
-      })
+      // })
     },
     //重置表单
     resetTemp() {
