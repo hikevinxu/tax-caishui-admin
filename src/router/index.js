@@ -270,12 +270,6 @@ export const asyncRouterMap = [
     },
     children: [
       {
-        path: 'bannerSetting',
-        component: () => import('@/views/homePageSetting/bannerSetting'),
-        name: 'bannerSetting',
-        meta: { title: '系统广告功能配置', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
         path: 'tagSetting',
         component: () => import('@/views/homePageSetting/tagSetting'),
         name: 'tagSetting',
