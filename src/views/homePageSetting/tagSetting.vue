@@ -62,7 +62,7 @@
           <Upload v-model="uploadImg"/>
         </el-form-item>
 
-        <el-form-item label="选择服务：">
+        <el-form-item label="选择服务：" v-show="!selectDis">
           <el-select :disabled="selectDis" style="width: 150px" v-model="serviceType.firstCode" @change="firstCodeChange" clearable placeholder="请选择一级服务">
             <el-option v-for="(item,index) in firstCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
           </el-select>
@@ -72,6 +72,10 @@
            <el-select  v-show="showThird" style="width: 150px" v-model="serviceType.thirdCode" @change="thirdCodeChange" clearable placeholder="请选择三级服务">
             <el-option v-for="(item,index) in thirdCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
           </el-select>
+        </el-form-item>
+
+        <el-form-item label="服务名字：">
+          <span style="font-weight: 500;color: red;font-size: 18px;">{{ temp.name }}</span>
         </el-form-item>
 
       </el-form>
