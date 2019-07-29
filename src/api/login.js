@@ -9,8 +9,7 @@ import qs from 'qs'
  * @param password String
  */
 export function loginByUsername(params) {
-  const paramsString = qs.stringify(params)
-  return fetchPost('/auth/login_ldap', paramsString)
+  return fetchPost('/auth/login', params)
 }
 
 /**

@@ -13,10 +13,10 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // Do something before request is sent
-    // if (getToken()) {
-    //   // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    //   config.headers.Authorization = getToken()
-    // }
+    if (getToken()) {
+      // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
+      config.headers.Authorization = getToken()
+    }
     return config
   },
   error => {
@@ -82,10 +82,10 @@ export function fetchPost(url, params) {
   return new Promise((resolve, reject) => {
     service.post(url, params)
       .then(response => {
-        // if (response.headers.authorization) {
-        //   setToken(response.headers.authorization)
-        //   store.dispatch('refreshToken', response.headers.authorization)
-        // }
+        if (response.headers.authorization) {
+          setToken(response.headers.authorization)
+          store.dispatch('refreshToken', response.headers.authorization)
+        }
         resolve(response.data)
       }, err => {
         reject(err)
@@ -101,10 +101,10 @@ export function fetchGet(url, param) {
   return new Promise((resolve, reject) => {
     service.get(url, { params: param })
       .then(response => {
-        // if (response.headers.authorization) {
-        //   setToken(response.headers.authorization)
-        //   store.dispatch('refreshToken', response.headers.authorization)
-        // }
+        if (response.headers.authorization) {
+          setToken(response.headers.authorization)
+          store.dispatch('refreshToken', response.headers.authorization)
+        }
         resolve(response.data)
       }, err => {
         reject(err)
