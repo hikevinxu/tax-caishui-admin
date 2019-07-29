@@ -194,8 +194,13 @@
     <!-- 拒绝弹框 -->
     <el-dialog :visible.sync="dialogRefuseVisible" title="拒绝">
       <el-form ref="dataForm1" :rules="rules1" :model="temp" label-position="right" label-width="120px">
-        <el-form-item label="拒绝原因" prop="failReason">
-          <el-input v-model="temp.failReason" placeholder="请输入拒绝原因" />
+        <el-form-item label="拒绝原因：" prop="failReason">
+          <el-select @change="failChose" v-model="temp.failReason" placeholder="请选择原因"  style="width: 150px" class="filter-item">
+            <el-option v-for="(item,index) in failReasonList" :key="item+index" :label="item.name" :value="item.id"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-show="showFailReason" label="添加原因：" prop="failReason">
+          <el-input v-model="temp.failReasonText" placeholder="请输入拒绝原因" />
         </el-form-item>
       </el-form>
 
@@ -243,22 +248,31 @@ export default {
           id: 2,
         },
       ],
+      failReasonList: [
+        {
+          name: '机构已存在',
+          id: 1
+        },
+        {
+          name: '资质信息不符',
+          id: 2
+        },
+        {
+          name: '其他',
+          id: -1
+        }
+      ],
+      showFailReason: false,
       temp: {
-        action: '',
-        deviceType: 'android',
-        downloadUrl: '',
-        forceUpdateVersion: '',
-        remark: '',
-        updateContent: '',
-        appVersion: '',
-        channels: []
+        failReason: ''
       },
       dialogFormVisible: false,
       dialogAuditVisible: false,
       dialogRefuseVisible: false,
-      rules1: [
-        {}
-      ]
+      rules: {},
+      rules1: {
+        failReason: [{ required: true, message: '拒绝原因必选'}]
+      }
     }
   },
   created() {
@@ -276,6 +290,13 @@ export default {
           this.listLoading = false
         }
       })
+    },
+    failChose(){
+      if(this.temp.failReason == -1){
+        this.showFailReason = true
+      }else{
+        this.showFailReason = false
+      }
     },
     //重置表单
     resetTemp() {
