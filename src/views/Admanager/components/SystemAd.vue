@@ -15,13 +15,13 @@
         </el-select>
       </span>
       <span v-if="relateType == 3" class="filter-item">
-        <el-select style="width: 150px" v-model="firstCode" @change="firstCodeSearch" clearable placeholder="请选择一级服务">
+        <el-select style="width: 150px" v-model="firstCodeFilter" @change="firstCodeSearch" clearable placeholder="请选择一级服务">
           <el-option v-for="(item,index) in firstCodeList" :key="item.name+index" :label="item.name" :value="item.code"> </el-option>
         </el-select>
-        <el-select style="width: 150px" v-model="secondCode"  @change="secondCodeSearch" clearable placeholder="请选择二级服务">
+        <el-select style="width: 150px" v-model="secondCodeFilter"  @change="secondCodeSearch" clearable placeholder="请选择二级服务">
           <el-option v-for="(item,index) in secondCodeList" :key="item.name+index" :label="item.name" :value="item.code"> </el-option>
         </el-select>
-        <el-select style="width: 150px" v-model="thirdCode"  @change="thirdCodeSearch" clearable placeholder="请选择三级服务">
+        <el-select style="width: 150px" v-model="thirdCodeFilter"  @change="thirdCodeSearch" clearable placeholder="请选择三级服务">
           <el-option v-for="(item,index) in thirdCodeList" :key="item.name+index" :label="item.name" :value="item.code"> </el-option>
         </el-select>
       </span>
@@ -113,7 +113,8 @@
             <Upload v-model="form.elementValue" />
           </el-form-item>
           <el-form-item v-if="elementType == '2'" label="选择公司：" prop="">
-            <el-select v-model="form.elementValue.fileId" filterable remote reserve-keyword placeholder="请输入关键词" style="width: 350px" :remote-method="searchFirmList" :loading="loading">
+            <input hidden type="text" :value="form.elementValue.fileId">
+            <el-select v-model="form.elementName" filterable remote reserve-keyword placeholder="请输入关键词" style="width: 350px" @change="elementValueNameChange" :remote-method="searchFirmList" :loading="loading">
               <el-option v-for="item in firmList" :key="item.name" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -131,7 +132,8 @@
             <el-input style="width: 300px" v-model="form.h5Url" placeholder="请输入跳转地址" />
           </el-form-item>
           <el-form-item v-if="form.nativeUrl !== '' && form.goType == 2" label="选择跳转详情公司：" prop="">
-            <el-select v-model="form.firmId" filterable remote reserve-keyword placeholder="请输入关键词" style="width: 350px" :remote-method="searchFirmList" :loading="loading">
+            <input hidden type="text" :value="form.firmId">
+            <el-select v-model="form.firmName" filterable remote reserve-keyword placeholder="请输入关键词" style="width: 350px" @change="firmNameChange" :remote-method="searchFirmList" :loading="loading">
               <el-option
                 v-for="item in firmList"
                 :key="item.name + 'firm1'"
@@ -140,7 +142,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item  v-if="form.nativeUrl == '2' && form.goType == 2" label="服务详情图：" prop="elementValue">
+          <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/servicer' && form.goType == 2" label="服务详情图：" prop="elementValue">
             <Upload v-model="form.firmImg"/>
           </el-form-item>
           <el-form-item label="备注">
@@ -210,18 +212,18 @@
       </el-table>
       <div class="listTab">
         <el-button type="primary" @click="addCityFormDialog">添加广告</el-button>
-        <el-button type="warning">全部上架</el-button>
-        <el-button type="danger">全部下架</el-button>
+        <!-- <el-button type="warning">全部上架</el-button>
+        <el-button type="danger">全部下架</el-button> -->
       </div>
     </el-dialog>
     <el-dialog width="1000px" :title="dialogStatus2 == 'create' ? '新增广告' : '编辑广告'" :visible.sync="createCityFormDialog">
       <el-form ref="addCityForm" :model="addCityForm" label-position="right" label-width="150px" style="margin-left:50px;">
         <el-form-item label="选择投放城市：" prop="putCity">
           <el-select v-model="addCityForm.provinceCode" placeholder="选择投放城市" @change="provinceChange" clearable style="width: 190px" class="filter-item">
-            <el-option v-for="(item,index) in provinceList" :key="item.code+index" :label="item.name" :value="item.code"/>
+            <el-option v-for="item in provinceList" :key="item.code" :label="item.name" :value="item.code"/>
           </el-select>
           <el-select v-if="addCityForm.provinceCode != '' && addCityForm.provinceCode != -1" v-model="addCityForm.cityCode" placeholder="选择投放城市" @change="cityChange" clearable style="width: 190px" class="filter-item">
-            <el-option v-for="(item,index) in cityList" :key="item.code+index" :label="item.name" :value="item.code"/>
+            <el-option v-for="item in cityList" :key="item.code" :label="item.name" :value="item.code"/>
           </el-select>
         </el-form-item>
         <el-form-item label="选择投放时间：" prop="putTime">
@@ -305,10 +307,13 @@ export default {
       firmList: [],
       loading: false,
       typeValueList: [],
-      firstCode: [],
+      firstCodeFilter: '',
+      firstCode: '',
       firstCodeList: [],
+      secondCodeFilter: '',
       secondCode: '',
       secondCodeList: [],
+      thirdCodeFilter: '',
       thirdCode: '',
       thirdCodeList: [],
       adId: '',
@@ -317,6 +322,7 @@ export default {
         elementValue: {
           imgUrl: ''
         },
+        elementName: '',
         goType: '',
         pageUrl: '',
         nativeUrl: '',
@@ -368,8 +374,8 @@ export default {
       })
     },
     firstCodeSearch(value) {
-      this.secondCode = ''
-      this.thirdCode = ''
+      this.secondCodeFilter = ''
+      this.thirdCodeFilter = ''
       this.secondCodeList = []
       this.thirdCodeList = []
       let params = {
@@ -380,17 +386,22 @@ export default {
           this.secondCodeList = res.data
         }
       })
-      for(let i=0;i<this.firstCodeList.length;i++){
-        if(this.firstCodeList[i].code == value){
-          if(this.firstCodeList[i].leafNode){
-            this.listQuery.typeValue = value
-            this.getList()
+      if (value == '') {
+        this.listQuery.typeValue = ''
+        this.getList()
+      } else {
+        for(let i=0;i<this.firstCodeList.length;i++){
+          if(this.firstCodeList[i].code == value){
+            if(this.firstCodeList[i].leafNode){
+              this.listQuery.typeValue = value
+              this.getList()
+            }
           }
         }
       }
     },
     secondCodeSearch(value) {
-      this.thirdCode = ''
+      this.thirdCodeFilter = ''
       this.thirdCodeList = []
       let params = {
         parentCode: value
@@ -400,21 +411,31 @@ export default {
           this.thirdCodeList = res.data
         }
       })
-      for(let i=0;i<this.secondCodeList.length;i++){
-        if(this.secondCodeList[i].code == value){
-          if(this.secondCodeList[i].leafNode){
-            this.listQuery.typeValue = value
-            this.getList()
+      if (value == '') {
+        this.listQuery.typeValue = ''
+        this.getList()
+      } else {
+        for(let i=0;i<this.secondCodeList.length;i++){
+          if(this.secondCodeList[i].code == value){
+            if(this.secondCodeList[i].leafNode){
+              this.listQuery.typeValue = value
+              this.getList()
+            }
           }
         }
       }
     },
     thirdCodeSearch(value) {
-      for(let i=0;i<this.thirdCodeList.length;i++){
-        if(this.thirdCodeList[i].code == value){
-          if(this.thirdCodeList[i].leafNode){
-            this.listQuery.typeValue = value
-            this.getList()
+      if (value == '  ') {
+        this.listQuery.typeValue = ''
+        this.getList()
+      } else {
+        for(let i=0;i<this.thirdCodeList.length;i++){
+          if(this.thirdCodeList[i].code == value){
+            if(this.thirdCodeList[i].leafNode){
+              this.listQuery.typeValue = value
+              this.getList()
+            }
           }
         }
       }
@@ -480,6 +501,7 @@ export default {
           imgUrl: '',
           fileId: ''
         },
+        elementName: '',
         goType: '',
         pageUrl: '',
         nativeUrl: '',
@@ -507,7 +529,7 @@ export default {
       this.dialogStatus = 'create'
     },
     createData() {
-      console.log()
+      console.log(this.form.elementValue.fileId)
       let params = {
         positionNo: this.typeId,
         adType: 1,
@@ -518,7 +540,7 @@ export default {
         adValue: this.form.goType == 1 ? this.form.h5Url : this.form.nativeUrl,
         remark: this.form.remark
       }
-      params.adParam = JSON.stringify([{name: 'firmImg', value: this.form.firmImg.fileId, type: 'img'}, {name: 'firmId',value: this.form.firmId, type: 'text'}])
+      params.adParam = JSON.stringify([{name: 'firmImg', value: this.form.firmImg.fileId, type: 'img'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}])
       advertInfoSave(params).then(res => {
         if(res.code == 0){
           console.log(res)
@@ -546,46 +568,64 @@ export default {
           console.log(res)
           this.form.adTitle = res.data.info.adTitle
           this.form.adType = res.data.info.adType
+          this.form.remark = res.data.info.remark
+          if (this.elementType == 1) { 
+            this.form.elementValue.imgUrl = res.data.info.elementValue
+            this.form.elementValue.fileId = res.data.info.elementValue
+          } else if(this.elementType == 2) {
+            this.form.elementName= res.data.info.elementName
+            this.form.elementValue.fileId = res.data.info.elementValue
+          }
+          this.form.typeValue = res.data.info.typeValue
+          this.form.goType = res.data.info.goType
           if (res.data.info.goType == 1) {
             this.form.h5Url = res.data.info.adValue
           } else if(res.data.info.goType == 2) {
             this.form.nativeUrl = res.data.info.adValue
-            this.form.typeValue = res.data.info.typeValue
-            this.form.elementValue.imgUrl = res.data.info.elementValue
-            this.form.elementValue.fileId = res.data.info.elementValue
-            this.form.goType = res.data.info.goType
             if(res.data.info.adParam){
               this.form.firmImg.imgUrl = JSON.parse(res.data.info.adParam).firmImg
               this.form.firmImg.fileId = JSON.parse(res.data.info.adParam).firmImg
+              this.form.firmId =  JSON.parse(res.data.info.adParam).firmId
+              this.form.firmName = JSON.parse(res.data.info.adParam).companyName
             }
-            this.dialogFormVisible = true
-            this.dialogStatus = 'edit'
-            this.getServiceTypeList()
-            this.getProvinceList()
-            this.getPutList()
           }
+          let codeList = res.data.codeList
+          if (codeList && codeList.length > 0) {
+            this.firstCode = codeList[0]
+            let params = {
+              parentCode: this.firstCode
+            }
+            serviceTypeList(params).then(res => {
+              if(res.code == 0){
+                this.secondCodeList = res.data
+              }
+            })
+          } else {
+             this.firstCode = this.form.typeValue
+          }
+          if (codeList && codeList.length > 1) {
+            this.secondCode = codeList[1]
+            let data = {
+              parentCode: this.secondCode
+            }
+            serviceTypeList(data).then(res => {
+              if(res.code == 0){
+                this.thirdCodeList = res.data
+              }
+            })
+          } else {
+            this.secondCode = this.form.typeValue
+          }
+          if (codeList && codeList.length > 2) {
+            this.thirdCode = codeList[2]
+          } else {
+            this.thirdCode = this.form.typeValue
+          }
+          this.dialogFormVisible = true
+          this.dialogStatus = 'edit'
+          this.getServiceTypeList()
         }
       })
-      // this.form.adTitle = row.adTitle
-      // this.form.adType = row.adType
-      // if (row.goType == 1) {
-      //   this.form.h5Url = row.adValue
-      // } else if(row.goType == 2) {
-      //   this.form.nativeUrl = row.adValue
-      // }
-      // this.form.typeValue = row.typeValue
-      // this.form.elementValue.imgUrl = row.elementValue
-      // this.form.elementValue.fileId = row.elementValue
-      // this.form.goType = row.goType
-      // if(row.adParam){
-      //   this.form.firmImg.imgUrl = JSON.parse(row.adParam).firmImg
-      //   this.form.firmImg.fileId = JSON.parse(row.adParam).firmImg
-      // }
-      // this.dialogFormVisible = true
-      // this.dialogStatus = 'edit'
-      // this.getServiceTypeList()
-      // this.getProvinceList()
-      // this.getPutList()
     },
     editData() {
       let params = {
@@ -598,7 +638,7 @@ export default {
       params.elementValue = this.form.elementValue.fileId
       params.goType = this.form.goType
       params.adValue = this.form.goType == 1 ? this.form.h5Url : this.form.nativeUrl
-      params.adParam = JSON.stringify([{name: 'firmImg', value: this.form.firmImg.fileId, type: 'img'}, {name: 'firmId',value: this.form.firmId, type: 'text'}])
+      params.adParam = JSON.stringify([{name: 'firmImg', value: this.form.firmImg.fileId, type: 'img'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}])
       params.remark = this.form.remark
       console.log(params)
       advertInfoUpdate(params).then(res => {
@@ -756,7 +796,7 @@ export default {
     getProvinceList(){
       addressProvinces().then(res => {
         if(res.code == 0){
-          this.provinceList = [{name: '全国', code: -1}].concat(res.data)
+          this.provinceList = [{name: '全国', code: "-1"}].concat(res.data)
         }
       })
     },
@@ -881,20 +921,32 @@ export default {
     },
     editCityFormDialog(row){
       this.resetCityForm()
-      this.getProvinceList()
-      this.createCityFormDialog = true
-      this.dialogStatus2 = 'edit'
       this.adId = row.adId
       this.addCityForm.id = row.id
       this.addCityForm.putTime[0] = row.startTime
       this.addCityForm.putTime[1] = row.endTime
-      if (row.cityCode == '-1') {
-        this.addCityForm.provinceCode = row.cityCode
-      } else {
-        this.addCityForm.provinceCode = row.parentCode
+      if (row.parentCode) {
+        this.addCityForm.provinceCode = String(row.parentCode)
+        addressProvinces().then(res => {
+          if(res.code == 0){
+            this.provinceList = [{name: '全国', code: "-1"}].concat(res.data)
+          }
+        })
       }
-      this.addCityForm.cityCode = row.cityCode
+      if (row.cityCode) {
+        this.addCityForm.cityCode = String(row.cityCode)
+        let params = {
+          provinceCode: row.parentCode
+        }
+        addressCitys(params).then(res => {
+          if(res.code == 0){
+            this.cityList = res.data
+          }
+        })
+      }
       this.addCityForm.adIndex = row.adIndex
+      this.createCityFormDialog = true
+      this.dialogStatus2 = 'edit'
       this.advertRecordIndexCheck(row.adIndex)
     },
     createCityData(){
@@ -947,6 +999,12 @@ export default {
           this.createCityFormDialog = false
         }
       })
+    },
+    firmNameChange(val){
+      this.form.firmId = val
+    },
+    elementValueNameChange(val){
+      this.form.elementValue.fileId = val
     }
   }
 }

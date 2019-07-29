@@ -107,27 +107,6 @@
           <span>{{ scope.row.adTitle }}</span>
         </template>
       </el-table-column>
-
-      <!-- <el-table-column label="跳转类型" width="120px" align="center">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.jumpType == 1">{{ scope.row.jumpType | jumpTypeFilters }}</el-tag>
-          <el-tag v-if="scope.row.jumpType == 2" type="success">{{ scope.row.jumpType | jumpTypeFilters }}</el-tag>
-          <el-tag v-if="scope.row.jumpType == 3" type="warning">{{ scope.row.jumpType | jumpTypeFilters }}</el-tag>
-          <el-tag v-if="scope.row.jumpType == 4" type="danger">{{ scope.row.jumpType | jumpTypeFilters }}</el-tag>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="跳转目标" width="250px" align="center">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.jumpType == 1">{{ scope.row.pageUrl | pageUrlFilters }}</el-tag>
-          <el-tag v-if="scope.row.jumpType == 2">{{ scope.row.jumpUrl }}</el-tag>
-          <span v-if="scope.row.jumpType == 3">
-            <el-tag v-if="scope.row.serviceType.firstName">{{ scope.row.serviceType.firstName }}</el-tag>
-            <el-tag type="danger" v-if="scope.row.serviceType.secondName">{{ scope.row.serviceType.secondName }}</el-tag>
-          </span>
-          <el-tag v-if="scope.row.jumpType == 4">{{ scope.row.firm.firmName }}</el-tag>
-        </template>
-      </el-table-column> -->
       
       <el-table-column :label="$t('table.actions')" align="center" width="150" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -145,9 +124,17 @@
           <label>主题：</label>
           <span>{{advertInfoForm.adTitle}}</span>
         </div>
-        <div class="item img">
+        <div v-if="advertInfoForm.typeValue != ''" class="item">
+          <label>服务类型：</label>
+          <span>{{advertInfoForm.typeName}}</span>
+        </div>
+        <div v-if="elementType == '1'" class="item img">
           <label>广告图片：</label>
           <span><img :src="advertInfoForm.elementValue" alt=""></span>
+        </div>
+        <div v-if="elementType == '2'" class="item">
+          <label>公司名称：</label>
+          <span>{{advertInfoForm.elementName}}</span>
         </div>
         <div class="item">
           <label>跳转类型：</label>
@@ -157,6 +144,14 @@
           <label>跳转页面：</label>
           <span v-if="advertInfoForm.goType != 2">{{ advertInfoForm.adValue }}</span>
           <span v-else>{{ advertInfoForm.adValue |  pageUrlFilters}}</span>
+        </div>
+        <div class="item" v-if="advertInfoForm.goType == 2 && advertInfoForm.adValue == 'main/home/queryService/company'">
+          <label>跳转页面详情：</label>
+          <span>{{ advertInfoForm.adParam.companyName}}</span>
+        </div>
+        <div class="item img" v-if="advertInfoForm.goType == 2 && advertInfoForm.adValue == 'main/home/queryService/servicer'" >
+          <label>跳转页面详情图片：</label>
+          <span><img :src="advertInfoForm.elementValue" alt=""></span>
         </div>
         <div class="item">
           <label>备注：</label>
@@ -286,9 +281,7 @@ export default {
       adverInfoDialog: false,
       putListLoading: false,
       putList: [],
-      advertInfoForm: {
-        adTitle: ''
-      },
+      advertInfoForm: {},
       adTitle: ''
     }
   },
@@ -367,11 +360,16 @@ export default {
           this.secondCodeList = res.data
         }
       })
-      for(let i=0;i<this.firstCodeList.length;i++){
-        if(this.firstCodeList[i].code == value){
-          if(this.firstCodeList[i].leafNode){
-            this.listQuery.typeValue = value
-            this.getList()
+      if (value == '') {
+        this.listQuery.typeValue = ''
+        this.getList()
+      } else {
+        for(let i=0;i<this.firstCodeList.length;i++){
+          if(this.firstCodeList[i].code == value){
+            if(this.firstCodeList[i].leafNode){
+              this.listQuery.typeValue = value
+              this.getList()
+            }
           }
         }
       }
@@ -387,21 +385,31 @@ export default {
           this.thirdCodeList = res.data
         }
       })
-      for(let i=0;i<this.secondCodeList.length;i++){
-        if(this.secondCodeList[i].code == value){
-          if(this.secondCodeList[i].leafNode){
-            this.listQuery.typeValue = value
-            this.getList()
+      if (value == '') {
+        this.listQuery.typeValue = ''
+        this.getList()
+      } else {
+        for(let i=0;i<this.secondCodeList.length;i++){
+          if(this.secondCodeList[i].code == value){
+            if(this.secondCodeList[i].leafNode){
+              this.listQuery.typeValue = value
+              this.getList()
+            }
           }
         }
       }
     },
     thirdCodeChange(value) {
-      for(let i=0;i<this.thirdCodeList.length;i++){
-        if(this.thirdCodeList[i].code == value){
-          if(this.thirdCodeList[i].leafNode){
-            this.listQuery.typeValue = value
-            this.getList()
+      if (value == '') {
+        this.listQuery.typeValue = ''
+        this.getList()
+      } else {
+        for(let i=0;i<this.thirdCodeList.length;i++){
+          if(this.thirdCodeList[i].code == value){
+            if(this.thirdCodeList[i].leafNode){
+              this.listQuery.typeValue = value
+              this.getList()
+            }
           }
         }
       }
@@ -443,11 +451,10 @@ export default {
       advertInfo(params).then(res => {
         if(res.code == 0) {
           console.log(res)
-          this.advertInfoForm.adTitle = res.data.info.adTitle
-          this.advertInfoForm.elementValue = res.data.info.elementValue
-          this.advertInfoForm.goType = res.data.info.goType
-          this.advertInfoForm.adValue = res.data.info.adValue
-          this.advertInfoForm.remark = res.data.info.remark
+          this.advertInfoForm = res.data.info
+          if(this.advertInfoForm.adParam) {
+            this.advertInfoForm.adParam = JSON.parse(this.advertInfoForm.adParam)
+          }
           this.putList = res.data.list
         }
       })

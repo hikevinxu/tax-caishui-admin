@@ -236,6 +236,36 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/merchant',
+    component: Layout,
+    redirect: '/merchant/merchantBAM',
+    name: 'merchant',
+    meta: {
+      title: '商户入驻',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'merchantBAM',
+        component: () => import('@/views/Admanager/merchantMs/BussinessAdManager.vue'),
+        name: 'merchantBussinessAdManager',
+        meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'merchantBAP',
+        component: () => import('@/views/Admanager/merchantMs/BussinessAdPut.vue'),
+        name: 'merchantBussinessAdPut',
+        meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'merchantSAM',
+        component: () => import('@/views/Admanager/merchantMs/SystemAdManager.vue'),
+        name: 'merchantSystemAdManager',
+        meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
+      }
+    ]
+  },
+  {
     path: '/merchantsAudit',
     component: Layout,
     redirect: '/merchants/merchantsAudit',

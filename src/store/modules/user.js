@@ -57,8 +57,9 @@ const user = {
         }
         loginByUsername(params).then(response => {
           const data = response.data
-          commit('SET_TOKEN', data.token)
-          setToken(response.data.token)
+          commit('SET_TOKEN', data.accessToken)
+          commit('SET_NAME', data.authInfo.username)
+          setToken(response.data.accessToken)
           resolve()
         }).catch(error => {
           reject(error)
@@ -90,7 +91,7 @@ const user = {
         }
         const data = response.data
         commit('SET_ROLES', data.roles)
-        commit('SET_NAME', data.name)
+        // commit('SET_NAME', data.name)
         commit('SET_AVATAR', data.avatar)
         commit('SET_INTRODUCTION', data.introduction)
         resolve(response)
