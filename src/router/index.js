@@ -266,6 +266,30 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/merchantsAudit',
+    component: Layout,
+    redirect: '/merchants/merchantsAudit',
+    name: 'merchantsAudit',
+    meta: {
+      title: '入驻商户管理',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'merchantsAudit',
+        component: () => import('@/views/merchants/merchantsAudit.vue'),
+        name: 'merchantsAudit',
+        meta: { title: '商户入驻审核', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'merchants',
+        component: () => import('@/views/merchants/merchants.vue'),
+        name: 'merchants',
+        meta: { title: '商户管理', icon: '', noCache: true, roles: ['admin']  }
+      }
+    ]
+  },
+  {
     path: '/homePageSetting',
     component: Layout,
     redirect: '/homePageSetting/bannerSetting',
@@ -275,12 +299,6 @@ export const asyncRouterMap = [
       icon: 'table'
     },
     children: [
-      {
-        path: 'bannerSetting',
-        component: () => import('@/views/homePageSetting/bannerSetting'),
-        name: 'bannerSetting',
-        meta: { title: '系统广告功能配置', icon: '', noCache: true, roles: ['admin']  }
-      },
       {
         path: 'tagSetting',
         component: () => import('@/views/homePageSetting/tagSetting'),
