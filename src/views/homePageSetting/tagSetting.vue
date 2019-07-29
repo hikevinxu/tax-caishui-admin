@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import { systemTagList, systemTagSave, systemTagPublish, systemTagDown, systemTagDelete, businessTypeList } from '@/api/homePageSetting'
+import { serviceTagList, serviceTagShelfDisable, serviceTagShelfEnable, serviceTagSortIncr, serviceTagSortDecr, serviceTagAdd, serviceTagUpdate, serviceTagDelete } from '@/api/tag'
 import { jumpTypeFilters, statusFilters, pageUrlFilters } from '@/filters/index'
 import global from '@/utils/global'
 import waves from '@/directive/waves' // Waves directive
@@ -225,7 +225,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true
-      systemTagList(this.listQuery).then(response => {
+      serviceTagList(this.listQuery).then(response => {
         if(response.code == 0){
           this.list = response.data.items
           this.total = response.data.total
@@ -240,7 +240,7 @@ export default {
         let query = {
           id: id
         }
-        systemTagPublish(query).then(response => {
+        serviceTagShelfEnable(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -267,7 +267,7 @@ export default {
         let query = {
           id: id
         }
-        systemTagDown(query).then(response => {
+        serviceTagShelfDisable(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -341,7 +341,7 @@ export default {
           }else if(this.temp.jumpType == 4){
             params.firm = this.temp.firm
           }
-          systemTagSave(params).then((response) => {
+          serviceTagAdd(params).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
@@ -418,7 +418,7 @@ export default {
           }else if(this.temp.jumpType == 4){
             params.firm = this.temp.firm
           }
-          systemTagSave(params).then((response) => {
+          serviceTagUpdate(params).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
@@ -447,7 +447,7 @@ export default {
         let query = {
           id: id
         }
-        systemTagDelete(query).then(response => {
+        serviceTagDelete(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -466,25 +466,25 @@ export default {
           this.getList()
         })
       })
-    },
-    getBusinessTypeList () {
-      businessTypeList().then(res => {
-        if(res.code == 0) {
-          this.firstCodeList = res.data
-        }
-      })
-    },
-    firstCodeChange(value) {
-      this.temp.serviceType.secondCode = ''
-      for(let i=0;i<this.firstCodeList.length;i++){
-        if(this.firstCodeList[i].code == value) {
-          this.secondCodeList = this.firstCodeList[i].children
-        }
-      }
-    },
-    pageUrlChange(){
-      this.$forceUpdate()
     }
+    // getBusinessTypeList () {
+    //   businessTypeList().then(res => {
+    //     if(res.code == 0) {
+    //       this.firstCodeList = res.data
+    //     }
+    //   })
+    // },
+    // firstCodeChange(value) {
+    //   this.temp.serviceType.secondCode = ''
+    //   for(let i=0;i<this.firstCodeList.length;i++){
+    //     if(this.firstCodeList[i].code == value) {
+    //       this.secondCodeList = this.firstCodeList[i].children
+    //     }
+    //   }
+    // },
+    // pageUrlChange(){
+    //   this.$forceUpdate()
+    // }
   }
 }
 </script>
