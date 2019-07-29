@@ -76,11 +76,11 @@
       
       <el-table-column :label="$t('table.actions')" align="center" width="400" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button type="primary" size="small" v-if="scope.row.status == 0 || scope.row.status == 2" @click="handleEdit(scope.row)">编辑</el-button>
           <el-button type="primary" size="small" @click="managerAdvertList(scope.row)">管理投放记录</el-button>
-          <el-button style="margin-left: 10px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.status !== 1">上架</el-button>
+          <el-button style="margin-left: 10px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.status == 0 || scope.row.status == 3 || scope.row.status == 2">{{scope.row.status == 2 ? '重新' : ''}}上架</el-button>
           <el-button style="margin-left: 10px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.status == 1">下架</el-button>
-          <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button style="margin-left: 10px;" type="danger" size="small" v-if="scope.row.status == 0" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -191,22 +191,24 @@
 
         <el-table-column label="是否生效" width="80px" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.valid | validFilters}}</span>
+            <el-tag v-if="scope.row.valid == true">{{ scope.row.valid | validFilters }}</el-tag>
+            <el-tag type="danger" v-else>{{ scope.row.valid | validFilters }}</el-tag>
           </template>
         </el-table-column>
 
         <el-table-column label="状态" width="100px" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.status | statusFilters }}</span>
+            <el-tag v-if="scope.row.status == 1">{{ scope.row.status | statusFilters }}</el-tag>
+            <el-tag type="danger" v-else>{{ scope.row.status | statusFilters }}</el-tag>
           </template>
         </el-table-column>
         
         <el-table-column :label="$t('table.actions')" align="center" width="250" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button type="primary" size="small" @click="editCityFormDialog(scope.row)">编辑</el-button>
-            <el-button style="margin-left: 10px;" type="success" size="small" @click="advertRecordUp(scope.row)" v-if="scope.row.status !== 1">上架</el-button>
+            <el-button type="primary" size="small" v-if="scope.row.status == 0 || scope.row.status == 2" @click="editCityFormDialog(scope.row)">编辑</el-button>
+            <el-button style="margin-left: 10px;" type="success" size="small" @click="advertRecordUp(scope.row)" v-if="scope.row.status == 0 || scope.row.status == 2">上架</el-button>
             <el-button style="margin-left: 10px;" type="warning" size="small" @click="advertRecordDown(scope.row)" v-if="scope.row.status == 1">下架</el-button>
-            <el-button style="margin-left: 10px;" type="danger" size="small" @click="advertRecordDelete(scope.row)">删除</el-button>
+            <el-button style="margin-left: 10px;" type="danger" size="small" @click="advertRecordDelete(scope.row)" v-if="scope.row.status == 0">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -802,6 +804,7 @@ export default {
       })
     },
     provinceChange(val){
+      this.$forceUpdate()
       this.addCityForm.cityCode = ''
       this.addCityForm.cityName = ''
       if(val == ''){
@@ -825,6 +828,7 @@ export default {
       })
     },
     cityChange(val){
+      this.$forceUpdate()
       for (let i=0;i< this.cityList.length; i++) {
         if (this.cityList[i].code == val) {
           this.addCityForm.cityName = this.cityList[i].name
