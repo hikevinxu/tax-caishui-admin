@@ -72,10 +72,10 @@ export function shelfFilters(status) {
 export function validFilters(valid) {
   switch (valid) {
     case true:
-      return '已生效'
+      return '是'
       break;
     case false:
-      return '未生效'
+      return '否'
       break;
   }
 }

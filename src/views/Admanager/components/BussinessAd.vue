@@ -198,17 +198,24 @@
 
         <el-table-column label="状态" width="100px" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status == 1">{{ scope.row.status | statusFilters }}</el-tag>
-            <el-tag type="danger" v-else>{{ scope.row.status | statusFilters }}</el-tag>
+            <div v-if="new Date(scope.row.endTime).valueOf() < new Date().valueOf()">
+              <el-tag type="danger">已过期</el-tag>
+            </div>
+            <div v-else>
+              <el-tag v-if="scope.row.status == 1">{{ scope.row.status | statusFilters }}</el-tag>
+              <el-tag type="danger" v-else>{{ scope.row.status | statusFilters }}</el-tag>
+            </div>
           </template>
         </el-table-column>
         
         <el-table-column :label="$t('table.actions')" align="center" width="250" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button type="primary" size="small" v-if="scope.row.status == 0 || scope.row.status == 2" @click="editCityFormDialog(scope.row)">编辑</el-button>
-            <el-button style="margin-left: 10px;" type="success" size="small" @click="advertRecordUp(scope.row)" v-if="scope.row.status == 0 || scope.row.status == 2">上架</el-button>
-            <el-button style="margin-left: 10px;" type="warning" size="small" @click="advertRecordDown(scope.row)" v-if="scope.row.status == 1">下架</el-button>
-            <el-button style="margin-left: 10px;" type="danger" size="small" @click="advertRecordDelete(scope.row)" v-if="scope.row.status == 0">删除</el-button>
+            <div v-if="new Date(scope.row.endTime).valueOf() > new Date().valueOf()">
+              <el-button type="primary" size="small" v-if="scope.row.status == 0 || scope.row.status == 2" @click="editCityFormDialog(scope.row)">编辑</el-button>
+              <el-button style="margin-left: 10px;" type="success" size="small" @click="advertRecordUp(scope.row)" v-if="scope.row.status == 0 || scope.row.status == 2">上架</el-button>
+              <el-button style="margin-left: 10px;" type="warning" size="small" @click="advertRecordDown(scope.row)" v-if="scope.row.status == 1">下架</el-button>
+              <el-button style="margin-left: 10px;" type="danger" size="small" @click="advertRecordDelete(scope.row)" v-if="scope.row.status == 0">删除</el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -953,6 +960,7 @@ export default {
         })
       }
       this.addCityForm.adIndex = row.adIndex
+      this.addCityForm.cityName = row.cityName
       this.createCityFormDialog = true
       this.dialogStatus2 = 'edit'
       this.advertRecordIndexCheck(row.adIndex)
