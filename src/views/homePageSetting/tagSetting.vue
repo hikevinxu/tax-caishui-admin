@@ -308,7 +308,7 @@ export default {
               name
           if(this.serviceType.firstCode == ''){
               serviceCode = ''
-              name = '全部'
+              name = '全部服务'
           }else{
             if(this.showThird == true){
               serviceCode = this.serviceType.thirdCode
@@ -430,7 +430,7 @@ export default {
       }
       businessTypeList().then(res => {
         if(res.code == 0) {
-          this.firstCodeList = [{name:'全部',code: ''}].concat(res.data)
+          this.firstCodeList = [{name:'全部服务',code: ''}].concat(res.data)
           console.log(res)
         }
       })
