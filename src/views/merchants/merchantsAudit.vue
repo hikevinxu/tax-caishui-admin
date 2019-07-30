@@ -8,11 +8,11 @@
       <el-select v-model="listQuery.status" placeholder="状态" style="width: 150px" class="filter-item">
         <el-option v-for="(item,index) in statusList" :key="item+index" :label="item.name" :value="item.id"/>
       </el-select>
-      <el-date-picker
+      <!-- <el-date-picker
         v-model="listQuery.submitTime"
         type="datetime"
         placeholder="选择日期时间">
-      </el-date-picker>
+      </el-date-picker> -->
     </div>
 
     <el-table
@@ -188,7 +188,7 @@
 </template>
 
 <script>
-import { merchantList, merchantAudit, merchantDetail, merchantTypes } from '@/api/merchants'
+import { merchantApplyList, merchantApplyAudit, merchantApplyDetail, merchantApplyTypes } from '@/api/merchants'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
@@ -299,7 +299,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true
-      merchantList(this.listQuery).then(response => {
+      merchantApplyList(this.listQuery).then(response => {
         if (response.code === 0) {
           console.log(response)
           this.list = response.data.items
@@ -309,7 +309,7 @@ export default {
       })
     },
     getTypes(){
-      merchantTypes().then(res => {
+      merchantApplyTypes().then(res => {
         console.log(res)
         if(res.code == 0){
           this.types = res.data
@@ -340,7 +340,7 @@ export default {
       let data = {
         id: row.merchantId
       }
-      merchantDetail(data).then(res => {
+      merchantApplyDetail(data).then(res => {
         console.log(res)
         if(res.code == 0){
           this.merchantDetail = res.data
@@ -352,7 +352,7 @@ export default {
     createData() {
       // this.$refs['dataForm'].validate((valid) => {
       //   if (valid) {
-          merchantAudit(this.temp).then((response) => {
+          merchantApplyAudit(this.temp).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
@@ -378,7 +378,7 @@ export default {
       this.$refs['dataForm1'].validate((valid) => {
         if (valid) {
           this.temp.through = false
-          merchantAudit(this.temp).then((response) => {
+          merchantApplyAudit(this.temp).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
@@ -410,7 +410,7 @@ export default {
       let data = {
         id: row.merchantId
       }
-      merchantDetail(data).then(res => {
+      merchantApplyDetail(data).then(res => {
         console.log(res)
         if(res.code == 0){
           this.merchantDetail = res.data

@@ -8,11 +8,11 @@
       <el-select v-model="listQuery.status" placeholder="状态" style="width: 150px" class="filter-item">
         <el-option v-for="(item,index) in statusList" :key="item+index" :label="item.name" :value="item.id"/>
       </el-select>
-      <el-date-picker
+      <!-- <el-date-picker
         v-model="listQuery.submitTime"
         type="datetime"
         placeholder="选择日期时间">
-      </el-date-picker>
+      </el-date-picker> -->
     </div>
 
     <el-table
@@ -24,19 +24,19 @@
       style="width: 100%;">
       <el-table-column label="ID" prop="id" align="center" width="80px">
         <template slot-scope="scope">
-          <span>{{ scope.row.merchantId }}</span>
+          <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="机构名称" width="250px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.companyName }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="机构类型" align="center">
         <template slot-scope="scope">
-         <span>{{ scope.row.type | typesFiters }}</span>
+         <span>{{ scope.row.companyType | typesFiters }}</span>
         </template>
       </el-table-column>
 
@@ -54,21 +54,21 @@
 
       <el-table-column label="发布状态" width="150px" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status == 102">{{ scope.row.status | releaseStatusFilters  }}</el-tag>
-          <el-tag type="danger" v-else>{{ scope.row.status | releaseStatusFilters }}</el-tag>
+          <el-tag v-if="scope.row.companyStatus == 1">{{ scope.row.companyStatus | releaseStatusFilters  }}</el-tag>
+          <el-tag type="danger" v-else>{{ scope.row.companyStatus | releaseStatusFilters }}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column label="提交时间" width="180px" align="center">
+      <!-- <el-table-column label="提交时间" width="180px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.submitTime }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column label="操作" align="center" width="300px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button style="margin-left: 12px;" type="warning" size="small" @click="handleLookDetail(scope.row)">上架</el-button>
-          <el-button style="margin-left: 12px;" type="danger" size="small" @click="handleLookDetail(scope.row)">下架</el-button>
+          <el-button v-show="scope.row.companyStatus == 0" style="margin-left: 12px;" type="warning" size="small" @click="handleUp(scope.row)">上架</el-button>
+          <el-button v-show="scope.row.companyStatus == 1" style="margin-left: 12px;" type="danger" size="small" @click="handleDown(scope.row)">下架</el-button>
           <el-button style="margin-left: 12px;" type="success" size="small" @click="handleLookDetail(scope.row)">查看</el-button>
         </template>
       </el-table-column>
@@ -77,30 +77,17 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
-    <el-dialog :title="temp.action === 'create' ? '添加' : temp.action === 'look' ? '详情' : '编辑'" width="800px" :visible.sync="dialogFormVisible">
-      <el-form class="update" ref="dataForm" :model="temp" label-position="right" label-width="120px" style="width: 650px; margin-left:50px;">
-      </el-form>
-      <div slot="footer" class="dialog-footer" v-if="temp.action !== 'look'">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="temp.action === 'create' ? createData() : updateData()">提交</el-button>
-      </div>
-    </el-dialog>
-
     <!-- 审核弹框 -->
-    <el-dialog :visible.sync="dialogAuditVisible" title="审核">
-      <div class="header" v-if="isLookDetail">
-        <h3 v-if="merchantDetail.status == 999" style="color: red;">审核不通过</h3>
-        <h3 v-if="merchantDetail.status == 103" style="color: #67c23a;">审核通过</h3>
-      </div>
+    <el-dialog :visible.sync="dialogAuditVisible" title="查看">
       <div class="basicInformation">
         <h2 class="title">基本信息</h2>
         <div class="line">
           <span class="label">机构名称：</span>
-          <span>{{ merchantDetail.name }}</span>
+          <span>{{ merchantDetail.companyInfo.name }}</span>
         </div>
         <div class="line">
           <span class="label">机构类型：</span>
-          <span>{{ merchantDetail.type | typesFiters }}</span>
+          <span>{{ merchantDetail.companyInfo.type | typesFiters }}</span>
         </div>
         <div class="line">
           <span class="label">登录手机号：</span>
@@ -108,36 +95,32 @@
         </div>
         <div class="line">
           <span class="label">机构logo：</span>
-          <img :src="merchantDetail.logo" alt="" srcset="">
+          <img :src="merchantDetail.companyInfo.logo" alt="" srcset="">
         </div>
         <div class="line">
           <span class="label">详细地址：</span>
-          <span>{{ merchantDetail.address }}</span>
+          <span>{{ merchantDetail.companyInfo.address }}</span>
         </div>
         <div class="line">
           <span class="label">地址定位：</span>
-          <span>{{ merchantDetail.location }}</span>
+          <span>{{ merchantDetail.companyInfo.location }}</span>
         </div>
         <div class="line">
-          <span class="label">联系人：</span>
-          <span>{{ merchantDetail.contactName }}</span>
+          <span class="label">服务时间：</span>
+          <span>{{ merchantDetail.companyInfo.workTime }}</span>
         </div>
         <div class="line">
-          <span class="label">联系电话：</span>
-          <span>{{ merchantDetail.contactPhone }}</span>
+          <span class="label">服务电话：</span>
+          <span v-for="(item, index) in merchantDetail.companyInfo.phones" :key="index">{{item}}</span>
         </div>
         <div class="line">
-          <span class="label">QQ号：</span>
-          <span>{{ merchantDetail.qq }}</span>
-        </div>
-        <div class="line">
-          <span class="label">电子邮箱：</span>
-          <span>{{ merchantDetail.email }}</span>
+          <span class="label">品牌标签：</span>
+          <span v-for="(item, index) in merchantDetail.companyInfo.brandTags" :key="index">{{item}}</span>
         </div>
         <div class="line">
           <span class="label">介绍图：</span>
           <div class="imgList">
-            <img v-for="(item, index) in merchantDetail.publicityImgs" :src="item" alt="" srcset="" :key="index">
+            <img style="margin-right: 10px;" v-for="(item, index) in merchantDetail.companyInfo.publicityImgs" :src="item.img" alt="" srcset="" :key="index">
           </div>
         </div>
       </div>
@@ -164,30 +147,11 @@
         <el-button @click="dialogAuditVisible = false">返回</el-button>
       </span>
     </el-dialog>
-
-    <!-- 拒绝弹框 -->
-    <el-dialog :visible.sync="dialogRefuseVisible" title="拒绝">
-      <el-form ref="dataForm1" :rules="rules1" :model="temp" label-position="right" label-width="120px">
-        <el-form-item label="拒绝原因：" prop="failCause">
-          <el-select @change="failChose" v-model="temp.failCause" placeholder="请选择原因"  style="width: 150px" class="filter-item">
-            <el-option v-for="(item,index) in failReasonList" :key="item+index" :label="item.name" :value="item.name"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item v-show="showFailReason" label="添加原因：" prop="failReason">
-          <el-input v-model="temp.failCause" placeholder="请输入拒绝原因" />
-        </el-form-item>
-      </el-form>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogRefuseVisible = false">返回</el-button>
-        <el-button type="primary" @click="refuse">确定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { merchantList, merchantAudit, merchantDetail, merchantTypes } from '@/api/merchants'
+import { merchantList, merchantUp, merchantDetail, merchantDown, merchantApplyTypes } from '@/api/merchants'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
@@ -197,18 +161,10 @@ export default {
   directives: { waves },
   filters: {
     releaseStatusFilters (val) {
-      if(val  == 102){
-        return val = '审核中'
-      }else if(val == 103){
-        return val = '审核通过'
-      }else if(val == 103){
-        return val = '审核通过'
-      }else if(val == 999){
-        return val = '审核未通过'
-      }else if(val == 100){
-        return val = '等待公司提交信息'
-      }else if(val == 101){
-        return val = '等待提交资质信息'
+      if(val  == 1){
+        return val = '已上架'
+      }else if(val == 0){
+        return val = '已下架'
       }
     },
     typesFiters(val){
@@ -246,17 +202,13 @@ export default {
       },
       statusList: [
         {
-          name: '审核中',
-          id: 102,
+          name: '已上架',
+          id: 1,
         },
         {
-          name: '审核通过',
-          id: 103,
-        },
-        {
-          name: '审核未通过',
-          id: 999,
-        },
+          name: '已下架',
+          id: 0,
+        }
       ],
       types: [],
       failReasonList: [
@@ -279,7 +231,19 @@ export default {
         merchantId: '',
         through: true
       },
-      merchantDetail:{},
+      merchantDetail:{
+        companyInfo: {
+          name: '',
+          logo: '',
+          address: '',
+          brandTags: [],
+          location: '',
+          phones: [],
+          publicityImgs: [],
+          workTime: ''
+        },
+        loginPhone: ''
+      },
       isLookDetail: false,
       dialogFormVisible: false,
       dialogAuditVisible: false,
@@ -308,36 +272,82 @@ export default {
       })
     },
     getTypes(){
-      merchantTypes().then(res => {
+      merchantApplyTypes().then(res => {
         console.log(res)
         if(res.code == 0){
           this.types = res.data
         }
       })
     },
-    failChose(){
-      if(this.temp.failCause == '其他'){
-        this.showFailReason = true
-        this.temp.failCause = ''
-      }else{
-        this.showFailReason = false
-      }
+    // 上架
+    handleUp(row) {
+      const id = row.id
+      this.$confirm('确认上架?', '提示', {}).then(() => {
+        let query = {
+          id: id
+        }
+        merchantUp(query).then(response => {
+          if (response.code == 0) {
+            this.$notify({
+              title: '成功',
+              message: '上架成功',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$message({
+              message: '上架失败',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+          }
+          this.getList()
+        })
+      })
+    },
+    // 下架
+    handleDown(row) {
+      const id = row.id
+      this.$confirm('确认下架?', '提示', {}).then(() => {
+        let query = {
+          id: id
+        }
+        merchantDown(query).then(response => {
+          if (response.code == 0) {
+            this.$notify({
+              title: '成功',
+              message: '下架成功',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$message({
+              message: '下架失败',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+          }
+          this.getList()
+        })
+      })
     },
     //重置表单
     resetTemp() {
       this.temp = {
         failCause: '',
-        merchantId: '',
+        id: '',
         through: true
       }
     },
     //唤起新建
     handleCreate(row) {
       this.resetTemp()
-      this.temp.merchantId = row.merchantId
+      this.temp.id = row.id
       this.isLookDetail = false
       let data = {
-        id: row.merchantId
+        id: row.id
       }
       merchantDetail(data).then(res => {
         console.log(res)
@@ -347,67 +357,12 @@ export default {
       })
       this.dialogAuditVisible = true
     },
-    //新建
-    createData() {
-      // this.$refs['dataForm'].validate((valid) => {
-      //   if (valid) {
-          merchantAudit(this.temp).then((response) => {
-            if (response.code == 0) {
-              this.$notify({
-                title: '成功',
-                message: '审核成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.dialogAuditVisible = false
-            } else {
-              this.$message({
-                message: response.msg,
-                type: 'error',
-                showClose: true,
-                duration: 1000
-              })
-            }
-            this.getList()
-          })
-        // }
-      // })
-    },
-    refuse(){
-      this.$refs['dataForm1'].validate((valid) => {
-        if (valid) {
-          this.temp.through = false
-          merchantAudit(this.temp).then((response) => {
-            if (response.code == 0) {
-              this.$notify({
-                title: '成功',
-                message: '审核成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.dialogAuditVisible = false
-              this.dialogRefuseVisible = false
-            } else {
-              this.$message({
-                message: response.msg,
-                type: 'error',
-                showClose: true,
-                duration: 1000
-              })
-              this.dialogAuditVisible = false
-              this.dialogRefuseVisible = false
-            }
-            this.getList()
-          })
-        }
-      })
-    },
     //查看
     handleLookDetail(row) {
       this.resetTemp()
       this.isLookDetail = true
       let data = {
-        id: row.merchantId
+        id: row.id
       }
       merchantDetail(data).then(res => {
         console.log(res)
@@ -451,7 +406,7 @@ export default {
     align-items: center;
   }
   img{
-    width: 80px;
+    width: 100px;
     height: 80px;
   }
 }
