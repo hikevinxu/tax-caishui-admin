@@ -137,7 +137,7 @@
         <div class="line">
           <span class="label">介绍图：</span>
           <div class="imgList">
-            <img v-for="(item, index) in merchantDetail.publicityImgs" :src="item" alt="" srcset="" :key="index">
+            <img style="margin-right: 10px;" v-for="(item, index) in merchantDetail.publicityImgs" :src="item" alt="" srcset="" :key="index">
           </div>
         </div>
       </div>
@@ -453,7 +453,7 @@ export default {
     align-items: center;
   }
   img{
-    width: 80px;
+    width: 100px;
     height: 80px;
   }
 }
