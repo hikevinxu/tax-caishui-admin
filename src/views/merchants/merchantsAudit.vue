@@ -35,7 +35,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="机构类型" align="center">
+      <el-table-column label="机构类型" align="center" width="120px">
         <template slot-scope="scope">
          <span>{{ scope.row.type | typesFiters }}</span>
         </template>
@@ -66,7 +66,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" width="300px" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="300px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button style="margin-left: 12px;" type="success" size="small" @click="handleLookDetail(scope.row)">查看</el-button>
           <el-button v-if="scope.row.status == 102" style="margin-left: 12px;" type="primary" size="small" @click="handleCreate(scope.row)">审核</el-button>

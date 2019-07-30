@@ -35,7 +35,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="机构类型" align="center">
+      <el-table-column label="机构类型" align="center" width="120px">
         <template slot-scope="scope">
          <span>{{ scope.row.companyType | typesFiters }}</span>
         </template>
