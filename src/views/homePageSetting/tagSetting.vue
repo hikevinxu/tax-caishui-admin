@@ -74,8 +74,8 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="服务名字：" v-show="selectDis">
-          <span style="font-weight: 500;color: red;font-size: 18px;">{{ temp.name }}</span>
+        <el-form-item label="服务名字：">
+          <el-input style="width: 250px;" v-model="temp.name" placeholder="请输入服务名字" />
         </el-form-item>
 
       </el-form>
@@ -308,21 +308,44 @@ export default {
               name
           if(this.serviceType.firstCode == ''){
               serviceCode = ''
-              name = '全部服务'
+              // name = '全部服务'
           }else{
             if(this.showThird == true){
               serviceCode = this.serviceType.thirdCode
-              name = this.thirdName
+              if(this.serviceType.thirdCode != ''){
+                serviceCode = this.serviceType.thirdCode
+              }else{
+                if(this.serviceType.secondCode != ''){
+                  serviceCode = this.serviceType.secondCode
+                }else{
+                  this.$message({
+                    message: '请选择子级类目后提交',
+                    type: 'error',
+                    showClose: true,
+                    duration: 1000
+                  })
+                  return
+                }
+              }
             }else{
-              serviceCode = this.serviceType.secondCode
-              name = this.secondName
+              if(this.serviceType.secondCode == ''){
+                this.$message({
+                  message: '请选择子级类目后提交',
+                  type: 'error',
+                  showClose: true,
+                  duration: 1000
+                })
+                return
+              }else{
+                serviceCode = this.serviceType.secondCode
+              }
             }
           }
           let params = {
             id: '',
             icon: this.uploadImg.fileId,
             serviceCode: serviceCode,
-            name: name,
+            name: this.temp.name,
             shelf: false
           }
           console.log(params)
