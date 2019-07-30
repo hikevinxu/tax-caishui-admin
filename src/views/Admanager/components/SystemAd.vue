@@ -76,11 +76,11 @@
       
       <el-table-column :label="$t('table.actions')" align="center" width="400" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button type="primary" size="small" v-if="scope.row.status == 0 || scope.row.status == 2" @click="handleEdit(scope.row)">编辑</el-button>
           <el-button type="primary" size="small" @click="managerAdvertList(scope.row)">管理投放记录</el-button>
-          <el-button style="margin-left: 10px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.status !== 1">上架</el-button>
+          <el-button style="margin-left: 10px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.status == 0 || scope.row.status == 3 || scope.row.status == 2">{{scope.row.status == 2 ? '重新' : ''}}上架</el-button>
           <el-button style="margin-left: 10px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.status == 1">下架</el-button>
-          <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button style="margin-left: 10px;" type="danger" size="small" v-if="scope.row.status == 0" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -191,22 +191,31 @@
 
         <el-table-column label="是否生效" width="80px" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.valid | validFilters}}</span>
+            <el-tag v-if="scope.row.valid == true">{{ scope.row.valid | validFilters }}</el-tag>
+            <el-tag type="danger" v-else>{{ scope.row.valid | validFilters }}</el-tag>
           </template>
         </el-table-column>
 
         <el-table-column label="状态" width="100px" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.status | statusFilters }}</span>
+            <div v-if="new Date(scope.row.endTime).valueOf() < new Date().valueOf()">
+              <el-tag type="danger">已过期</el-tag>
+            </div>
+            <div v-else>
+              <el-tag v-if="scope.row.status == 1">{{ scope.row.status | statusFilters }}</el-tag>
+              <el-tag type="danger" v-else>{{ scope.row.status | statusFilters }}</el-tag>
+            </div>
           </template>
         </el-table-column>
         
         <el-table-column :label="$t('table.actions')" align="center" width="250" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button type="primary" size="small" @click="editCityFormDialog(scope.row)">编辑</el-button>
-            <el-button style="margin-left: 10px;" type="success" size="small" @click="advertRecordUp(scope.row)" v-if="scope.row.status !== 1">上架</el-button>
-            <el-button style="margin-left: 10px;" type="warning" size="small" @click="advertRecordDown(scope.row)" v-if="scope.row.status == 1">下架</el-button>
-            <el-button style="margin-left: 10px;" type="danger" size="small" @click="advertRecordDelete(scope.row)">删除</el-button>
+            <div v-if="new Date(scope.row.endTime).valueOf() > new Date().valueOf()">
+              <el-button type="primary" size="small" v-if="scope.row.status == 0 || scope.row.status == 2" @click="editCityFormDialog(scope.row)">编辑</el-button>
+              <el-button style="margin-left: 10px;" type="success" size="small" @click="advertRecordUp(scope.row)" v-if="scope.row.status == 0 || scope.row.status == 2">上架</el-button>
+              <el-button style="margin-left: 10px;" type="warning" size="small" @click="advertRecordDown(scope.row)" v-if="scope.row.status == 1">下架</el-button>
+              <el-button style="margin-left: 10px;" type="danger" size="small" @click="advertRecordDelete(scope.row)" v-if="scope.row.status == 0">删除</el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -317,6 +326,7 @@ export default {
       thirdCode: '',
       thirdCodeList: [],
       adId: '',
+      typeValueTemp: '',
       form: {
         adTitle: '',
         elementValue: {
@@ -565,7 +575,6 @@ export default {
       }
       advertInfo(params).then(res => {
         if(res.code == 0) {
-          console.log(res)
           this.form.adTitle = res.data.info.adTitle
           this.form.adType = res.data.info.adType
           this.form.remark = res.data.info.remark
@@ -801,6 +810,7 @@ export default {
       })
     },
     provinceChange(val){
+      this.$forceUpdate()
       this.addCityForm.cityCode = ''
       this.addCityForm.cityName = ''
       if(val == ''){
@@ -824,6 +834,7 @@ export default {
       })
     },
     cityChange(val){
+      this.$forceUpdate()
       for (let i=0;i< this.cityList.length; i++) {
         if (this.cityList[i].code == val) {
           this.addCityForm.cityName = this.cityList[i].name
@@ -843,6 +854,7 @@ export default {
       let params = {
         positionNo: this.typeId,
         adType: 1,
+        typeValue: this.typeValueTemp,
         cityCode: this.addCityForm.cityCode,
         startTime: this.addCityForm.putTime[0],
         endTime: this.addCityForm.putTime[1]
@@ -896,7 +908,9 @@ export default {
       })
     },
     managerAdvertList(row){
+      this.typeValueTemp = ''
       this.adId = row.id
+      this.typeValueTemp = row.typeValue
       this.putList = []
       this.dialogFormVisible2 = true
       this.getPutList()
@@ -945,6 +959,7 @@ export default {
         })
       }
       this.addCityForm.adIndex = row.adIndex
+      this.addCityForm.cityName = row.cityName
       this.createCityFormDialog = true
       this.dialogStatus2 = 'edit'
       this.advertRecordIndexCheck(row.adIndex)
