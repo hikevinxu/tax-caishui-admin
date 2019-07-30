@@ -17,11 +17,11 @@ export function serviceTagList(params) {
  * @function serviceTagShelf
  * @type 'post'
  * @param id Number 词条ID
- * @param up Boolean true(上架) false(下架)
+ * @param up Boolean true(下架) false(下架)
  */
 export function serviceTagShelfDisable(params) {
   const paramsString = qs.stringify(params)
-  return fetchPost('/serviceTag/shelf/disable', paramsString)
+  return fetchPost('/serviceTag/shelf/down', paramsString)
 }
 
 /**
@@ -29,11 +29,11 @@ export function serviceTagShelfDisable(params) {
  * @function serviceTagShelfEnable
  * @type 'post'
  * @param id Number 词条ID
- * @param up Boolean true(上架) false(下架)
+ * @param up Boolean true(上架) false(上架)
  */
 export function serviceTagShelfEnable(params) {
   const paramsString = qs.stringify(params)
-  return fetchPost('/serviceTag/shelf/enable', paramsString)
+  return fetchPost('/serviceTag/shelf/up', paramsString)
 }
 
 /**
