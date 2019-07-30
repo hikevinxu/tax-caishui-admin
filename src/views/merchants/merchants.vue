@@ -2,6 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-button v-waves class="filter-item" type="primary" @click="getList">筛选</el-button>
+      <el-input style="width: 250px;" v-model="listQuery.name" placeholder="请输入公司名字" />
       <el-select v-model="listQuery.type" placeholder="机构类型" style="width: 150px" class="filter-item">
         <el-option v-for="(item,index) in types" :key="item+index" :label="item.name" :value="item.value"/>
       </el-select>
