@@ -305,12 +305,12 @@ export const asyncRouterMap = [
         name: 'tagSetting',
         meta: { title: '系统标签功能配置', icon: '', noCache: true, roles: ['admin']  }
       },
-      {
-        path: 'citySetting',
-        component: () => import('@/views/homePageSetting/hotCitySetting'),
-        name: 'citySetting',
-        meta: { title: '热门城市功能配置', icon: '', noCache: true, roles: ['admin']  }
-      }
+      // {
+      //   path: 'citySetting',
+      //   component: () => import('@/views/homePageSetting/hotCitySetting'),
+      //   name: 'citySetting',
+      //   meta: { title: '热门城市功能配置', icon: '', noCache: true, roles: ['admin']  }
+      // }
     ]
   },
   // {
