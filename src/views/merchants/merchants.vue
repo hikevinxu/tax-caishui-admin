@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button v-waves class="filter-item" type="primary" @click="getList">筛选</el-button>
       <el-input style="width: 250px;" v-model="listQuery.name" placeholder="请输入公司名字" />
       <el-select v-model="listQuery.type" placeholder="机构类型" style="width: 150px" class="filter-item">
         <el-option v-for="(item,index) in types" :key="item+index" :label="item.name" :value="item.value"/>
@@ -9,6 +8,7 @@
       <el-select v-model="listQuery.status" placeholder="状态" style="width: 150px" class="filter-item">
         <el-option v-for="(item,index) in statusList" :key="item+index" :label="item.name" :value="item.id"/>
       </el-select>
+      <el-button v-waves class="filter-item" type="primary" @click="getList">筛选</el-button>
       <!-- <el-date-picker
         v-model="listQuery.submitTime"
         type="datetime"
@@ -170,23 +170,31 @@ export default {
     },
     typesFiters(val){
       if(val == 101){
-        return val = "会计培训机构"
-      }else if(val == 102){
-        return val = "会计服务机构"
-      }else if(val == 103){
         return val = "税务师事务所"
-      }else if(val == 104){
+      }else if(val == 102){
         return val = "会计师事务所"
-      }else if(val == 105){
+      }else if(val == 103){
         return val = "资产评估公司"
-      }else if(val == 106){
+      }else if(val == 104){
         return val = "律师事务所"
+      }else if(val == 105){
+        return val = "知识产权代理公司"
+      }else if(val == 106){
+        return val = "劳务及人力资源公司"
       }else if(val == 107){
-        return val = "知识产权服务机构"
+        return val = "融资服务公司"
       }else if(val == 108){
-        return val = "劳务服务机构"
+        return val = "代理记账公司"
       }else if(val == 109){
-        return val = "融资服务机构"
+        return val = "财税培训机构"
+      }else if(val == 110){
+        return val = "刻章店"
+      }else if(val == 111){
+        return val = "税务筹划公司"
+      }else if(val == 112){
+        return val = "工程造价咨询公司"
+      }else if(val == 113){
+        return val = "离岸公司注册的公司"
       }
     }
   },

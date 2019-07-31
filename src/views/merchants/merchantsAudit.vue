@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button v-waves class="filter-item" type="primary" @click="getList">筛选</el-button>
       <el-input style="width: 250px;" v-model="listQuery.name" placeholder="请输入公司名字" />
       <el-select v-model="listQuery.type" placeholder="机构类型" style="width: 150px" class="filter-item">
         <el-option v-for="(item,index) in types" :key="item+index" :label="item.name" :value="item.value"/>
@@ -9,6 +8,7 @@
       <el-select v-model="listQuery.status" placeholder="状态" style="width: 150px" class="filter-item">
         <el-option v-for="(item,index) in statusList" :key="item+index" :label="item.name" :value="item.id"/>
       </el-select>
+      <el-button v-waves class="filter-item" type="primary" @click="getList">筛选</el-button>
       <!-- <el-date-picker
         v-model="listQuery.submitTime"
         type="datetime"
@@ -89,8 +89,8 @@
     <!-- 审核弹框 -->
     <el-dialog :visible.sync="dialogAuditVisible" title="审核">
       <div class="header" v-if="isLookDetail">
-        <h3 v-if="merchantDetail.status == 999" style="color: red;">审核不通过</h3>
-        <h3 v-if="merchantDetail.status == 103" style="color: #67c23a;">审核通过</h3>
+        <h3 class="noPass" v-if="merchantDetail.status == 999" style="color: red;">不通过</h3>
+        <h3 class="pass" v-if="merchantDetail.status == 103" style="color: #67c23a;">通过</h3>
       </div>
       <div class="basicInformation">
         <h2 class="title">基本信息</h2>
@@ -108,7 +108,7 @@
         </div>
         <div class="line">
           <span class="label">机构logo：</span>
-          <img :src="merchantDetail.logo" alt="" srcset="">
+          <img @click="imageShow($event)" :src="merchantDetail.logo" alt="" srcset="">
         </div>
         <div class="line">
           <span class="label">详细地址：</span>
@@ -137,7 +137,7 @@
         <div class="line">
           <span class="label">介绍图：</span>
           <div class="imgList">
-            <img style="margin-right: 10px;" v-for="(item, index) in merchantDetail.publicityImgs" :src="item" alt="" srcset="" :key="index">
+            <img @click="imageShow($event)" style="margin-right: 10px;" v-for="(item, index) in merchantDetail.publicityImgs" :src="item" alt="" srcset="" :key="index">
           </div>
         </div>
       </div>
@@ -149,15 +149,15 @@
         </div>
         <div class="line">
           <span class="label">营业执照：</span>
-          <img :src="merchantDetail.businessLicenseImg" alt="" srcset="">
+          <img @click="imageShow($event)" :src="merchantDetail.businessLicenseImg" alt="" srcset="">
         </div>
         <div class="line">
           <span class="label">法人手持身份证（正面）：</span>
-          <img :src="merchantDetail.handheldIdCardImg" alt="" srcset="">
+          <img @click="imageShow($event)" :src="merchantDetail.handheldIdCardImg" alt="" srcset="">
         </div>
         <div class="line">
           <span class="label">其他资质证书：</span>
-          <img :src="merchantDetail.otherCertificateImg" alt="" srcset="">
+          <img @click="imageShow($event)" :src="merchantDetail.otherCertificateImg" alt="" srcset="">
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -185,17 +185,20 @@
         <el-button type="primary" @click="refuse">确定</el-button>
       </span>
     </el-dialog>
+
+    <imgPreview :url="imgUrl" :show="imgShow" v-if="imgShow" @letImageHide="imgShow = false" />
   </div>
 </template>
 
 <script>
 import { merchantApplyList, merchantApplyAudit, merchantApplyDetail, merchantApplyTypes } from '@/api/merchants'
+import imgPreview from '@/components/imgPreView'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
   name: 'androidUpdate',
-  components: { Pagination },
+  components: { Pagination,imgPreview },
   directives: { waves },
   filters: {
     releaseStatusFilters (val) {
@@ -215,23 +218,31 @@ export default {
     },
     typesFiters(val){
       if(val == 101){
-        return val = "会计培训机构"
-      }else if(val == 102){
-        return val = "会计服务机构"
-      }else if(val == 103){
         return val = "税务师事务所"
-      }else if(val == 104){
+      }else if(val == 102){
         return val = "会计师事务所"
-      }else if(val == 105){
+      }else if(val == 103){
         return val = "资产评估公司"
-      }else if(val == 106){
+      }else if(val == 104){
         return val = "律师事务所"
+      }else if(val == 105){
+        return val = "知识产权代理公司"
+      }else if(val == 106){
+        return val = "劳务及人力资源公司"
       }else if(val == 107){
-        return val = "知识产权服务机构"
+        return val = "融资服务公司"
       }else if(val == 108){
-        return val = "劳务服务机构"
+        return val = "代理记账公司"
       }else if(val == 109){
-        return val = "融资服务机构"
+        return val = "财税培训机构"
+      }else if(val == 110){
+        return val = "刻章店"
+      }else if(val == 111){
+        return val = "税务筹划公司"
+      }else if(val == 112){
+        return val = "工程造价咨询公司"
+      }else if(val == 113){
+        return val = "离岸公司注册的公司"
       }
     }
   },
@@ -289,7 +300,9 @@ export default {
       rules: {},
       rules1: {
         failCause: [{ required: true, message: '拒绝原因必选'}]
-      }
+      },
+      imgUrl: '',
+      imgShow: false
     }
   },
   created() {
@@ -426,17 +439,53 @@ export default {
     // 编辑提交
     updateData () {
 
+    },
+    imageShow(e) {
+      this.imgUrl = e.target.src
+      this.imgShow = true
+    },
+    imageHide () {
+      this.imgShow = false
     }
   }
 }
 </script>
 <style lang="scss">
 .filter-container .filter-item{
-    margin-bottom: 0px;
+    margin-bottom: 0px !important;
+    vertical-align: baseline;
 }
 
 .el-dialog__body{
   padding-top: 0px !important;
+}
+.header{
+  position: absolute;
+  left: 100px;
+  top: 0;
+  .pass{
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1px solid #67c23a;
+    transform: rotateZ(-45deg);
+    // margin-bottom: -0px;
+  }
+  .noPass{
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1px solid red;
+    transform: rotateZ(-45deg);
+  }
 }
 .line{
   display: flex;
