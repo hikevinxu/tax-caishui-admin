@@ -56,7 +56,8 @@
       <el-table-column label="发布状态" width="150px" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status == 102">{{ scope.row.status | releaseStatusFilters  }}</el-tag>
-          <el-tag type="danger" v-else>{{ scope.row.status | releaseStatusFilters }}</el-tag>
+          <el-tag type="danger" v-if="scope.row.status == 999">{{ scope.row.status | releaseStatusFilters  }}</el-tag>
+          <el-tag type="success" v-if="scope.row.status == 103">{{ scope.row.status | releaseStatusFilters }}</el-tag>
         </template>
       </el-table-column>
 
@@ -459,6 +460,7 @@ export default {
 .el-dialog__body{
   padding-top: 0px !important;
 }
+
 .header{
   position: absolute;
   left: 100px;
