@@ -94,6 +94,7 @@
         <h3 class="pass" v-if="merchantDetail.status == 103" style="color: #67c23a;">通过</h3>
       </div>
       <div class="basicInformation">
+        <span style="color: red;" v-if="isLookDetail && merchantDetail.status == 999">拒审原因：{{merchantDetail.auditFailCause}}</span>
         <h2 class="title">基本信息</h2>
         <div class="line">
           <span class="label">机构名称：</span>
