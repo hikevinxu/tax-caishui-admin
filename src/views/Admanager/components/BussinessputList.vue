@@ -10,7 +10,7 @@
       <el-select v-model="listQuery.cityCode" placeholder="选择投放城市" @change="getList" clearable style="width: 190px" class="filter-item">
         <el-option v-for="(item,index) in cityList" :key="item.code+index" :label="item.name" :value="item.code"/>
       </el-select>
-      <el-select v-model="listQuery.adStatus" placeholder="投放状态" @change="getList" clearable style="width: 150px" class="filter-item">
+      <el-select v-model="listQuery.adStatus" placeholder="投放状态" @change="adStatusChange" clearable style="width: 150px" class="filter-item">
         <el-option v-for="(item,index) in statusList" :key="item+index" :label="item.name" :value="item.id"/>
       </el-select>
       <span v-if="relateType == 2" class="filter-item">
@@ -458,6 +458,10 @@ export default {
           this.putList = res.data.list
         }
       })
+    },
+    adStatusChange(val) {
+      this.listQuery.cityStatus = val
+      this.getList()
     }
   }
 }

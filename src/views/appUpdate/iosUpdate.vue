@@ -23,9 +23,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="更新内容" align="center">
+      <el-table-column label="更新内容" align="center" width="250"> 
         <template slot-scope="scope">
-         <span>{{ scope.row.updateContent }}</span>
+         <span class="textHidden">{{ scope.row.updateContent }}</span>
         </template>
       </el-table-column>
 
@@ -328,5 +328,12 @@ export default {
 }
 .update .el-checkbox+.el-checkbox {
   margin-left: 0;
+}
+.textHidden {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box; 
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2; 
 }
 </style>
