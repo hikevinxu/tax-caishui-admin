@@ -96,7 +96,7 @@
         </div>
         <div class="line">
           <span class="label">机构logo：</span>
-          <img :src="merchantDetail.companyInfo.logo" alt="" srcset="">
+          <img @click="imageShow($event)" :src="merchantDetail.companyInfo.logo" alt="" srcset="">
         </div>
         <div class="line">
           <span class="label">详细地址：</span>
@@ -121,7 +121,7 @@
         <div class="line">
           <span class="label">介绍图：</span>
           <div class="imgList">
-            <img style="margin-right: 10px;" v-for="(item, index) in merchantDetail.companyInfo.publicityImgs" :src="item.img" alt="" srcset="" :key="index">
+            <img @click="imageShow($event)" style="margin-right: 10px;" v-for="(item, index) in merchantDetail.companyInfo.publicityImgs" :src="item.img" alt="" srcset="" :key="index">
           </div>
         </div>
       </div>
@@ -133,32 +133,34 @@
         </div>
         <div class="line">
           <span class="label">营业执照：</span>
-          <img :src="merchantDetail.businessLicenseImg" alt="" srcset="">
+          <img @click="imageShow($event)" :src="merchantDetail.businessLicenseImg" alt="" srcset="">
         </div>
         <div class="line">
           <span class="label">法人手持身份证（正面）：</span>
-          <img :src="merchantDetail.handheldIdCardImg" alt="" srcset="">
+          <img @click="imageShow($event)" :src="merchantDetail.handheldIdCardImg" alt="" srcset="">
         </div>
         <div class="line">
           <span class="label">其他资质证书：</span>
-          <img :src="merchantDetail.otherCertificateImg" alt="" srcset="">
+          <img @click="imageShow($event)" :src="merchantDetail.otherCertificateImg" alt="" srcset="">
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogAuditVisible = false">返回</el-button>
       </span>
     </el-dialog>
+    <imgPreview :url="imgUrl" :show="imgShow" v-if="imgShow" @letImageHide="imgShow = false" />
   </div>
 </template>
 
 <script>
 import { merchantList, merchantUp, merchantDetail, merchantDown, merchantApplyTypes } from '@/api/merchants'
 import waves from '@/directive/waves' // Waves directive
+import imgPreview from '@/components/imgPreView'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
   name: 'androidUpdate',
-  components: { Pagination },
+  components: { Pagination,imgPreview },
   directives: { waves },
   filters: {
     releaseStatusFilters (val) {
@@ -260,7 +262,9 @@ export default {
       rules: {},
       rules1: {
         failCause: [{ required: true, message: '拒绝原因必选'}]
-      }
+      },
+      imgUrl: '',
+      imgShow: false
     }
   },
   created() {
@@ -388,6 +392,13 @@ export default {
     // 编辑提交
     updateData () {
 
+    },
+    imageShow(e) {
+      this.imgUrl = e.target.src
+      this.imgShow = true
+    },
+    imageHide () {
+      this.imgShow = false
     }
   }
 }
