@@ -31,7 +31,7 @@
         <template slot-scope="scope">
           <el-button v-if="!scope.row.enableStatus" style="margin-left: 10px;" type="success" size="small" @click="handleEnable(scope.row)">启用</el-button>
           <el-button v-else style="margin-left: 10px;" type="danger" size="small" @click="handleDisable(scope.row)">禁用</el-button>
-          <el-button style="margin-left: 10px;" type="primary" size="small" @click="handleManageList(scope.row)">管理列表</el-button>
+          <el-button style="margin-left: 10px;" type="primary" size="small" @click="handleManageList(scope.row, scope.$index)">管理列表</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -111,8 +111,8 @@ export default {
         })
       })
     },
-    handleManageList() {
-
+    handleManageList(row, index) {
+      this.$router.push('/adManagerList/adPosition' + (index + 1) + '/businessAdManager' + (index + 1) + '-1/params=' + row.positionNo + ',' + row.elementNum + ',' + row.elementType + ',' + row.relateType)
     }
   }
 }

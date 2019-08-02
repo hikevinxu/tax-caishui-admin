@@ -152,7 +152,7 @@
       </div>
       <div slot="footer" class="dialog-footer" style="text-align: right;">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogStatus == 'create' ? createData() : editData()">保存</el-button>
+        <el-button type="primary" :loading="dialogStatusLoading" @click="dialogStatus == 'create' ? createData() : editData()">保存</el-button>
       </div>
     </el-dialog>
 
@@ -254,7 +254,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer" style="text-align: right;">
         <el-button @click="createCityFormDialog = false">取消</el-button>
-        <el-button type="primary" @click="dialogStatus2 == 'create' ? createCityData() : editCityData()">保存</el-button>
+        <el-button type="primary" :loading="dialogStatusLoading2" @click="dialogStatus2 == 'create' ? createCityData() : editCityData()">保存</el-button>
       </div>
     </el-dialog>
   </div>
@@ -311,7 +311,9 @@ export default {
       dialogFormVisible2: false,
       createCityFormDialog: false,
       dialogStatus: '',
+      dialogStatusLoading: false,
       dialogStatus2: '',
+      dialogStatusLoading2: false,
       pageUrlList: global.pageUrlList,
       firmList: [],
       loading: false,
@@ -551,7 +553,9 @@ export default {
         remark: this.form.remark
       }
       params.adParam = JSON.stringify([{name: 'firmImg', value: this.form.firmImg.fileId, type: 'img'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}])
+      this.dialogStatusLoading = true
       advertInfoSave(params).then(res => {
+        this.dialogStatusLoading = false
         if(res.code == 0){
           console.log(res)
           this.adId = res.data
@@ -564,6 +568,8 @@ export default {
           this.dialogFormVisible = false
           this.getList()
         }
+      }).catch(err => {
+        this.dialogStatusLoading = false
       })
     },
     handleEdit(row) {
@@ -651,7 +657,9 @@ export default {
       params.adParam = JSON.stringify([{name: 'firmImg', value: this.form.firmImg.fileId, type: 'img'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}])
       params.remark = this.form.remark
       console.log(params)
+      this.dialogStatusLoading = true
       advertInfoUpdate(params).then(res => {
+        this.dialogStatusLoading = false
         if(res.code == 0){
           console.log(res)
           this.$notify({
@@ -663,6 +671,8 @@ export default {
           this.dialogFormVisible = false
           this.getList()
         }
+      }).catch(err => {
+        this.dialogStatusLoading = false
       })
     },
     advertRecordUp(row){
@@ -978,7 +988,9 @@ export default {
         this.$message.error('请先添加一个广告')
         return 
       }
+      this.dialogStatusLoading2 = true
       advertRecordSave(params).then(res => {
+        this.dialogStatusLoading2 = false
         if(res.code == 0){
           console.log(res)
           this.$notify({
@@ -990,6 +1002,8 @@ export default {
           this.getPutList()
           this.createCityFormDialog = false
         }
+      }).catch(err => {
+         this.dialogStatusLoading2 = false
       })
     },
     editCityData() {
@@ -1002,7 +1016,9 @@ export default {
         endTime: this.addCityForm.putTime[1],
         adIndex: this.addCityForm.adIndex
       }
+      this.dialogStatusLoading2 = true
       advertRecordUpdate(params).then(res => {
+        this.dialogStatusLoading2 = false
         if(res.code == 0){
           console.log(res)
           this.$notify({
@@ -1014,6 +1030,8 @@ export default {
           this.getPutList()
           this.createCityFormDialog = false
         }
+      }).catch(err => {
+        this.dialogStatusLoading2 = false
       })
     },
     firmNameChange(val){

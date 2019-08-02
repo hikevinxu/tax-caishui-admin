@@ -85,191 +85,191 @@ export const asyncRouterMap = [
       }
     ]
   },
+  // {
+  //   path: '/homeBanner',
+  //   component: Layout,
+  //   redirect: '/homeBanner/homeBannerBAM',
+  //   name: 'homeBanner',
+  //   meta: {
+  //     title: '首页banner管理',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'homeBannerBAM',
+  //       component: () => import('@/views/Admanager/homeBanner/BussinessAdManager.vue'),
+  //       name: 'homeBannerBussinessAdManager',
+  //       meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'homeBannerBAP',
+  //       component: () => import('@/views/Admanager/homeBanner/BussinessAdPut.vue'),
+  //       name: 'homeBannerBussinessAdPut',
+  //       meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'homeBannerSAM',
+  //       component: () => import('@/views/Admanager/homeBanner/SystemAdManager.vue'),
+  //       name: 'homeBannerSystemAdManager',
+  //       meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/homeRecommend',
+  //   component: Layout,
+  //   redirect: '/homeRecommend/homeBannerBussinessAd',
+  //   name: 'homeRecommend',
+  //   meta: {
+  //     title: '首页人气推荐',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'homeRecommendBAM',
+  //       component: () => import('@/views/Admanager/homeRecommend/BussinessAdManager.vue'),
+  //       name: 'homeRecommendBussinessAdManager',
+  //       meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'homeRecommendBAP',
+  //       component: () => import('@/views/Admanager/homeRecommend/BussinessAdPut.vue'),
+  //       name: 'homeRecommendBussinessAdPut',
+  //       meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'homeRecommendSAM',
+  //       component: () => import('@/views/Admanager/homeRecommend/SystemAdManager.vue'),
+  //       name: 'homeRecommendSystemAdManager',
+  //       meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/homeRecommendCompany',
+  //   component: Layout,
+  //   redirect: '/homeRecommendCompany/homeRecommendCompanyBAM',
+  //   name: 'homeRecommendCompany',
+  //   meta: {
+  //     title: '首页推荐企业',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'homeRecommendCompanyBAM',
+  //       component: () => import('@/views/Admanager/homeRecommendCompany/BussinessAdManager.vue'),
+  //       name: 'homeRecommendCompanyBussinessAdManager',
+  //       meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'homeRecommendCompanyBAP',
+  //       component: () => import('@/views/Admanager/homeRecommendCompany/BussinessAdPut.vue'),
+  //       name: 'homeRecommendCompanyBussinessAdPut',
+  //       meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'homeRecommendCompanySAM',
+  //       component: () => import('@/views/Admanager/homeRecommendCompany/SystemAdManager.vue'),
+  //       name: 'homeRecommendCompanySystemAdManager',
+  //       meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/serviceTop',
+  //   component: Layout,
+  //   redirect: '/serviceTop/serviceTopBAM',
+  //   name: 'serviceTop',
+  //   meta: {
+  //     title: '服务分类顶部',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'serviceTopBAM',
+  //       component: () => import('@/views/Admanager/serviceTop/BussinessAdManager.vue'),
+  //       name: 'serviceTopBussinessAdManager',
+  //       meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'serviceTopBAP',
+  //       component: () => import('@/views/Admanager/serviceTop/BussinessAdPut.vue'),
+  //       name: 'serviceTopBussinessAdPut',
+  //       meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'serviceTopSAM',
+  //       component: () => import('@/views/Admanager/serviceTop/SystemAdManager.vue'),
+  //       name: 'serviceTopSystemAdManager',
+  //       meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/serviceList',
+  //   component: Layout,
+  //   redirect: '/serviceList/serviceListBAM',
+  //   name: 'serviceList',
+  //   meta: {
+  //     title: '服务列表',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'serviceListBAM',
+  //       component: () => import('@/views/Admanager/serviceList/BussinessAdManager.vue'),
+  //       name: 'serviceListBussinessAdManager',
+  //       meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'serviceListBAP',
+  //       component: () => import('@/views/Admanager/serviceList/BussinessAdPut.vue'),
+  //       name: 'serviceListBussinessAdPut',
+  //       meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'serviceListSAM',
+  //       component: () => import('@/views/Admanager/serviceList/SystemAdManager.vue'),
+  //       name: 'serviceListSystemAdManager',
+  //       meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/merchant',
+  //   component: Layout,
+  //   redirect: '/merchant/merchantBAM',
+  //   name: 'merchant',
+  //   meta: {
+  //     title: '商户入驻',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'merchantBAM',
+  //       component: () => import('@/views/Admanager/merchantMs/BussinessAdManager.vue'),
+  //       name: 'merchantBussinessAdManager',
+  //       meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'merchantBAP',
+  //       component: () => import('@/views/Admanager/merchantMs/BussinessAdPut.vue'),
+  //       name: 'merchantBussinessAdPut',
+  //       meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'merchantSAM',
+  //       component: () => import('@/views/Admanager/merchantMs/SystemAdManager.vue'),
+  //       name: 'merchantSystemAdManager',
+  //       meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
+  //     }
+  //   ]
+  // },
   {
-    path: '/homeBanner',
-    component: Layout,
-    redirect: '/homeBanner/homeBannerBAM',
-    name: 'homeBanner',
-    meta: {
-      title: '首页banner管理',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'homeBannerBAM',
-        component: () => import('@/views/Admanager/homeBanner/BussinessAdManager.vue'),
-        name: 'homeBannerBussinessAdManager',
-        meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'homeBannerBAP',
-        component: () => import('@/views/Admanager/homeBanner/BussinessAdPut.vue'),
-        name: 'homeBannerBussinessAdPut',
-        meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'homeBannerSAM',
-        component: () => import('@/views/Admanager/homeBanner/SystemAdManager.vue'),
-        name: 'homeBannerSystemAdManager',
-        meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
-  {
-    path: '/homeRecommend',
-    component: Layout,
-    redirect: '/homeRecommend/homeBannerBussinessAd',
-    name: 'homeRecommend',
-    meta: {
-      title: '首页人气推荐',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'homeRecommendBAM',
-        component: () => import('@/views/Admanager/homeRecommend/BussinessAdManager.vue'),
-        name: 'homeRecommendBussinessAdManager',
-        meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'homeRecommendBAP',
-        component: () => import('@/views/Admanager/homeRecommend/BussinessAdPut.vue'),
-        name: 'homeRecommendBussinessAdPut',
-        meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'homeRecommendSAM',
-        component: () => import('@/views/Admanager/homeRecommend/SystemAdManager.vue'),
-        name: 'homeRecommendSystemAdManager',
-        meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
-  {
-    path: '/homeRecommendCompany',
-    component: Layout,
-    redirect: '/homeRecommendCompany/homeRecommendCompanyBAM',
-    name: 'homeRecommendCompany',
-    meta: {
-      title: '首页推荐企业',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'homeRecommendCompanyBAM',
-        component: () => import('@/views/Admanager/homeRecommendCompany/BussinessAdManager.vue'),
-        name: 'homeRecommendCompanyBussinessAdManager',
-        meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'homeRecommendCompanyBAP',
-        component: () => import('@/views/Admanager/homeRecommendCompany/BussinessAdPut.vue'),
-        name: 'homeRecommendCompanyBussinessAdPut',
-        meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'homeRecommendCompanySAM',
-        component: () => import('@/views/Admanager/homeRecommendCompany/SystemAdManager.vue'),
-        name: 'homeRecommendCompanySystemAdManager',
-        meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
-  {
-    path: '/serviceTop',
-    component: Layout,
-    redirect: '/serviceTop/serviceTopBAM',
-    name: 'serviceTop',
-    meta: {
-      title: '服务分类顶部',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'serviceTopBAM',
-        component: () => import('@/views/Admanager/serviceTop/BussinessAdManager.vue'),
-        name: 'serviceTopBussinessAdManager',
-        meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'serviceTopBAP',
-        component: () => import('@/views/Admanager/serviceTop/BussinessAdPut.vue'),
-        name: 'serviceTopBussinessAdPut',
-        meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'serviceTopSAM',
-        component: () => import('@/views/Admanager/serviceTop/SystemAdManager.vue'),
-        name: 'serviceTopSystemAdManager',
-        meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
-  {
-    path: '/serviceList',
-    component: Layout,
-    redirect: '/serviceList/serviceListBAM',
-    name: 'serviceList',
-    meta: {
-      title: '服务列表',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'serviceListBAM',
-        component: () => import('@/views/Admanager/serviceList/BussinessAdManager.vue'),
-        name: 'serviceListBussinessAdManager',
-        meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'serviceListBAP',
-        component: () => import('@/views/Admanager/serviceList/BussinessAdPut.vue'),
-        name: 'serviceListBussinessAdPut',
-        meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'serviceListSAM',
-        component: () => import('@/views/Admanager/serviceList/SystemAdManager.vue'),
-        name: 'serviceListSystemAdManager',
-        meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
-  {
-    path: '/merchant',
-    component: Layout,
-    redirect: '/merchant/merchantBAM',
-    name: 'merchant',
-    meta: {
-      title: '商户入驻',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'merchantBAM',
-        component: () => import('@/views/Admanager/merchantMs/BussinessAdManager.vue'),
-        name: 'merchantBussinessAdManager',
-        meta: { title: '商业广告管理', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'merchantBAP',
-        component: () => import('@/views/Admanager/merchantMs/BussinessAdPut.vue'),
-        name: 'merchantBussinessAdPut',
-        meta: { title: '商业广告投放列表', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'merchantSAM',
-        component: () => import('@/views/Admanager/merchantMs/SystemAdManager.vue'),
-        name: 'merchantSystemAdManager',
-        meta: { title: '系统默认广告管理', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
-  {
-    path: '/merchantsAudit',
+    path: '/merchants',
     component: Layout,
     redirect: '/merchants/merchantsAudit',
-    name: 'merchantsAudit',
+    name: 'merchants',
     meta: {
       title: '入驻商户管理',
       icon: 'table'
@@ -282,9 +282,9 @@ export const asyncRouterMap = [
         meta: { title: '商户入驻审核', icon: '', noCache: true, roles: ['admin']  }
       },
       {
-        path: 'merchants',
+        path: 'merchantsAmg',
         component: () => import('@/views/merchants/merchants.vue'),
-        name: 'merchants',
+        name: 'merchantsAmg',
         meta: { title: '商户管理', icon: '', noCache: true, roles: ['admin']  }
       }
     ]
