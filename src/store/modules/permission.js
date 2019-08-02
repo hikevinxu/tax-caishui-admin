@@ -59,7 +59,7 @@ const permission = {
               for(let i=0;i<res.data.length;i++){
                 arr.push({
                   path: 'adPosition' + (i + 1),
-                  component: () => import('@/views/AdManager/index'), // Parent router-view
+                  component: () => import('@/views/AdManager/index.vue'), // Parent router-view
                   name: 'adPosition' + (i + 1),
                   meta: { title: res.data[i].positionName },
                   redirect: '/adManagerList/adPosition' + (i + 1) + '/businessAdManager' + (i + 1) + '-1',
