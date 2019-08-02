@@ -59,26 +59,26 @@ const permission = {
               for(let i=0;i<res.data.length;i++){
                 arr.push({
                   path: 'adPosition' + (i + 1),
-                  component: () => import('../../views/AdManager/index.vue'), // Parent router-view
+                  component: () => import('@/views/Admanager/index.vue'), // Parent router-view
                   name: 'adPosition' + (i + 1),
                   meta: { title: res.data[i].positionName },
                   redirect: '/adManagerList/adPosition' + (i + 1) + '/businessAdManager' + (i + 1) + '-1',
                   children: [
                     {
                       path: 'businessAdManager' + (i + 1) + '-1/params='+ res.data[i].positionNo +',' + res.data[i].elementNum + ','+ res.data[i].elementType + ',' + res.data[i].relateType,
-                      component: () => import('../../views/Admanager/admanagerList/BussinessAdManager.vue'),
+                      component: () => import('@/views/Admanager/admanagerList/BussinessAdManager.vue'),
                       name: 'adPosition1-1' + (i + 1),
                       meta: { title: '商业广告管理', roles: ['admin'] }
                     },
                     {
                       path: 'fullInfoList' + (i + 1) + '-2/params='+ res.data[i].positionNo +',' + res.data[i].elementNum + ','+ res.data[i].elementType + ',' + res.data[i].relateType,
-                      component: () => import('../../views/Admanager/admanagerList/BussinessAdPut.vue'),
+                      component: () => import('@/views/Admanager/admanagerList/BussinessAdPut.vue'),
                       name: 'adPosition1-2' + (i + 1),
                       meta: { title: '商业广告投放列表', roles: ['admin'] }
                     },
                     {
                       path: 'systemAd' + (i + 1) + '-3/params='+ res.data[i].positionNo +',' + res.data[i].elementNum + ','+ res.data[i].elementType + ',' + res.data[i].relateType,
-                      component: () => import('../../views/Admanager/admanagerList/SystemAdManager.vue'),
+                      component: () => import('@/views/Admanager/admanagerList/SystemAdManager.vue'),
                       name: 'adPosition1-3' + (i + 1),
                       meta: { title: '系统默认广告管理', roles: ['admin'] }
                     }
