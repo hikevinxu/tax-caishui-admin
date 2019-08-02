@@ -6,7 +6,7 @@
       </pan-thumb>
       <div class="info-container">
         <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">欢迎来到口袋税务师</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">欢迎来到财税鱼</span>
       </div>
     </div>
     <div>
