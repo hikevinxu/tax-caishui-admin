@@ -1,5 +1,5 @@
 module.exports = {
   NODE_ENV: '"production"',
   ENV_CONFIG: '"prod"',
-  BASE_API: '"http://admin-api.pocket.taxlioner.com"'
+  BASE_API: '"http://admin-api.caishuiyu.com"'
 }
