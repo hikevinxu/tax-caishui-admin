@@ -102,6 +102,10 @@ const permission = {
           //     commit('SET_ROUTERS', accessedRouters)
           //     resolve()
           //   }
+          // }).catch(err => {
+          //   accessedRouters = asyncRouterMap
+          //   commit('SET_ROUTERS', accessedRouters)
+          //   resolve()
           // })
           accessedRouters = asyncRouterMap
         } else {

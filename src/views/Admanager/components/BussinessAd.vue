@@ -210,7 +210,7 @@
         
         <el-table-column :label="$t('table.actions')" align="center" width="250" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <div v-if="new Date(scope.row.endTime).valueOf() > new Date().valueOf()">
+            <div v-if="new Date(scope.row.endTime.replace(/-/g,'/')).valueOf() > new Date().valueOf()">
               <el-button type="primary" size="small" v-if="scope.row.status == 0 || scope.row.status == 2" @click="editCityFormDialog(scope.row)">编辑</el-button>
               <el-button style="margin-left: 10px;" type="success" size="small" @click="advertRecordUp(scope.row)" v-if="scope.row.status == 0 || scope.row.status == 2">上架</el-button>
               <el-button style="margin-left: 10px;" type="warning" size="small" @click="advertRecordDown(scope.row)" v-if="scope.row.status == 1">下架</el-button>
@@ -371,6 +371,7 @@ export default {
     }
   },
   created(){
+    console.log(new Date("2019/09/02 00:00:00").valueOf())
     this.getServiceTypeList()
     this.getList()
   },
