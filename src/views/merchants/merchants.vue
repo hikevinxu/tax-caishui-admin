@@ -279,7 +279,7 @@ export default {
         if (response.code === 0) {
           console.log(response)
           this.list = response.data.items
-          // this.total = response.data.total
+          this.total = response.data.total
           this.listLoading = false
         }
       })
