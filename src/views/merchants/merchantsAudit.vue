@@ -76,7 +76,7 @@
 
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
     <el-dialog :title="temp.action === 'create' ? '添加' : temp.action === 'look' ? '详情' : '编辑'" width="800px" :visible.sync="dialogFormVisible">
       <el-form class="update" ref="dataForm" :model="temp" label-position="right" label-width="120px" style="width: 650px; margin-left:50px;">
