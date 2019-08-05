@@ -311,31 +311,19 @@ export default {
               // name = '全部服务'
           }else{
             if(this.showThird == true){
-              serviceCode = this.serviceType.thirdCode
+              // serviceCode = this.serviceType.thirdCode
               if(this.serviceType.thirdCode != ''){
                 serviceCode = this.serviceType.thirdCode
               }else{
                 if(this.serviceType.secondCode != ''){
                   serviceCode = this.serviceType.secondCode
                 }else{
-                  this.$message({
-                    message: '请选择子级类目后提交',
-                    type: 'error',
-                    showClose: true,
-                    duration: 1000
-                  })
-                  return
+                  serviceCode = this.serviceType.firstCode
                 }
               }
             }else{
               if(this.serviceType.secondCode == ''){
-                this.$message({
-                  message: '请选择子级类目后提交',
-                  type: 'error',
-                  showClose: true,
-                  duration: 1000
-                })
-                return
+                serviceCode = this.serviceType.firstCode
               }else{
                 serviceCode = this.serviceType.secondCode
               }
