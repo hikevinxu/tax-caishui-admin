@@ -336,7 +336,7 @@ export default {
             name: this.temp.name,
             shelf: false
           }
-          console.log(params)
+          // console.log(params)
           serviceTagAdd(params).then((response) => {
             if (response.code == 0) {
               this.$notify({
