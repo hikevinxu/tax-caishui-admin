@@ -290,6 +290,30 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/merchantsService',
+    component: Layout,
+    redirect: '/merchantsService/serviceList',
+    name: 'merchantsService',
+    meta: {
+      title: '商户上架服务管理',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'serviceList',
+        component: () => import('@/views/merchants/serviceList.vue'),
+        name: 'serviceList',
+        meta: { title: '服务列表', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'serviceSoldOutRecords',
+        component: () => import('@/views/merchants/serviceSoldOutRecords.vue'),
+        name: 'serviceSoldOutRecords',
+        meta: { title: '下架记录', icon: '', noCache: true, roles: ['admin']  }
+      }
+    ]
+  },
+  {
     path: '/homePageSetting',
     component: Layout,
     redirect: '/homePageSetting/bannerSetting',
@@ -311,6 +335,44 @@ export const asyncRouterMap = [
       //   name: 'citySetting',
       //   meta: { title: '热门城市功能配置', icon: '', noCache: true, roles: ['admin']  }
       // }
+    ]
+  },
+  {
+    path: '/landPage',
+    component: Layout,
+    redirect: '/landPage/landPageSetting',
+    name: 'landPage',
+    meta: {
+      title: '推广页面配置',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'landPageSetting',
+        component: () => import('@/views/landPage/pageList'),
+        name: 'landPageSetting',
+        meta: { title: '落地页配置', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'createLandPage',
+        component: () => import('@/views/landPage/createPage'),
+        name: 'createLandPage',
+        meta: { title: '新增落地页', icon: '', noCache: true, roles: ['admin']  },
+        hidden: true
+      },
+      {
+        path: 'editLandPage',
+        component: () => import('@/views/landPage/editPage'),
+        name: 'editLandPage',
+        meta: { title: '编辑落地页', icon: '',  hidden: true, noCache: true, roles: ['admin']  },
+        hidden: true
+      },
+      // {
+      //   path: 'promotion',
+      //   component: () => import('@/views/landPage/promotion'),
+      //   name: 'promotion',
+      //   meta: { title: '落地页配置', icon: '', noCache: true, roles: ['admin']  }
+      // },
     ]
   },
   // {

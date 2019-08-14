@@ -1,0 +1,254 @@
+<template>
+	<div class="land_page">
+		<div class="btn_Box filter-container">
+      <el-button v-waves class="filter-item" icon="el-icon-plus" type="primary" @click="$router.push('/landPage/createLandPage')">新建</el-button>
+      <el-select class="filter-item" style="width: 250px; margin-left: 10px;" @change="getList" v-model="searchData.packageName" placeholder="请选择投放应用">
+        <el-option value="" label="全部"></el-option>
+        <el-option v-for="item in app" :label="item" :value="item" :key="item" > </el-option>
+      </el-select>
+      <el-input class="filter-item" type="text" style="width: 250px; margin-left: 10px;" placeholder="请输入投放渠道" v-model="searchData.advertisingChannel"></el-input>
+      <el-input class="filter-item" type="text" style="width: 250px; margin-left: 10px;" placeholder="请输入渠道备注" v-model="searchData.channelRemark"></el-input>
+      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" @click="getList" icon="el-icon-search">搜索</el-button>
+	    </div>
+	    <el-table
+	      	:data="tableListData"
+          border
+          fit
+          highlight-current-row
+	      	style="width: 100%">
+	      	<el-table-column label="序号" type="index" :index="1" width="80px" align="center" >
+            
+	      	</el-table-column>
+	      	<el-table-column label="产品名称" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.packageName }}</span>
+            </template>
+	      	</el-table-column>
+	      	<el-table-column label="渠道channel" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.advertisingChannel }}</span>
+            </template>
+	      	</el-table-column>
+	      	<el-table-column label="渠道备注" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.channelRemark }}</span>
+            </template>
+	      	</el-table-column>
+	      	<el-table-column label="落地页url" align="center">
+	      		<template slot-scope="scope">
+	      			<span @click="openUrl(scope.row)" style="color: #409eff;">{{scope.row.landpageUrl}}</span>
+	      		</template>
+	      	</el-table-column>
+	      	<el-table-column label="预览"  align="center">
+	        	<template slot-scope="scope">
+	          	<img :src="scope.row.headImg" alt="" style="width: 40px;height: 40px">
+	        	</template>
+	      	</el-table-column>
+	      	<el-table-column label="落地页标题" align="center">
+            <template slot-scope="scope">
+	          	<span>{{ scope.row.title }}</span>
+	        	</template>
+	      	</el-table-column>
+	      	<el-table-column label="创建时间" align="center">
+          <template slot-scope="scope">
+	          	<span>{{ scope.row.gmtCreate }}</span>
+	        	</template>
+	      	</el-table-column>
+	      	<el-table-column label="操作" align="center">
+	        	<template slot-scope="scope">
+	          	<el-dropdown  @command="handleCommand">
+		            <el-button type="primary">
+		              操作
+		            </el-button>
+		            <el-dropdown-menu slot="dropdown">
+	              		<el-dropdown-item :command="{type: 'editItem', item: scope.row}">编辑</el-dropdown-item>
+	              		<el-dropdown-item :command="{type: 'copyItem', item: scope.row}">复制</el-dropdown-item>
+	              		<el-dropdown-item :command="{type: 'deleteItem', item: scope.row}">删除</el-dropdown-item>
+	            	</el-dropdown-menu>
+	          	</el-dropdown>
+	        	</template>
+	      	</el-table-column>
+	    </el-table>
+
+	    <!-- <el-pagination
+			@current-change="handleCurrentChange"
+			:current-page="currentPage"
+			:page-sizes="[10]"
+			:page-size="10"
+			layout="total, sizes, prev, pager, next, jumper"
+			:total="totalCount"
+			style="margin: 16px 0; display: flex; justify-content: center">
+		</el-pagination> -->
+    <pagination v-show="totalCount>0" :total="totalCount" :page.sync="searchData.page" :limit.sync="searchData.size" @pagination="getList" />
+	</div>
+</template>
+
+<script>
+	// import storage from 'good-storage';
+	import mixins from './mixins'
+  // import ajax from '../../../api/common/ajax'
+  import waves from '@/directive/waves' // Waves directive
+  import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+	export default {
+    components: { Pagination },
+    directives: { waves },
+		data() {
+			return {
+				searchData: {
+					packageName: null,
+					advertisingChannel: null,
+					channelRemark: null,
+					status: 1,
+					page: 1,
+					size: 10
+				},
+				formLabelWidth: '120px',
+				tableListData: [
+					{
+						packageName: '小白贷款',
+						advertisingChannel: 'smy',
+						channelRemark: 'smy12',
+						landpageUrl: 'https://www.baidu.com',
+						headImg: 'https://image.kongapi.com/xyzc/adbit/image/e315cf507de64223802ae51c54d620fc.png',
+						title: '小白贷款落地页',
+						gmtCreate: '2019-05-08'
+					}
+				],
+        currentPage: 1,
+        page: 1,
+        totalCount: 0,
+        totalPage: 0,
+			}
+		},
+		mixins: [mixins],
+		watch: {
+			'searchData.packageName': function(newValue) {
+				if(!newValue) {
+					this.searchData.packageName = null
+				}
+			},
+			'searchData.advertisingChannel': function(newValue) {
+				if(!newValue) {
+					this.searchData.advertisingChannel = null
+				}
+			},
+			'searchData.channelRemark': function(newValue) {
+				if(!newValue) {
+					this.searchData.channelRemark = null
+				}
+			},
+		},
+		methods: {
+			getList() {
+				this.searchData.page = this.currentPage;
+				ajax('api/channelPage/obtainPaging', 'post', this.searchData).then(res => {
+					if(res.code == 10001) {
+						console.log(res.data);
+						this.tableListData = res.data.data;
+						this.page = res.data.page;
+						this.totalCount = res.data.totalCount;
+						this.totalPage = res.data.totalPage;
+						// this.searchData = {
+						// 	packageName: null,
+						// 	advertisingChannel: null,
+						// 	channelRemark: null,
+						// 	status: 1,
+						// 	page: 1,
+						// 	size: 10
+						// }
+					}else {
+						this.$message({
+				            type: 'error',
+				            message: res.msg
+			          	}); 
+					}
+				})
+			},
+			search() {
+				this.searchData.page = 1
+				this.searchData.size = 10
+			},
+			editItem(item) {
+				this.$router.push({
+					path: '/landPage/editLandPage',
+					query: {
+						id: item.id
+					}
+				})
+			},
+			openUrl(item) {
+				window.open(item.landpageUrl)
+			},
+			copyItem(item) {
+				// ajax('api/channelPage/copy', 'post', {id: item.id}).then(res => {
+				// 	if(res.code == 10001) {
+				// 		this.getList();
+				// 	}else {
+				// 		this.$message({
+        //       type: 'error',
+        //       message: res.msg
+        //     })
+				// 	}
+				// })
+			},
+			deleteItem(item) {
+				this.$confirm('确认删掉该条数据么?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+		        }).then(() => {
+		        	ajax('api/channelPage/modify', 'post', {id: item.id, status: 0}).then(res => {
+						if(res.code == 10001) {
+					        this.$message({
+					            type: 'success',
+					            message: '删除成功!'
+					        });
+							this.getList();
+						}else {
+							this.$message({
+					            type: 'error',
+					            message: res.msg
+				          	}); 
+						}
+					})
+        }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });          
+        });
+			},
+			handleCurrentChange(page) {
+        this.currentPage = page;
+        this.getList();
+      },
+      handleCommand(command) {
+        console.log(command)
+        this[command.type](command.item)
+      },
+		},
+		created() {
+			this.getList()
+		},
+		mounted() {
+
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+.land_page {
+  padding: 20px;
+}
+.btn_Box {
+  width: 100%;
+  display: flex;
+  /* justify-content: flex-end; */
+  align-items: center;
+  margin-bottom: 10px;
+}
+.btn_Box .el-form {
+  margin: 0 auto;
+  width: 300px;
+}
+</style>
