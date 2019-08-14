@@ -338,6 +338,78 @@ export const asyncRouterMap = [
   //   ]
   // },
   {
+    path: '/levelOne',
+    component: Layout,
+    redirect: '/serviceCategory/levelOne',
+    name: 'levelOne',
+    meta: {
+      title: '服务类目管理',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'levelOne',
+        component: () => import('@/views/serviceCategory/levelOne'),
+        name: 'levelOne',
+        meta: { title: '一级类目管理', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'levelTwo',
+        component: () => import('@/views/serviceCategory/levelTwo'),
+        name: 'levelTwo',
+        meta: { title: '二级类目管理', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'levelThree',
+        component: () => import('@/views/serviceCategory/levelThree'),
+        name: 'levelThree',
+        meta: { title: '三级类目管理', icon: '', noCache: true, roles: ['admin']  }
+      }
+    ]
+  },
+  {
+    path: '/newBusiness',
+    component: Layout,
+    redirect: '/newBusiness/newBusiness',
+    name: 'newBusiness',
+    meta: {
+      title: '新业务申请业务',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'newBusiness',
+        component: () => import('@/views/newBusiness/newBusiness'),
+        name: 'newBusiness',
+        meta: { title: '新业务申请业务', icon: '', noCache: true, roles: ['admin']  }
+      }
+    ]
+  },
+  {
+    path: '/manually',
+    component: Layout,
+    redirect: '/manually/manually',
+    name: 'manually',
+    meta: {
+      title: '认领企业人工录入',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'manually',
+        component: () => import('@/views/manually/manually'),
+        name: 'manually',
+        meta: { title: '人工认领企业', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'createManually',
+        component: () => import('@/views/manually/createManually'),
+        name: 'createManually',
+        meta: { title: '添加认领企业', icon: '', noCache: true, roles: ['admin']  }
+      }
+    ]
+  },
+  {
     path: '/appUpdate',
     component: Layout,
     redirect: '/appUpdate/iosUpdate',
