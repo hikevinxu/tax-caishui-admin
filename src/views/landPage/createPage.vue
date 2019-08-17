@@ -1,8 +1,8 @@
 <template>
 	<div class="create_page">
 		<div class="form">
-			<el-form label-width="130px" :model="formData" :rules="rules" ref="createPage">
-				<div  style="margin-bottom: 12px;">投放目标</div>
+			<el-form label-width="200px" :model="formData" :rules="rules" ref="createPage">
+				<div  style="margin-bottom: 12px;"><span style="font-size: 16px; padding: 15px; border-radius: 5px;">投放目标</span></div>
 				<el-form-item label="投放应用：" prop="packageName">
           <el-select v-model="formData.packageName" placeholder="请选择">
             <el-option v-for="item in app" :label="item" :value="item" :key="item" ></el-option>
@@ -14,7 +14,7 @@
         <el-form-item label="渠道备注：" prop="channelRemark">
           <el-input type="text" placeholder="请输入渠道备注" v-model="formData.channelRemark"></el-input>
         </el-form-item>
-				<div  style="margin-bottom: 12px;">落地页配置</div>
+				<div  style="margin-bottom: 12px;"><span style="font-size: 16px; border-radius: 5px;">落地页配置</span> </div>
 				<!-- <el-form-item label="落地页url：" prop="url">
           <el-input type="text" placeholder="" v-model="formData.url" disabled></el-input>
         </el-form-item> -->
