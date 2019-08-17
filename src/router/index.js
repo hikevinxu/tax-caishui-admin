@@ -289,30 +289,30 @@ export const asyncRouterMap = [
       }
     ]
   },
-  {
-    path: '/merchantsService',
-    component: Layout,
-    redirect: '/merchantsService/serviceList',
-    name: 'merchantsService',
-    meta: {
-      title: '商户上架服务管理',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'serviceList',
-        component: () => import('@/views/merchants/serviceList.vue'),
-        name: 'serviceList',
-        meta: { title: '服务列表', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'serviceSoldOutRecords',
-        component: () => import('@/views/merchants/serviceSoldOutRecords.vue'),
-        name: 'serviceSoldOutRecords',
-        meta: { title: '下架记录', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
+  // {
+  //   path: '/merchantsService',
+  //   component: Layout,
+  //   redirect: '/merchantsService/serviceList',
+  //   name: 'merchantsService',
+  //   meta: {
+  //     title: '商户上架服务管理',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'serviceList',
+  //       component: () => import('@/views/merchants/serviceList.vue'),
+  //       name: 'serviceList',
+  //       meta: { title: '服务列表', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'serviceSoldOutRecords',
+  //       component: () => import('@/views/merchants/serviceSoldOutRecords.vue'),
+  //       name: 'serviceSoldOutRecords',
+  //       meta: { title: '下架记录', icon: '', noCache: true, roles: ['admin']  }
+  //     }
+  //   ]
+  // },
   {
     path: '/homePageSetting',
     component: Layout,
@@ -366,13 +366,7 @@ export const asyncRouterMap = [
         name: 'editLandPage',
         meta: { title: '编辑落地页', icon: '',  hidden: true, noCache: true, roles: ['admin']  },
         hidden: true
-      },
-      // {
-      //   path: 'promotion',
-      //   component: () => import('@/views/landPage/promotion'),
-      //   name: 'promotion',
-      //   meta: { title: '落地页配置', icon: '', noCache: true, roles: ['admin']  }
-      // },
+      }
     ]
   },
   // {
@@ -399,78 +393,78 @@ export const asyncRouterMap = [
   //     }
   //   ]
   // },
-  {
-    path: '/levelOne',
-    component: Layout,
-    redirect: '/serviceCategory/levelOne',
-    name: 'levelOne',
-    meta: {
-      title: '服务类目管理',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'levelOne',
-        component: () => import('@/views/serviceCategory/levelOne'),
-        name: 'levelOne',
-        meta: { title: '一级类目管理', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'levelTwo',
-        component: () => import('@/views/serviceCategory/levelTwo'),
-        name: 'levelTwo',
-        meta: { title: '二级类目管理', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'levelThree',
-        component: () => import('@/views/serviceCategory/levelThree'),
-        name: 'levelThree',
-        meta: { title: '三级类目管理', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
-  {
-    path: '/newBusiness',
-    component: Layout,
-    redirect: '/newBusiness/newBusiness',
-    name: 'newBusiness',
-    meta: {
-      title: '新业务申请业务',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'newBusiness',
-        component: () => import('@/views/newBusiness/newBusiness'),
-        name: 'newBusiness',
-        meta: { title: '新业务申请业务', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
-  {
-    path: '/manually',
-    component: Layout,
-    redirect: '/manually/manually',
-    name: 'manually',
-    meta: {
-      title: '认领企业人工录入',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'manually',
-        component: () => import('@/views/manually/manually'),
-        name: 'manually',
-        meta: { title: '人工认领企业', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'createManually',
-        component: () => import('@/views/manually/createManually'),
-        name: 'createManually',
-        meta: { title: '添加认领企业', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
+  // {
+  //   path: '/levelOne',
+  //   component: Layout,
+  //   redirect: '/serviceCategory/levelOne',
+  //   name: 'levelOne',
+  //   meta: {
+  //     title: '服务类目管理',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'levelOne',
+  //       component: () => import('@/views/serviceCategory/levelOne'),
+  //       name: 'levelOne',
+  //       meta: { title: '一级类目管理', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'levelTwo',
+  //       component: () => import('@/views/serviceCategory/levelTwo'),
+  //       name: 'levelTwo',
+  //       meta: { title: '二级类目管理', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'levelThree',
+  //       component: () => import('@/views/serviceCategory/levelThree'),
+  //       name: 'levelThree',
+  //       meta: { title: '三级类目管理', icon: '', noCache: true, roles: ['admin']  }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/newBusiness',
+  //   component: Layout,
+  //   redirect: '/newBusiness/newBusiness',
+  //   name: 'newBusiness',
+  //   meta: {
+  //     title: '新业务申请业务',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'newBusiness',
+  //       component: () => import('@/views/newBusiness/newBusiness'),
+  //       name: 'newBusiness',
+  //       meta: { title: '新业务申请业务', icon: '', noCache: true, roles: ['admin']  }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/manually',
+  //   component: Layout,
+  //   redirect: '/manually/manually',
+  //   name: 'manually',
+  //   meta: {
+  //     title: '认领企业人工录入',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'manually',
+  //       component: () => import('@/views/manually/manually'),
+  //       name: 'manually',
+  //       meta: { title: '人工认领企业', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'createManually',
+  //       component: () => import('@/views/manually/createManually'),
+  //       name: 'createManually',
+  //       meta: { title: '添加认领企业', icon: '', noCache: true, roles: ['admin']  }
+  //     }
+  //   ]
+  // },
   {
     path: '/appUpdate',
     component: Layout,

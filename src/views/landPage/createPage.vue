@@ -16,46 +16,30 @@
         </el-form-item>
 				<div  style="margin-bottom: 12px;">落地页配置</div>
 				<!-- <el-form-item label="落地页url：" prop="url">
-		          	<el-input type="text" placeholder="" v-model="formData.url" disabled></el-input>
-		        </el-form-item> -->
+          <el-input type="text" placeholder="" v-model="formData.url" disabled></el-input>
+        </el-form-item> -->
 	      <el-form-item label="落地页标题：" prop="title">
 		      <el-input type="text" placeholder="请输入落地页标题" v-model="formData.title"></el-input>
 		    </el-form-item>
 	      <el-form-item label="头图：" prop="headImg" v-if="formData.packageName != '风险检测h5'">
-          <!-- <el-upload
-            :action="url + '/api/ad/bit/uploadImage'"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
-            <img v-if="formData.headImg" :src="formData.headImg" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload> -->
           <el-upload
             action=""
             :show-file-list="false"
             :http-request="uploadHeadImg">
-            <img v-if="formData.headImg" :src="formData.headImg" class="avatar">
+            <img v-if="formData.headImgUrl" :src="formData.headImgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.headImg" @click="formData.headImg = ''">删除</el-button>
+          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.headImgUrl" @click="deleteHeadImg">删除</el-button>
         </el-form-item>
 	      <el-form-item label="头部浮层：" prop="topImg" v-if="formData.packageName != '风险检测h5'">
-          <!-- <el-upload
-            :action="url + '/api/ad/bit/uploadImage'"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload2">
-            <img v-if="formData.topImg" :src="formData.topImg" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload> -->
           <el-upload
             action=""
             :show-file-list="false"
             :http-request="uploadTopImg">
-            <img v-if="formData.topImg" :src="formData.topImg" class="avatar">
+            <img v-if="formData.topImgUrl" :src="formData.topImgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.topImg" @click="formData.topImg = ''">删除</el-button>
+          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.topImgUrl" @click="deleteTopImg">删除</el-button>
         </el-form-item>
         <el-form-item label="浮层距顶部高度：" prop="topSpace" v-if="formData.packageName != '风险检测h5'">
           <el-input type="number" placeholder="请输入浮层距顶部高度：" v-model="formData.topSpace"></el-input>
@@ -91,23 +75,14 @@
           <el-input type="textarea" :rows="3" placeholder="请输入按钮下方文案" v-model="formData.buttonUnder"></el-input>
 		    </el-form-item>
 	      <el-form-item label="底图：" prop="tailImg" v-if="formData.packageName != '风险检测h5'">
-          <!-- <el-upload
-              action=""
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload1"
-              :http-request="upload">
-              <img v-if="formData.tailImg" :src="formData.tailImg" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload> -->
           <el-upload
             action=""
             :show-file-list="false"
             :http-request="uploadTailImg">
-            <img v-if="formData.tailImg" :src="formData.tailImg" class="avatar">
+            <img v-if="formData.tailImgUrl" :src="formData.tailImgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.tailImg" @click="formData.tailImg = ''">删除</el-button>
+          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.tailImgUrl" @click="deleteTailImg">删除</el-button>
         </el-form-item>
         <el-form-item label="风险说明文案颜色：" prop="buttonRemarkColor" v-if="formData.packageName != '风险检测h5'">
           <el-color-picker v-model="formData.riskInfoColor" size="medium"></el-color-picker>
@@ -136,9 +111,9 @@
 				<div class="preview_box" :style="{'background-color': formData.pageBgColor}">
 					<div class="page_title">{{formData.title}}</div>
 					<div class="container1">
-					  <img class="banner" :src="formData.headImg" ref="banner">
-						<img class="topImg" :src="formData.topImg" :style="{top: formData.topSpace + 'px'}">
-						<div :style="{'background-color': formData.preRegisterBgColor, 'margin-top': '-2px', position: 'relative', 'padding-bottom': '36px'}">
+					  <img class="banner" :src="formData.headImgUrl" ref="banner">
+						<img class="topImg" :src="formData.topImgUrl" :style="{top: formData.topSpace + 'px'}">
+						<div :style="{'background-color': formData.preRegisterBgColor, 'margin-top': '30px', position: 'relative'}">
               <div class="registered-icon" v-if="formData.pageType == 1">
                 <form class="registered-form" method="post">
                   <div class="registered-form-item">
@@ -149,8 +124,8 @@
               <div class="download_btn" :style="{'background-color': formData.buttonBgColor, color: formData.buttonRemarkColor}">{{formData.buttonRemark}}</div>
               <div class="tip form_tip" v-if="formData.buttonUnder" v-html="handleText(formData.buttonUnder)" :style="{color: formData.buttonUnderColor}"></div>	
             </div>
-				    <img class="intro" v-if="formData.tailImg" :src="formData.tailImg">
-				    <div class="tip" v-if="formData.riskInfo" v-html="handleText(formData.riskInfo)" :style="{color: formData.riskInfoColor}"></div>	
+				    <img class="intro" v-if="formData.tailImgUrl" :src="formData.tailImgUrl">
+				    <div class="bottom_text2 riskInfo" v-if="formData.riskInfo" v-html="handleText(formData.riskInfo)" :style="{color: formData.riskInfoColor}"></div>	
 				    <div class="bottom">
 				    	<div class="line1"></div>
 				    	<div class="bottom_text2" v-html="handleText(formData.companyInfo)" :style="{color: formData.companyInfoColor}"></div>
@@ -163,23 +138,22 @@
 </template>
 
 <script>
-	// import storage from 'good-storage';
 	import mixins from './mixins'
-	// import { baseUrl } from '../../../api/common/ajax';
-	// import ajax from '../../../api/common/ajax'
-  // import $ from 'zhangjia-zepto'
   import { upLoadPicFromWeApp } from '@/api/qiniu'
+  import { channelPageAddition } from '@/api/landPage'
 	export default {
 		data() {
 			return {
         aaa: '',
 				url: '',
 				formData: {
-					packageName: '安牛有信',
+					packageName: '财税鱼',
 					advertisingChannel: '',
 					channelRemark: '',
-					headImg: '',
-					topImg: '',
+          headImg: '',
+          headImgUrl: '',
+          topImg: '',
+          topImgUrl: '',
 					title: '',
 					pageType: '',
 					pageBgColor: '#FFFFFF',
@@ -188,7 +162,8 @@
 					buttonRemark: '',
 					dowloadUrl: '',
 					buttonUnder: '',
-					tailImg: '',
+          tailImg: '',
+          tailImgUrl: '',
 					riskInfo: '',
 					companyInfo: '',
 					jsBase: '',
@@ -223,134 +198,27 @@
 		},
 		mixins: [mixins],
 		methods: {
-			beforeAvatarUpload(fileObj) {
-				if(fileObj.type.indexOf('image') == -1) {
-					this.$message.error('只能上传图片文件');
-					return false;
-				}
-				var self = this;
-				const formData = new FormData();
-				formData.append('image', fileObj);
-				// $.ajax({
-				// 	url: this.url + '/api/ad/bit/uploadImage',
-				// 	type: 'post',
-				// 	processData: false,
-				// 	contentType: false,
-				// 	data: formData,
-				// 	headers: {
-				// 		AccessToken: storage.get('accessToken') ? storage.get('accessToken') : '',
-				// 		Code: storage.get('code') ? storage.get('code') : ''
-				// 	},
-				// 	success(res) {
-				// 		if(res.code === 10009) {
-				// 			self.formData.headImg = res.data;
-				// 		}else {
-				// 			self.$message.error(res.msg);
-				// 		}
-				// 	},
-				// 	fail(err) {
-
-				// 	}
-				// })
-				return false;
-			},
-			beforeAvatarUpload1(fileObj) {
-				console.log(fileObj);
-				if(fileObj.type.indexOf('image') == -1) {
-					this.$message.error('只能上传图片文件');
-					return false;
-				}
-				var self = this;
-				const formData = new FormData();
-				formData.append('image', fileObj);
-				// $.ajax({
-				// 	url: this.url + '/api/ad/bit/uploadImage',
-				// 	type: 'post',
-				// 	processData: false,
-				// 	contentType: false,
-				// 	data: formData,
-				// 	headers: {
-				// 		AccessToken: storage.get('accessToken') ? storage.get('accessToken') : '',
-				// 		Code: storage.get('code') ? storage.get('code') : ''
-				// 	},
-				// 	success(res) {
-				// 		if(res.code === 10009) {
-				// 			self.formData.tailImg = res.data;
-				// 		}else {
-				// 			self.$message.error(res.msg);
-				// 		}
-				// 	},
-				// 	fail(err) {
-
-				// 	}
-				// })
-				return false;
-			},
-			beforeAvatarUpload2(fileObj) {
-				console.log(fileObj);
-				if(fileObj.type.indexOf('image') == -1) {
-					this.$message.error('只能上传图片文件');
-					return false;
-				}
-				var self = this;
-				const formData = new FormData();
-				formData.append('image', fileObj);
-				// $.ajax({
-				// 	url: this.url + '/api/ad/bit/uploadImage',
-				// 	type: 'post',
-				// 	processData: false,
-				// 	contentType: false,
-				// 	data: formData,
-				// 	headers: {
-				// 		AccessToken: storage.get('accessToken') ? storage.get('accessToken') : '',
-				// 		Code: storage.get('code') ? storage.get('code') : ''
-				// 	},
-				// 	success(res) {
-				// 		if(res.code === 10009) {
-				// 			self.formData.topImg = res.data;
-				// 		}else {
-				// 			self.$message.error(res.msg);
-				// 		}
-				// 	},
-				// 	fail(err) {
-
-				// 	}
-				// })
-				return false;
-			},
-			handleAvatarSuccess() {
-
-			},
 			handleSubmit() {
-				// this.$refs['createPage'].validate((valid) => {
-				// 	if (valid) {
-						// ajax('api/channelPage/addition', 'post', this.formData).then(res => {
-						// 	if(res.code === 10001) {
-						// 		this.$message({
-						// 			type: 'success',
-						// 			message: '保存成功'
-						// 		})
-						// 		this.$router.replace({
-						// 			name: 'landPageList',
-						// 			params: {
-						// 				id: res.data
-						// 			}
-						// 		})
-						// 	}else {
-						// 		this.$message.error(res.msg)
-						// 	}
-						// })
-					// } else {
-					// 	console.log(this.formData)
-					// 	return false;
-					// }
-				// });
+        console.log(this.formData)
+        channelPageAddition(this.formData).then(res => {
+          if(res.code == 0){
+            this.$message({
+              type: 'success',
+              message: '保存成功'
+            })
+            this.$router.push('/landPage')
+          }
+        })
 			},
       handleText(text) {
         text = text.replace(/\n/g,"<br/>");
         return text
       },
       uploadHeadImg(item) {
+        if(item.file.type.indexOf('image') == -1) {
+					this.$message.error('只能上传图片文件')
+					return
+				}
         let formData = new FormData()
         formData.append('files', item.file)
         upLoadPicFromWeApp(formData).then(res => {
@@ -358,15 +226,23 @@
             let oFileReader = new FileReader()
             oFileReader.readAsDataURL(item.file)
             oFileReader.onloadend = (e) => {
-              this.formData.headImg = e.target.result
-              // this.formData.headImg = res.data[0].fileUrl
+              this.formData.headImg = res.data[0].fileId
+              this.formData.headImgUrl = e.target.result
             }
           }
         }).catch(err => {
           this.$message.error('上传失败，请重新上传')
         })
+      },
+      deleteHeadImg() {
+        this.formData.headImg = ''
+        this.formData.headImgUrl = ''
       },
       uploadTopImg (item) {
+        if(item.file.type.indexOf('image') == -1) {
+					this.$message.error('只能上传图片文件')
+					return
+				}
         let formData = new FormData()
         formData.append('files', item.file)
         upLoadPicFromWeApp(formData).then(res => {
@@ -374,15 +250,23 @@
             let oFileReader = new FileReader()
             oFileReader.readAsDataURL(item.file)
             oFileReader.onloadend = (e) => {
-              this.formData.topImg = e.target.result
-              // this.formData.headImg = res.data[0].fileUrl
+              this.formData.topImgUrl = e.target.result
+              this.formData.topImg = res.data[0].fileId
             }
           }
         }).catch(err => {
           this.$message.error('上传失败，请重新上传')
         })
       },
+      deleteTopImg() {
+        this.formData.topImg = ''
+        this.formData.topImgUrl = ''
+      },
       uploadTailImg(item) {
+        if(item.file.type.indexOf('image') == -1) {
+					this.$message.error('只能上传图片文件')
+					return
+				}
         let formData = new FormData()
         formData.append('files', item.file)
         upLoadPicFromWeApp(formData).then(res => {
@@ -390,14 +274,18 @@
             let oFileReader = new FileReader()
             oFileReader.readAsDataURL(item.file)
             oFileReader.onloadend = (e) => {
-              this.formData.tailImg = e.target.result
-              // this.formData.headImg = res.data[0].fileUrl
+              this.formData.tailImgUrl = e.target.result
+              this.formData.tailImg = res.data[0].fileId
             }
           }
         }).catch(err => {
           this.$message.error('上传失败，请重新上传')
         })
-      } 
+      },
+      deleteTailImg() {
+        this.formData.tailImg = ''
+        this.formData.tailImgUrl = ''
+      },
     },
 		created() {
 
@@ -499,7 +387,6 @@
 		position: relative;
 		padding-top: 164;
 		width: 100%;
-		// height: 28;
 		box-sizing: border-box;
 		background: #fff top no-repeat;
 		background-size: 100%;
@@ -523,15 +410,16 @@
 	}
 	.intro {
 		width: 100%;
+    margin-top: 20px;
 	}
 	.download_btn {
 		margin: 0 auto;
-    margin-top: 16px;
-		width: 312px;
-		height: 40px;
+    width: 268px;
+    height: 40px;
+    margin: 30px auto;
+    margin-bottom: 0;
 		background: #1574FF;
-		box-shadow: 0 8px 16px 0 rgba(21,116,255,0.20);
-		border-radius: 20px;
+		border-radius: 3px;
 		font-family: PingFangSC-Medium;
 		font-size: 15px;
 		color: #FFFFFF;
@@ -539,9 +427,8 @@
 		text-align: center;
 	}
 	.tip {
-		margin-top: 24px;
-		padding: 0 16px;
-		width: 100%;
+		width: 268px;
+    margin: 0 auto;
 		box-sizing: border-box;
 		font-family: PingFangSC-Regular;
 		font-size: 12px;
@@ -550,10 +437,8 @@
 		line-height: 18px;
 	}
 	.form_tip {
-		position: absolute;
-		bottom: 0;
-		margin-top: 0;
-		line-height: 36px;
+		margin-top: 10px;
+		line-height: 16px;
 	}
 	.bottom {
 		padding: 0 24px 19px;
@@ -569,7 +454,7 @@
 		line-height: 18px;
 	}
 	.line1 {
-		margin-top: 24px;	
+		margin-top: 15px;	
 		width: 100%;
 		height: 0;
 		border-top: 1px solid rgba(0,0,0,0.12);
@@ -582,6 +467,9 @@
 		text-align: center;
 		line-height: 18px;
 	}
+  .riskInfo {
+    padding: 0 24px;
+  }
 	.registered-box {
 		display: flex;
 		flex-direction: column;
@@ -590,26 +478,28 @@
 	}
 	.registered-icon {
 		margin: 0 auto;
-    border-radius: 8px;
-    width: 312px;
+    border-radius: 3px;
+    width: 268px;
     text-align: center;
     overflow: hidden;
 	}
 	.registered-form {
 		margin: 0 auto;
-    border-radius: 04px;
+    border-radius: 3px;
     width: 100%;
 	}
 	.registered-form-item {
-		margin-top: 16px;
+		border-radius: 3px;
+    margin: 0 auto;
+    margin-top: 30px;
 		width: 100%;
 	}
 	.registered-form-item input {
 		padding-left: 35px;
-    height: 48px;
+    height: 40px;
     box-sizing: border-box;
     border: 1px solid rgba(0,0,0,0.12);
-    border-radius: 04px;
+    border-radius: 3px;
     color: rgba(0,0,0,0.87);
     background-size: 14px 20px;
     font-size: 15px;
@@ -624,7 +514,7 @@
     line-height: 23px;
 	}
 	.registered-form-phone {
-		width: 312px;
+		width: 268px;
     box-sizing: border-box;
     background: url('../../assets/img/phone.png') 12px center no-repeat;
 	}

@@ -11,6 +11,7 @@
       <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" @click="getList" icon="el-icon-search">搜索</el-button>
 	    </div>
 	    <el-table
+          v-loading="listLoading"
 	      	:data="tableListData"
           border
           fit
@@ -51,7 +52,7 @@
 	      	</el-table-column>
 	      	<el-table-column label="创建时间" align="center">
           <template slot-scope="scope">
-	          	<span>{{ scope.row.gmtCreate }}</span>
+	          	<span>{{ scope.row.createTime }}</span>
 	        	</template>
 	      	</el-table-column>
 	      	<el-table-column label="操作" align="center">
@@ -70,23 +71,13 @@
 	      	</el-table-column>
 	    </el-table>
 
-	    <!-- <el-pagination
-			@current-change="handleCurrentChange"
-			:current-page="currentPage"
-			:page-sizes="[10]"
-			:page-size="10"
-			layout="total, sizes, prev, pager, next, jumper"
-			:total="totalCount"
-			style="margin: 16px 0; display: flex; justify-content: center">
-		</el-pagination> -->
     <pagination v-show="totalCount>0" :total="totalCount" :page.sync="searchData.page" :limit.sync="searchData.size" @pagination="getList" />
 	</div>
 </template>
 
 <script>
-	// import storage from 'good-storage';
 	import mixins from './mixins'
-  // import ajax from '../../../api/common/ajax'
+  import { channelPageObtainPaging, channelPageCopy, channelPageDelete } from '@/api/landPage'
   import waves from '@/directive/waves' // Waves directive
   import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 	export default {
@@ -94,26 +85,16 @@
     directives: { waves },
 		data() {
 			return {
+        listLoading: false,
 				searchData: {
-					packageName: null,
-					advertisingChannel: null,
-					channelRemark: null,
-					status: 1,
+					packageName: '',
+					advertisingChannel: '',
+					channelRemark: '',
 					page: 1,
 					size: 10
 				},
 				formLabelWidth: '120px',
-				tableListData: [
-					{
-						packageName: '小白贷款',
-						advertisingChannel: 'smy',
-						channelRemark: 'smy12',
-						landpageUrl: 'https://www.baidu.com',
-						headImg: 'https://image.kongapi.com/xyzc/adbit/image/e315cf507de64223802ae51c54d620fc.png',
-						title: '小白贷款落地页',
-						gmtCreate: '2019-05-08'
-					}
-				],
+				tableListData: [],
         currentPage: 1,
         page: 1,
         totalCount: 0,
@@ -140,29 +121,16 @@
 		},
 		methods: {
 			getList() {
-				this.searchData.page = this.currentPage;
-				ajax('api/channelPage/obtainPaging', 'post', this.searchData).then(res => {
-					if(res.code == 10001) {
-						console.log(res.data);
-						this.tableListData = res.data.data;
-						this.page = res.data.page;
-						this.totalCount = res.data.totalCount;
-						this.totalPage = res.data.totalPage;
-						// this.searchData = {
-						// 	packageName: null,
-						// 	advertisingChannel: null,
-						// 	channelRemark: null,
-						// 	status: 1,
-						// 	page: 1,
-						// 	size: 10
-						// }
-					}else {
-						this.$message({
-				            type: 'error',
-				            message: res.msg
-			          	}); 
-					}
-				})
+        this.listLoading = true
+        channelPageObtainPaging(this.searchData).then(res => {
+          if(res.code == 0){
+            this.listLoading = false
+            this.tableListData = res.data.items
+            this.totalCount = res.data.total
+          }
+        }).catch(err => {
+          this.listLoading = false
+        })
 			},
 			search() {
 				this.searchData.page = 1
@@ -180,43 +148,44 @@
 				window.open(item.landpageUrl)
 			},
 			copyItem(item) {
-				// ajax('api/channelPage/copy', 'post', {id: item.id}).then(res => {
-				// 	if(res.code == 10001) {
-				// 		this.getList();
-				// 	}else {
-				// 		this.$message({
-        //       type: 'error',
-        //       message: res.msg
-        //     })
-				// 	}
-				// })
+        let params = {
+          id: item.id
+        }
+        channelPageCopy(params).then(res => {
+          if(res.code == 0) {
+            this.$message({
+              type: 'success',
+              message: '复制成功!'
+            })
+          } else {
+            this.$message({
+              type: 'success',
+              message: '复制失败!'
+            })
+          }
+          this.getList()
+        })
 			},
 			deleteItem(item) {
-				this.$confirm('确认删掉该条数据么?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-		        }).then(() => {
-		        	ajax('api/channelPage/modify', 'post', {id: item.id, status: 0}).then(res => {
-						if(res.code == 10001) {
-					        this.$message({
-					            type: 'success',
-					            message: '删除成功!'
-					        });
-							this.getList();
-						}else {
-							this.$message({
-					            type: 'error',
-					            message: res.msg
-				          	}); 
-						}
-					})
+				this.$confirm('确认删掉该条数据么?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消',type: 'warning'}).then(() => {
+          let params = {
+            id: item.id
+          }
+          channelPageDelete(params).then(res => {
+            if(res.code == 0) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+            }
+            this.getList()
+          })
         }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消删除'
-            });          
-        });
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })     
+        })
 			},
 			handleCurrentChange(page) {
         this.currentPage = page;
