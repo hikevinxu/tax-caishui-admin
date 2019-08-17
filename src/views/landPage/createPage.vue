@@ -235,6 +235,7 @@
         })
       },
       deleteHeadImg() {
+        this.$forceUpdate()
         this.formData.headImg = ''
         this.formData.headImgUrl = ''
       },
@@ -259,6 +260,7 @@
         })
       },
       deleteTopImg() {
+        this.$forceUpdate()
         this.formData.topImg = ''
         this.formData.topImgUrl = ''
       },
@@ -283,6 +285,7 @@
         })
       },
       deleteTailImg() {
+        this.$forceUpdate()
         this.formData.tailImg = ''
         this.formData.tailImgUrl = ''
       },

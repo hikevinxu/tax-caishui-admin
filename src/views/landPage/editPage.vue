@@ -248,8 +248,10 @@
         })
       },
       deleteHeadImg() {
+        this.$forceUpdate()
         this.formData.headImg = ''
         this.formData.headImgUrl = ''
+
       },
       uploadTopImg (item) {
         if(item.file.type.indexOf('image') == -1) {
@@ -272,6 +274,7 @@
         })
       },
       deleteTopImg() {
+        this.$forceUpdate()
         this.formData.topImg = ''
         this.formData.topImgUrl = ''
       },
@@ -296,6 +299,7 @@
         })
       },
       deleteTailImg() {
+        this.$forceUpdate()
         this.formData.tailImg = ''
         this.formData.tailImgUrl = ''
       }
