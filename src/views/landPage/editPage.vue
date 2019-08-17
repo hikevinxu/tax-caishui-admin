@@ -241,6 +241,7 @@
             oFileReader.onloadend = (e) => {
               this.formData.headImg = res.data[0].fileId
               this.formData.headImgUrl = e.target.result
+              this.$forceUpdate()
             }
           }
         }).catch(err => {
@@ -251,7 +252,6 @@
         this.$forceUpdate()
         this.formData.headImg = ''
         this.formData.headImgUrl = ''
-
       },
       uploadTopImg (item) {
         if(item.file.type.indexOf('image') == -1) {
@@ -267,6 +267,7 @@
             oFileReader.onloadend = (e) => {
               this.formData.topImgUrl = e.target.result
               this.formData.topImg = res.data[0].fileId
+              this.$forceUpdate()
             }
           }
         }).catch(err => {
@@ -290,8 +291,10 @@
             let oFileReader = new FileReader()
             oFileReader.readAsDataURL(item.file)
             oFileReader.onloadend = (e) => {
+              this.$forceUpdate()
               this.formData.tailImgUrl = e.target.result
               this.formData.tailImg = res.data[0].fileId
+              this.$forceUpdate()
             }
           }
         }).catch(err => {

@@ -228,6 +228,7 @@
             oFileReader.onloadend = (e) => {
               this.formData.headImg = res.data[0].fileId
               this.formData.headImgUrl = e.target.result
+              this.$forceUpdate()
             }
           }
         }).catch(err => {
@@ -253,6 +254,7 @@
             oFileReader.onloadend = (e) => {
               this.formData.topImgUrl = e.target.result
               this.formData.topImg = res.data[0].fileId
+              this.$forceUpdate()
             }
           }
         }).catch(err => {
@@ -278,6 +280,7 @@
             oFileReader.onloadend = (e) => {
               this.formData.tailImgUrl = e.target.result
               this.formData.tailImg = res.data[0].fileId
+              this.$forceUpdate()
             }
           }
         }).catch(err => {
