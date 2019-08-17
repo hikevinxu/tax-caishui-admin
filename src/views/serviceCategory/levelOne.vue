@@ -19,21 +19,27 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="一级类目名称" prop="id" align="center" width="180px">
+      <el-table-column label="一级类目名称" prop="id" align="center" width="150px">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="叶子类型" align="center" width="180px">
+      <el-table-column label="叶子类型" align="center" width="120px">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.leafLevel }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="叶子类目数量" align="center" width="180px">
+      <el-table-column label="二级类目数量" align="center" width="120px">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.levelTwoCount }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="三级类目数量" align="center" width="120px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.levelThreeCount }}</span>
         </template>
       </el-table-column>
 
@@ -51,17 +57,21 @@
           <el-button style="margin-left: 10px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.shelf == true">下架</el-button>
           <el-button style="margin-left: 10px;" type="primary" size="small" @click="handleIncr(scope.row)">排序上升</el-button>
           <el-button style="margin-left: 10px;" type="success" size="small" @click="handleDecr(scope.row)">排序下降</el-button>
-          <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)" v-if="scope.row.shelf == false">删除</el-button>
+          <!-- <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)" v-if="scope.row.shelf == false">删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
+    <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" /> -->
 
     <el-dialog width="800px" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="margin-left:50px;">
-        <el-form-item label="ICON图：" prop="icon">
-          <Upload v-model="uploadImg"/>
+        <el-form-item label="服务类目名称：" prop="name">
+          <el-input v-model="temp.name" placeholder="请输入服务名字" />
+        </el-form-item>
+
+        <el-form-item label="服务介绍：">
+          <el-input v-model="temp.descr" placeholder="请输入服务介绍" type="textarea" autosize/>
         </el-form-item>
 
       </el-form>
@@ -74,17 +84,17 @@
 </template>
 
 <script>
-import { serviceTagList, serviceTagShelfDisable, serviceTagShelfEnable, serviceTagSortIncr, serviceTagSortDecr, serviceTagAdd, serviceTagUpdate, serviceTagDelete } from '@/api/tag'
+import { serviceTypeList,serviceTypeInfom,serviceTypeSave,serviceTypeDown,serviceTypeUp,serviceTypeDecr,serviceTypeIncr,serviceTypeUpdate } from '@/api/service'
 import { businessTypeList } from '@/api/homePageSetting'
 import { jumpTypeFilters, shelfFilters, pageUrlFilters } from '@/filters/index'
 import global from '@/utils/global'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import Upload from '@/components/Upload/uploadImgTemp'
+import qs from 'qs'
 export default {
   name: 'participles',
-  components: { Pagination, Upload },
+  components: { Pagination },
   directives: { waves },
   data() {
     return {
@@ -92,26 +102,23 @@ export default {
       total: 0,
       listLoading: false,
       listQuery: {
-        pageNum: 1,
+        // pageNum: 1,
+        parentCode: '',
         shelf: '',
-        pageSize: 10
+        // pageSize: 10
       },
       statusList: [
         {name:'已上架',id: true},
         {name:'已下架',id: false}
       ],
       jumpTypeList: global.jumpTypeList,
-      uploadImg: {
-        imgUrl: '',
-        fileId: ''
-      },
       secondName: '',
       thirdName: '',
       temp: {
-        id: '',
-        icon: '',
-        serviceCode: '',
-        name: ''
+        name: '',
+        parentCode: '',
+        level: 1,
+        descr: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -120,7 +127,8 @@ export default {
         create: '新建'
       },
       rules: {
-        word: [{ required: true, message: '词条名称必填', trigger: 'blur' }]
+        name: [{ required: true, message: '类目名称必填', trigger: 'blur' }],
+        // descr: [{ required: true, message: '类目名称必填', trigger: 'blur' }]
       }
     }
   },
@@ -131,7 +139,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true
-      businessTypeList().then(response => {
+      serviceTypeList(this.listQuery).then(response => {
         if(response.code == 0){
           console.log(response)
           this.list = response.data
@@ -147,7 +155,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagShelfEnable(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeUp(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -174,7 +183,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagShelfDisable(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeDown(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -201,7 +211,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagSortIncr(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeIncr(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -228,7 +239,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagSortDecr(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeDecr(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -251,13 +263,11 @@ export default {
     //重置表单
     resetTemp() {
       this.temp = {
-        id: '',
-        icon: '',
-        serviceCode: '',
-        name: ''
+        name: '',
+        parentCode: '',
+        level: 1,
+        descr: ''
       }
-      this.uploadImg.imgUrl = ''
-      this.uploadImg.fileId = ''
     },
     //唤起新建
     handleCreate() {
@@ -272,17 +282,9 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          let serviceCode,
-              name
-          let params = {
-            id: '',
-            icon: this.uploadImg.fileId,
-            serviceCode: serviceCode,
-            name: this.temp.name,
-            shelf: false
-          }
           // console.log(params)
-          serviceTagAdd(params).then((response) => {
+          let temp = qs.stringify(this.temp)
+          serviceTypeSave(temp).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
@@ -308,11 +310,8 @@ export default {
     handleEdit(row) {
       this.resetTemp()
       this.temp.id = row.id
-      this.temp.icon = row.icon
-      this.temp.serviceCode = row.serviceCode
+      this.temp.descr = row.descr
       this.temp.name = row.name
-      this.uploadImg.imgUrl = row.icon
-      this.uploadImg.fileId = row.icon
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -322,15 +321,9 @@ export default {
     editData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          let params = {
-            id: this.temp.id,
-            serviceCode: this.temp.serviceCode,
-            name: this.temp.name,
-            icon: this.uploadImg.fileId,
-            shelf: false
-          }
-          console.log(params)
-          serviceTagUpdate(params).then((response) => {
+          // console.log(params)
+          let temp = qs.stringify(this.temp)
+          serviceTypeUpdate(temp).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
@@ -359,6 +352,7 @@ export default {
         let query = {
           id: id
         }
+        query = qs.stringify(query)
         serviceTagDelete(query).then(response => {
           if (response.code == 0) {
             this.$notify({

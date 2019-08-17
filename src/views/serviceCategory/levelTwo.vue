@@ -2,7 +2,7 @@
   <div class="bannerSetting-container">
     <div class="filter-container">
       <el-button v-waves class="filter-item" type="primary" @click="handleCreate">添加</el-button>
-      <el-select  style="width: 200px" v-model="listQuery.firstCode" @change="firstCodeChange" clearable placeholder="请选择一级服务">
+      <el-select  style="width: 200px" v-model="listQuery.parentCode" @change="firstCodeChange" clearable placeholder="请选择一级服务">
         <el-option v-for="(item,index) in firstCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
       </el-select>
     </div>
@@ -22,21 +22,21 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="二级级类目名称" prop="id" align="center" width="180px">
+      <el-table-column label="二级级类目名称" prop="id" align="center" width="150px">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="叶子类型" align="center" width="180px">
+      <el-table-column label="icon" align="center" width="150px">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <img :src="scope.row.icon" alt="" srcset="">
         </template>
       </el-table-column>
 
-      <el-table-column label="叶子类目数量" align="center" width="180px">
+      <el-table-column label="三级类目数量" align="center" width="120px">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.levelThreeCount }}</span>
         </template>
       </el-table-column>
 
@@ -54,7 +54,7 @@
           <el-button style="margin-left: 10px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.shelf == true">下架</el-button>
           <el-button style="margin-left: 10px;" type="primary" size="small" @click="handleIncr(scope.row)">排序上升</el-button>
           <el-button style="margin-left: 10px;" type="success" size="small" @click="handleDecr(scope.row)">排序下降</el-button>
-          <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)" v-if="scope.row.shelf == false">删除</el-button>
+          <!-- <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)" v-if="scope.row.shelf == false">删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -63,13 +63,22 @@
 
     <el-dialog width="800px" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="margin-left:50px;">
-        <el-form-item label="请选择一级类目" prop="icon">
-          <el-select  style="width: 200px" v-model="serviceType.firstCode" @change="createCodeChange" clearable placeholder="请选择一级服务">
+        <el-form-item label="一级类目：" prop="parentCode" v-show="textMap[dialogStatus] == '新建'">
+          <el-select  style="width: 200px" v-model="temp.parentCode" @change="createCodeChange" clearable placeholder="请选择一级服务">
           <el-option v-for="(item,index) in firstCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
         </el-select>
         </el-form-item>
+
+        <el-form-item label="服务名称：" prop="name">
+          <el-input v-model="temp.name" placeholder="请输入服务类目名称" type="text" />
+        </el-form-item>
+
         <el-form-item label="ICON图：" prop="icon">
           <Upload v-model="uploadImg"/>
+        </el-form-item>
+
+        <el-form-item label="服务介绍：">
+          <el-input v-model="temp.descr" placeholder="请输入服务介绍" type="textarea" autosize/>
         </el-form-item>
 
       </el-form>
@@ -82,7 +91,7 @@
 </template>
 
 <script>
-import { serviceTagList, serviceTagShelfDisable, serviceTagShelfEnable, serviceTagSortIncr, serviceTagSortDecr, serviceTagAdd, serviceTagUpdate, serviceTagDelete } from '@/api/tag'
+import { serviceTypeList,serviceTypeInfo,serviceTypeSave,serviceTypeDown,serviceTypeUp,serviceTypeDecr,serviceTypeIncr,serviceTypeUpdate } from '@/api/service'
 import { businessTypeList } from '@/api/homePageSetting'
 import { jumpTypeFilters, shelfFilters, pageUrlFilters } from '@/filters/index'
 import global from '@/utils/global'
@@ -90,6 +99,7 @@ import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import Upload from '@/components/Upload/uploadImgTemp'
+import qs from 'qs'
 export default {
   name: 'participles',
   components: { Pagination, Upload },
@@ -101,7 +111,7 @@ export default {
       listLoading: false,
       listQuery: {
         pageNum: 1,
-        firstCode:'',
+        parentCode:'',
         pageSize: 10
       },
       statusList: [
@@ -132,7 +142,8 @@ export default {
         create: '新建'
       },
       rules: {
-        word: [{ required: true, message: '词条名称必填', trigger: 'blur' }]
+        parentCode: [{ required: true, message: '一级类目必填' }],
+        name: [{ required: true, message: '服务类目名称不为空' }]
       }
     }
   },
@@ -144,7 +155,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true
-      businessTypeList().then(response => {
+      serviceTypeList(this.listQuery).then(response => {
         if(response.code == 0){
           console.log(response)
           this.list = response.data
@@ -160,7 +171,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagShelfEnable(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeUp(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -187,7 +199,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagShelfDisable(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeDown(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -214,7 +227,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagSortIncr(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeIncr(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -241,7 +255,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagSortDecr(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeDecr(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -266,8 +281,10 @@ export default {
       this.temp = {
         id: '',
         icon: '',
-        serviceCode: '',
-        name: ''
+        parentCode: '',
+        name: '',
+        level: 2,
+        descr: ''
       }
       this.uploadImg.imgUrl = ''
       this.uploadImg.fileId = ''
@@ -285,17 +302,17 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          let serviceCode,
-              name
           let params = {
-            id: '',
+            // id: '',
             icon: this.uploadImg.fileId,
-            serviceCode: serviceCode,
+            parentCode: this.temp.parentCode,
             name: this.temp.name,
-            shelf: false
+            descr: this.temp.descr,
+            level: 2
           }
           // console.log(params)
-          serviceTagAdd(params).then((response) => {
+          params = qs.stringify(params)
+          serviceTypeSave(params).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
@@ -322,8 +339,9 @@ export default {
       this.resetTemp()
       this.temp.id = row.id
       this.temp.icon = row.icon
-      this.temp.serviceCode = row.serviceCode
+      this.temp.parentCode = row.parentCode
       this.temp.name = row.name
+      this.temp.descr = row.descr
       this.uploadImg.imgUrl = row.icon
       this.uploadImg.fileId = row.icon
       this.dialogStatus = 'update'
@@ -337,13 +355,14 @@ export default {
         if (valid) {
           let params = {
             id: this.temp.id,
-            serviceCode: this.temp.serviceCode,
+            parentCode: this.temp.parentCode,
             name: this.temp.name,
             icon: this.uploadImg.fileId,
-            shelf: false
+            level: 2,
+            descr: this.temp.descr
           }
-          console.log(params)
-          serviceTagUpdate(params).then((response) => {
+          params = qs.stringify(params)
+          serviceTypeUpdate(params).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
@@ -396,7 +415,7 @@ export default {
       let data = {
         parentCode: ''
       }
-      businessTypeList().then(res => {
+      serviceTypeList().then(res => {
         if(res.code == 0) {
           this.firstCodeList = res.data
           console.log(res)
@@ -405,10 +424,10 @@ export default {
     },
     firstCodeChange(value) {
       let data = {
-        parentCode: this.listQuery.firstCode
+        parentCode: this.listQuery.parentCode
       }
       console.log(data)
-      businessTypeList(data).then(res => {
+      serviceTypeList(data).then(res => {
         if(res.code == 0) {
           this.list = res.data
           console.log(res)
