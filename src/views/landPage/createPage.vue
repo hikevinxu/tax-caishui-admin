@@ -346,7 +346,7 @@
 		}
 		.preview {
 			position: fixed;
-			top: 140px;
+			top: 100px;
 			right: 100px;
 			width: 360px;
 			height: 680px;
@@ -497,7 +497,6 @@
 	.registered-form-item {
 		border-radius: 3px;
     margin: 0 auto;
-    margin-top: 30px;
 		width: 100%;
 	}
 	.registered-form-item input {

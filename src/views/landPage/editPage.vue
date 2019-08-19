@@ -360,7 +360,7 @@
 		}
 		.preview {
 			position: fixed;
-			top: 140px;
+			top: 100px;
 			right: 100px;
 			width: 360px;
 			height: 680px;
