@@ -113,7 +113,7 @@
 					<div class="container1">
 					  <img class="banner" :src="formData.headImgUrl" ref="banner">
 						<img class="topImg" :src="formData.topImgUrl" :style="{top: formData.topSpace + 'px'}">
-						<div :style="{'background-color': formData.preRegisterBgColor, 'margin-top': '30px', position: 'relative'}">
+						<div :style="{'background-color': formData.preRegisterBgColor, 'margin-top': '16px', position: 'relative'}">
               <div class="registered-icon" v-if="formData.pageType == 1">
                 <form class="registered-form" method="post">
                   <div class="registered-form-item">
@@ -420,9 +420,9 @@
 	}
 	.download_btn {
 		margin: 0 auto;
-    width: 268px;
+    width: 300px;
     height: 40px;
-    margin: 30px auto;
+    margin: 16px auto;
     margin-bottom: 0;
 		background: #1574FF;
 		border-radius: 3px;
@@ -433,7 +433,7 @@
 		text-align: center;
 	}
 	.tip {
-		width: 268px;
+		width: 300px;
     margin: 0 auto;
 		box-sizing: border-box;
 		font-family: PingFangSC-Regular;
@@ -485,7 +485,7 @@
 	.registered-icon {
 		margin: 0 auto;
     border-radius: 3px;
-    width: 268px;
+    width: 300px;
     text-align: center;
     overflow: hidden;
 	}
@@ -519,7 +519,7 @@
     line-height: 23px;
 	}
 	.registered-form-phone {
-		width: 268px;
+		width: 300px;
     box-sizing: border-box;
     background: url('../../assets/img/phone.png') 12px center no-repeat;
 	}
