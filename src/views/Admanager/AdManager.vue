@@ -112,7 +112,7 @@ export default {
       })
     },
     handleManageList(row, index) {
-      this.$router.push('/adManagerList/adPosition' + (index + 1) + '/businessAdManager' + (index + 1) + '-1/params=' + row.positionNo + ',' + row.elementNum + ',' + row.elementType + ',' + row.relateType)
+      this.$router.push('/adManagerList/adPosition' + (index + 1) + '/businessAdManager' + (index + 1) + '-1/params=' + row.positionNo + ',' + row.elementNum + ',' + row.elementType + ',' + row.relateType + ',2')
     }
   }
 }

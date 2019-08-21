@@ -198,7 +198,7 @@
 
         <el-table-column label="状态" width="100px" align="center">
           <template slot-scope="scope">
-            <div v-if="new Date(scope.row.endTime).valueOf() < new Date().valueOf()">
+            <div v-if="new Date(scope.row.endTime.replace(/-/g,'/')).valueOf() < new Date().valueOf()">
               <el-tag type="danger">已过期</el-tag>
             </div>
             <div v-else>
@@ -289,13 +289,17 @@ export default {
     elementType: {
       type: String,
       default: ''
+    },
+    adType: {
+      type: String,
+      default: ''
     }
   },
   data () {
     return {
       listQuery: {
         positionNo: this.typeId,
-        adType: 2,
+        adType: this.adType,
         status: '',
         adTitle: '',
         typeValue: '',
@@ -371,7 +375,7 @@ export default {
     }
   },
   created(){
-    console.log(new Date("2019/09/02 00:00:00").valueOf())
+    console.log(this.adType)
     this.getServiceTypeList()
     this.getList()
   },
@@ -545,7 +549,7 @@ export default {
       console.log(this.form.elementValue.fileId)
       let params = {
         positionNo: this.typeId,
-        adType: 2,
+        adType: this.adType,
         adTitle: this.form.adTitle,
         typeValue: this.form.typeValue,
         elementValue: this.form.elementValue.fileId,
@@ -648,7 +652,7 @@ export default {
       let params = {
         id: this.adId,
         positionNo: this.typeId,
-        adType: 2
+        adType: this.adType
       }
       params.adTitle = this.form.adTitle
       params.typeValue = this.form.typeValue
@@ -865,7 +869,7 @@ export default {
     advertRecordIndexCheck(index){
       let params = {
         positionNo: this.typeId,
-        adType: 2,
+        adType: this.adType,
         typeValue: this.typeValueTemp,
         cityCode: this.addCityForm.cityCode,
         startTime: this.addCityForm.putTime[0],

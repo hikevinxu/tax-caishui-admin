@@ -1,6 +1,6 @@
 <template>
   <div class="homeBanner_bussinessAd">
-    <Bussiness-Ad type="homeBanner" :typeId="positionNo" :elementType="elementType" :relateType="relateType" :elementNum="elementNum" v-on:func="show" />
+    <Bussiness-Ad type="homeBanner" :typeId="positionNo" :elementType="elementType" :relateType="relateType" :elementNum="elementNum" :adType="adType" v-on:func="show" />
   </div>
 </template>
 <script>
@@ -14,7 +14,8 @@ export default {
       positionNo: '',
       elementType: '',
       relateType: '',
-      elementNum: ''
+      elementNum: '',
+      adType: ''
     }
   },
   created() {
@@ -29,6 +30,7 @@ export default {
     this.elementNum = arr[1]
     this.elementType = arr[2]
     this.relateType = arr[3]
+    this.adType = arr[4]
   },
   methods: {
     show () {

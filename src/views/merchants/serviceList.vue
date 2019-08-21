@@ -63,7 +63,7 @@
       </el-table>
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </div>
-    <el-cascader-panel :props="props" :options="options" @change="cascaderChange"></el-cascader-panel>
+    <el-cascader-panel v-model="cascaderData" :props="props" :options="options" @change="cascaderChange"></el-cascader-panel>
   </div>
 </template>
 <script>
@@ -84,6 +84,7 @@ export default {
       listLoading: false,
       list: [],
       total: 0,
+      cascaderData: [],
       options: [{
         value: 'zhinan',
         label: '指南',
@@ -280,12 +281,13 @@ export default {
         }]
       }],
       props: {
-        multiple: true
+        multiple: true,
+        checkStrictly: false
       }
     }
   },
   created() {
-
+    this.cascaderData = [["zhinan", "shejiyuanze", "yizhi"],["zhinan", "shejiyuanze", "fankui"],["ziyuan", "sketch"]]
   },
   methods: {
     getList() {
@@ -293,6 +295,7 @@ export default {
     },
     cascaderChange(val){
       console.log(val)
+      console.log(this.cascaderData)
     }
   }
 }
