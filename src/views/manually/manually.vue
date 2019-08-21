@@ -2,12 +2,18 @@
   <div class="bannerSetting-container">
     <div class="filter-container">
       <el-input style="width: 250px;" v-model="listQuery.name" placeholder="请输入公司名字" />
-      <el-select v-model="listQuery.type" placeholder="机构类型" style="width: 150px" class="filter-item">
-        <el-option v-for="(item,index) in types" :key="item+index" :label="item.name" :value="item.value"/>
-      </el-select>
-      <el-select v-model="listQuery.status" placeholder="状态" style="width: 150px" class="filter-item">
+      <!-- <el-select v-model="listQuery.status" placeholder="状态" style="width: 150px" class="filter-item">
         <el-option v-for="(item,index) in statusList" :key="item+index" :label="item.name" :value="item.id"/>
-      </el-select>
+      </el-select> -->
+      <el-date-picker
+        v-model="value3"
+        type="datetimerange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        value-format="yyyy-MM-dd hh:mm:ss"
+        @change="timeChose">
+      </el-date-picker>
       <el-button v-waves class="filter-item" type="primary" @click="getList">筛选</el-button>
     </div>
 
@@ -28,26 +34,27 @@
 
       <el-table-column label="企业名称" prop="id" align="center" width="280px">
         <template slot-scope="scope">
-          <span>{{ scope.row.companyName }}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="入录时间" align="center" width="180px">
+      <el-table-column label="入录时间" align="center" width="280px">
         <template slot-scope="scope">
-          <span>{{ scope.row.contactPhone }}</span>
+          <span>{{ scope.row.handleTime }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="状态" width="120px" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.companyStatus == 1">{{ scope.row.companyStatus | releaseStatusFilters }}</el-tag>
-          <el-tag type="danger" v-else>{{ scope.row.companyStatus | releaseStatusFilters }}</el-tag>
+          <el-tag v-if="scope.row.status == 1">{{ scope.row.status | releaseStatusFilters }}</el-tag>
+          <el-tag type="danger" v-else>{{ scope.row.status | releaseStatusFilters }}</el-tag>
         </template>
       </el-table-column>
       
       <el-table-column :label="$t('table.actions')" align="center" min-width="250" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+          <!-- <el-button type="primary" size="small">编辑</el-button> -->
+          <el-button type="primary" size="small" @click="goEdit(scope.row)">编辑</el-button>
           <el-button style="margin-left: 10px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.shelf == false">上架</el-button>
           <el-button style="margin-left: 10px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.shelf == true">下架</el-button>
           <!-- <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)" v-if="scope.row.shelf == false">删除</el-button> -->
@@ -60,7 +67,6 @@
     <el-dialog width="800px" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="margin-left:50px;">
 
-
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -71,7 +77,8 @@
 </template>
 
 <script>
-import { merchantList, merchantUp, merchantDetail, merchantDown, merchantApplyTypes } from '@/api/merchants'
+import { claimList, claimInfo, claimCheck, claimSave, claimUpdate } from '@/api/claim'
+import { merchantApplyTypes } from '@/api/merchants'
 import { businessTypeList } from '@/api/homePageSetting'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
@@ -124,11 +131,14 @@ export default {
       list: null,
       total: 0,
       listLoading: false,
+      value3: '',
       listQuery: {
         pageNum: 1,
         pageSize: 10,
-        submitTime: '',
-        status: ''
+        startTime: '',
+        dataSource: 102,
+        endTime: '',
+        // status: ''
       },
       types: [],
       statusList: [
@@ -157,11 +167,11 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true
-      merchantList(this.listQuery).then(response => {
+      claimList(this.listQuery).then(response => {
         if(response.code == 0){
           console.log(response)
           this.list = response.data.items
-          // this.total = response.data.total
+          this.total = response.data.total
         }
         this.listLoading = false
       })
@@ -173,6 +183,13 @@ export default {
           this.types = res.data
         }
       })
+    },
+    timeChose(e){
+      console.log(e)
+      this.listQuery.startTime = e[0]
+      this.listQuery.endTime = e[1]
+      console.log(this.listQuery)
+      // this.getList()
     },
     // 上架
     handleUp(row) {
@@ -373,6 +390,14 @@ export default {
           this.secondCodeList = res.data
           console.log(res)
         }
+      })
+    },
+    goEdit(row){
+      this.$router.push({
+          path: '/manually/createManually',
+          query: {
+            id: row.id
+          }
       })
     }
   }

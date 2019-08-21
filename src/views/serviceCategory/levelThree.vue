@@ -2,10 +2,10 @@
   <div class="bannerSetting-container">
     <div class="filter-container">
       <el-button v-waves class="filter-item" type="primary" @click="handleCreate">添加</el-button>
-      <el-select  style="width: 200px" v-model="listQuery.firstCode" @change="firstCodeChange" clearable placeholder="请选择一级服务">
+      <el-select  style="width: 200px" v-model="firstCode" @change="firstCodeChange" clearable placeholder="请选择一级服务">
         <el-option v-for="(item,index) in firstCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
       </el-select>
-      <el-select v-show="showSend" style="width: 200px" v-model="listQuery.secondCode" @change="secondCodeChange" clearable placeholder="请选择二级服务">
+      <el-select v-show="showSend" style="width: 200px" v-model="listQuery.parentCode" @change="secondCodeChange" clearable placeholder="请选择二级服务">
         <el-option v-for="(item,index) in secondCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
       </el-select>
     </div>
@@ -25,19 +25,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="三级级类目名称" prop="id" align="center" width="180px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="叶子类型" align="center" width="180px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="叶子类目数量" align="center" width="180px">
+      <el-table-column label="三级级类目名称" prop="id" align="center" width="280px">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
@@ -53,11 +41,11 @@
       <el-table-column :label="$t('table.actions')" align="center" min-width="250" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button style="margin-left: 10px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.shelf == false">上架</el-button>
-          <el-button style="margin-left: 10px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.shelf == true">下架</el-button>
+          <!-- <el-button style="margin-left: 10px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.shelf == false">上架</el-button> -->
+          <!-- <el-button style="margin-left: 10px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.shelf == true">下架</el-button> -->
           <el-button style="margin-left: 10px;" type="primary" size="small" @click="handleIncr(scope.row)">排序上升</el-button>
           <el-button style="margin-left: 10px;" type="success" size="small" @click="handleDecr(scope.row)">排序下降</el-button>
-          <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)" v-if="scope.row.shelf == false">删除</el-button>
+          <!-- <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)" v-if="scope.row.shelf == false">删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -67,19 +55,24 @@
     <el-dialog width="800px" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="margin-left:50px;">
 
-        <el-form-item label="一级类目：" prop="icon">
+        <el-form-item label="一级类目：" prop="icon" v-show="textMap[dialogStatus] == '新建'">
           <el-select  style="width: 200px" v-model="serviceType.firstCode" @change="createCodeChange" clearable placeholder="请选择一级服务">
           <el-option v-for="(item,index) in firstCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
-        </el-select>
+        </el-select><span style="margin-left: 10px;">(二级类目数据必须选择完一级类目才有)</span>
         </el-form-item>
 
-        <el-form-item  label="二级类目：" prop="icon">
-          <el-select v-show="showCreateSend" style="width: 200px" v-model="serviceType.secondCode" @change="serviceCodeChange" clearable placeholder="请选择二级类目">
+        <el-form-item  label="二级类目：" prop="parentCode" v-show="textMap[dialogStatus] == '新建'">
+          <el-select style="width: 200px" v-model="temp.parentCode" @change="serviceCodeChange" clearable placeholder="请选择二级类目">
             <el-option v-for="(item,index) in secondCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="ICON图：" prop="icon">
-          <Upload v-model="uploadImg"/>
+
+        <el-form-item label="服务名称：" prop="name" v-show="textMap[dialogStatus]== '新建'">
+          <el-input v-model="temp.name" placeholder="请输入服务类目名称" type="text" />
+        </el-form-item>
+
+        <el-form-item label="服务介绍：">
+          <el-input v-model="temp.descr" placeholder="请输入服务介绍" type="textarea" autosize/>
         </el-form-item>
 
       </el-form>
@@ -92,7 +85,7 @@
 </template>
 
 <script>
-import { serviceTagList, serviceTagShelfDisable, serviceTagShelfEnable, serviceTagSortIncr, serviceTagSortDecr, serviceTagAdd, serviceTagUpdate, serviceTagDelete } from '@/api/tag'
+import { serviceTypeList,serviceTypeInfom,serviceTypeSave,serviceTypeDown,serviceTypeUp,serviceTypeDecr,serviceTypeIncr,serviceTypeUpdate } from '@/api/service'
 import { businessTypeList } from '@/api/homePageSetting'
 import { jumpTypeFilters, shelfFilters, pageUrlFilters } from '@/filters/index'
 import global from '@/utils/global'
@@ -100,6 +93,7 @@ import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import Upload from '@/components/Upload/uploadImgTemp'
+import qs from 'qs'
 export default {
   name: 'participles',
   components: { Pagination, Upload },
@@ -109,11 +103,9 @@ export default {
       list: null,
       total: 0,
       listLoading: false,
+      firstCode: '',
       listQuery: {
-        pageNum: 1,
-        firstCode:'',
-        secondCode: '',
-        pageSize: 10
+        parentCode: '',
       },
       statusList: [
         {name:'已上架',id: true},
@@ -128,16 +120,18 @@ export default {
         secondCode: ''
       },
       jumpTypeList: global.jumpTypeList,
-      uploadImg: {
-        imgUrl: '',
-        fileId: ''
-      },
+      // uploadImg: {
+      //   imgUrl: '',
+      //   fileId: ''
+      // },
       secondName: '',
       thirdName: '',
       temp: {
         id: '',
-        icon: '',
-        serviceCode: '',
+        // icon: '',
+        parentCode: '',
+        descr: '',
+        level: 3,
         name: ''
       },
       dialogFormVisible: false,
@@ -147,7 +141,8 @@ export default {
         create: '新建'
       },
       rules: {
-        word: [{ required: true, message: '词条名称必填', trigger: 'blur' }]
+        parentCode: [{ required: true, message: '二级类目必填' }],
+        name: [{ required: true, message: '类目名称不能为空' }]
       }
     }
   },
@@ -159,7 +154,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true
-      businessTypeList().then(response => {
+      serviceTypeList(this.listQuery).then(response => {
         if(response.code == 0){
           console.log(response)
           this.list = response.data
@@ -175,7 +170,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagShelfEnable(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeUp(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -202,7 +198,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagShelfDisable(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeDown(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -229,7 +226,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagSortIncr(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeIncr(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -256,7 +254,8 @@ export default {
         let query = {
           id: id
         }
-        serviceTagSortDecr(query).then(response => {
+        query = qs.stringify(query)
+        serviceTypeDecr(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -280,12 +279,14 @@ export default {
     resetTemp() {
       this.temp = {
         id: '',
-        icon: '',
-        serviceCode: '',
+        // icon: '',
+        parentCode: '',
+        descr: '',
+        level: 3,
         name: ''
       }
-      this.uploadImg.imgUrl = ''
-      this.uploadImg.fileId = ''
+      // this.uploadImg.imgUrl = ''
+      // this.uploadImg.fileId = ''
     },
     //唤起新建
     handleCreate() {
@@ -300,17 +301,17 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          let serviceCode,
-              name
           let params = {
             id: '',
-            icon: this.uploadImg.fileId,
-            serviceCode: serviceCode,
+            // icon: this.uploadImg.fileId,
+            parentCode: this.temp.parentCode,
             name: this.temp.name,
-            shelf: false
+            level: 3,
+            descr: this.temp.descr
           }
           // console.log(params)
-          serviceTagAdd(params).then((response) => {
+          params = qs.stringify(params)
+          serviceTypeSave(params).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
@@ -336,11 +337,12 @@ export default {
     handleEdit(row) {
       this.resetTemp()
       this.temp.id = row.id
-      this.temp.icon = row.icon
-      this.temp.serviceCode = row.serviceCode
+      // this.temp.icon = row.icon
+      this.temp.parentCode = row.parentCode
       this.temp.name = row.name
-      this.uploadImg.imgUrl = row.icon
-      this.uploadImg.fileId = row.icon
+      // this.uploadImg.imgUrl = row.icon
+      // this.uploadImg.fileId = row.icon
+      this.temp.descr = row.descr
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -352,13 +354,15 @@ export default {
         if (valid) {
           let params = {
             id: this.temp.id,
-            serviceCode: this.temp.serviceCode,
+            parentCode: this.temp.parentCode,
             name: this.temp.name,
-            icon: this.uploadImg.fileId,
-            shelf: false
+            descr: this.temp.descr,
+            level: 3
+            // icon: this.uploadImg.fileId,
+            // shelf: false
           }
-          console.log(params)
-          serviceTagUpdate(params).then((response) => {
+          params = qs.stringify(params)
+          serviceTypeUpdate(params).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
@@ -411,7 +415,7 @@ export default {
       let data = {
         parentCode: ''
       }
-      businessTypeList().then(res => {
+      serviceTypeList().then(res => {
         if(res.code == 0) {
           this.firstCodeList = res.data
           console.log(res)
@@ -420,10 +424,12 @@ export default {
     },
     firstCodeChange(value) {
       let data = {
-        parentCode: this.listQuery.firstCode
+        parentCode: this.firstCode
       }
+      this.listQuery.parentCode = ''
+      this.list = []
       console.log(data)
-      businessTypeList(data).then(res => {
+      serviceTypeList(data).then(res => {
         if(res.code == 0) {
           this.showSend = true
           this.secondCodeList = res.data
@@ -432,32 +438,23 @@ export default {
       })
     },
     secondCodeChange(value){
-      this.serviceType.thirdCode = ''
-      for (let i = 0; i < this.secondCodeList.length; i++) {
-        if(value == this.secondCodeList[i].code){
-          this.secondName = this.secondCodeList[i].name
-          console.log(this.secondName)
-          if(this.secondCodeList[i].leafNode == false){
-            let data = {
-              parentCode: this.listQuery.secondCode
-            }
-            console.log(data)
-            businessTypeList(data).then(res => {
-              if(res.code == 0) {
-                this.list = res.data
-                console.log(res)
-              }
-            })
-          }
-        }
+      let data = {
+        parentCode: this.listQuery.parentCode
       }
+      console.log(data)
+      serviceTypeList(data).then(res => {
+        if(res.code == 0) {
+          this.list = res.data
+          console.log(res)
+        }
+      })
     },
     createCodeChange(value){
       let data = {
         parentCode: this.serviceType.firstCode
       }
       console.log(data)
-      businessTypeList(data).then(res => {
+      serviceTypeList(data).then(res => {
         if(res.code == 0) {
           this.showCreateSend = true
           this.secondCodeList = res.data

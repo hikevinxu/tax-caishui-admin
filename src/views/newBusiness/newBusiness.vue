@@ -6,7 +6,9 @@
         type="datetimerange"
         range-separator="至"
         start-placeholder="开始日期"
-        end-placeholder="结束日期">
+        end-placeholder="结束日期"
+        value-format="yyyy-MM-dd hh:mm:ss"
+        @change="timeChose">
       </el-date-picker>
     </div>
 
@@ -21,23 +23,29 @@
       style="width: 100%;">
       <el-table-column label="序号" prop="id" align="center" width="80px">
         <template slot-scope="scope">
-          <span>{{ scope.row.sortIndex }}</span>
+          <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="机构名称" prop="id" align="center" width="180px">
+      <el-table-column label="机构名称" prop="id" align="center" width="250px">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.applyName }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="联系人" align="center" width="180px">
+      <el-table-column label="联系人" align="center" width="120px">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.contacts }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="申请业务" align="center" width="180px">
+      <el-table-column label="联系电话" align="center" width="150px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.phone }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="申请业务" align="center" width="200px">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
@@ -45,13 +53,13 @@
 
       <el-table-column label="描述" prop="id" align="center" min-width="180px">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.introduce }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="提交时间" prop="id" align="center" width="180px">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
 
@@ -64,7 +72,7 @@
 
 <script>
 import waves from '@/directive/waves' // Waves directive
-import { businessTypeList } from '@/api/homePageSetting'
+import { businessList } from '@/api/service'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 export default {
   name: 'participles',
@@ -78,8 +86,11 @@ export default {
       listLoading: false,
       listQuery: {
         pageNum: 1,
-        shelf: '',
-        pageSize: 10
+        name: '',
+        applyName: '',
+        startTime: '',
+        endTime: '',
+        pageSize: 20
       },
       statusList: [
         {name:'已上架',id: true},
@@ -95,14 +106,21 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true
-      businessTypeList().then(response => {
+      businessList(this.listQuery).then(response => {
         if(response.code == 0){
           console.log(response)
-          this.list = response.data
-          // this.total = response.data.total
+          this.list = response.data.items
+          this.total = response.data.total
         }
         this.listLoading = false
       })
+    },
+    timeChose(e){
+      console.log(e)
+      this.listQuery.startTime = e[0]
+      this.listQuery.endTime = e[1]
+      console.log(this.listQuery)
+      this.getList()
     }
   }
 }
