@@ -27,19 +27,25 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="机构名称" prop="id" align="center" width="180px">
+      <el-table-column label="机构名称" prop="id" align="center" width="250px">
         <template slot-scope="scope">
           <span>{{ scope.row.applyName }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="联系人" align="center" width="180px">
+      <el-table-column label="联系人" align="center" width="120px">
         <template slot-scope="scope">
           <span>{{ scope.row.contacts }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="申请业务" align="center" width="180px">
+      <el-table-column label="联系电话" align="center" width="150px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.phone }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="申请业务" align="center" width="200px">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
@@ -104,7 +110,7 @@ export default {
         if(response.code == 0){
           console.log(response)
           this.list = response.data.items
-          // this.total = response.data.total
+          this.total = response.data.total
         }
         this.listLoading = false
       })

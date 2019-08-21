@@ -2,19 +2,20 @@
   <div class="bannerSetting-container">
     <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right">
 
-      <el-form-item label="机构名称：">
-        <el-input style="width: 398px;" v-model="temp.name" placeholder="请输入机构名称" />
-        <el-button type="primary" @click="dialogFormVisible = false">鉴定</el-button>
+      <el-form-item label="机构名称：" v-show="!isEdit">
+        <el-input  @input="nameInput" style="width: 598px;" v-model.trim="temp.name" placeholder="请输入机构名称" />
+        <el-button type="primary" @click="check">鉴定</el-button>
       </el-form-item>
 
-      <el-form-item label="机构类型：">
-        <el-select v-model="temp.type" placeholder="机构类型" style="width: 398px" class="filter-item">
+     <div v-show="showForm">
+        <el-form-item label="机构类型：">
+        <el-select v-model="temp.type" placeholder="机构类型" style="width: 598px" class="filter-item">
           <el-option v-for="(item,index) in types" :key="item+index" :label="item.name" :value="item.value"/>
         </el-select>
       </el-form-item>
 
-      <el-form-item label="所在地区：">
-        <el-select v-model="provinceCode" @change="provinceCodeChange" placeholder="请选择">
+      <el-form-item label="所在地区：" >
+        <el-select v-model="temp.provinceCode" @change="provinceCodeChange" placeholder="请选择">
           <el-option
             v-for="item in provinceList"
             :key="item.code"
@@ -23,7 +24,7 @@
           </el-option>
         </el-select>
 
-        <el-select v-model="cityCode" @change="cityCodeChange" placeholder="请选择">
+        <el-select v-model="temp.cityCode" @change="cityCodeChange" placeholder="请选择">
           <el-option
             v-for="item in cityList"
             :key="item.code"
@@ -32,7 +33,7 @@
           </el-option>
         </el-select>
 
-        <el-select v-model="areaCode" @change="areaCodeChange" placeholder="请选择">
+        <el-select v-model="temp.areaCode" @change="areaCodeChange" placeholder="请选择">
           <el-option
             v-for="item in areaList"
             :key="item.code"
@@ -43,7 +44,7 @@
       </el-form-item>
 
       <el-form-item label="地图定位：">
-        <el-select style="width: 398px;" class="selectAddress" v-model="searchInput" :loading="loading" :remote-method="selectAddressInput" @change="selectAddressChange" reserve-keyword filterable remote placeholder="请选择">
+        <el-select style="width: 598px;" class="selectAddress" v-model="searchInput" :loading="loading" :remote-method="selectAddressInput" @change="selectAddressChange" reserve-keyword filterable remote placeholder="请选择">
           <el-option
             v-for="item in searchResult"
             :key="item.id"
@@ -52,27 +53,43 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-cascader-panel v-model="casList" :options="options" :props="{ multiple: true, checkStrictly: false }" @change="casa"></el-cascader-panel> -->
       <div class="mapContainer">
         <el-amap vid="amap" ref="map" :center="center" :zoom="zoom" :plugin="plugin" :events="events"></el-amap>
         <i class="el-icon-location"></i>
       </div>
 
       <el-form-item label="详细地址：">
-        <el-input style="width: 398px;" v-model="temp.adress" placeholder="请输入详细地址" />
+        <el-input style="width: 598px;" v-model="temp.address" placeholder="请输入详细地址" />
       </el-form-item>
 
       <el-form-item label="服务电话：">
-        <el-input style="width: 398px;" v-model="temp.phone" placeholder="请输入服务电话" />
+        <el-input style="width: 598px;" v-model="temp.phone" placeholder="请输入服务电话" />
       </el-form-item>
 
       <el-form-item label="详细介绍：">
-        <el-input type="textarea" autosize :rows="4" style="width: 398px;" v-model="temp.context" placeholder="请输入详细介绍" />
+        <el-input type="textarea" autosize :rows="4" style="width: 598px;" v-model="temp.introduce" placeholder="请输入详细介绍" />
       </el-form-item>
+
+      <el-form-item label="主营业务：" style="display: flex;">
+        <div v-for="(item,index) in serviceCodes" :key="index" style="margin-bottom: 10px;">
+          <el-select  style="width: 196px" v-model="item.serviceType.firstCode" @change="firstCodeChange(item,$event)" @clear="clearFirst(item,$event)" clearable placeholder="请选择一级服务">
+            <el-option v-for="(detail,index) in item.firstCodeList" :key="detail.code+index" :label="detail.name" :value="detail.code"> </el-option>
+          </el-select>
+          <el-select v-show="item.showSend" style="width: 196px" v-model="item.serviceType.secondCode" @change="secondCodeChange(item,$event)"  @clear="clearSend(item,$event)" clearable placeholder="请选择二级服务">
+            <el-option v-for="(detail,index) in item.secondCodeList" :key="detail.code+index" :label="detail.name" :value="detail.code"> </el-option>
+          </el-select>
+            <el-select  v-show="item.showThird" style="width: 196px" v-model="item.serviceType.thirdCode" @change="thirdCodeChange(item,$event)" clearable placeholder="请选择三级服务">
+            <el-option v-for="(detail,index) in item.thirdCodeList" :key="detail.code+index" :label="detail.name" :value="detail.code"> </el-option>
+          </el-select>
+          <el-button type="primary" @click="deleteService(item,index)">删除该业务</el-button>
+        </div>
+        <el-button type="primary" @click="add">添加业务</el-button>
+      </el-form-item>
+     </div>
 
     </el-form>
 
-    <span slot="footer" class="dialog-footer" style="display: flex;justify-content: flex-end;width:480px;">
+    <span v-show="showForm" slot="footer" class="dialog-footer" style="display: flex;justify-content: flex-end;width:678px;">
       <!-- <el-button @click="dialogRefuseVisible = false">返回</el-button> -->
       <el-button type="primary" @click="refuse">保存</el-button>
     </span>
@@ -82,12 +99,14 @@
 <script>
 import Vue from 'vue'
 import VueAMap from 'vue-amap'
-import { merchantList, merchantUp, merchantDetail, merchantDown, merchantApplyTypes } from '@/api/merchants'
+import { claimList, claimInfo, claimCheck, claimSave, claimUpdate } from '@/api/claim'
+import { merchantApplyTypes } from '@/api/merchants'
 import { addressProvinces,addressCitys,addressAreas } from '@/api/cityList'
-import { businessTypeList } from '@/api/homePageSetting'
+import {  businessTypeList } from '@/api/homePageSetting'
 import { config } from '@/utils/config'
 import waves from '@/directive/waves' // Waves directive
 // import Upload from '@/components/Upload/uploadImgTemp'
+import qs from 'qs'
 Vue.use(VueAMap)
 
 // 初始化高德地图的 key 和插件
@@ -98,7 +117,7 @@ VueAMap.initAMapApiLoader({
   v: '1.4.4'
 })
 export default {
-  name: 'participles',
+  name: 'createManually',
   directives: { waves },
   filters: {
     
@@ -107,213 +126,32 @@ export default {
     return {
       casList: [],
       oneList: [],
-      options: [{
-          value: 'zhinan',
-          label: '指南',
-          children: [{
-            value: 'shejiyuanze',
-            label: '设计原则',
-            children: [{
-              value: 'yizhi',
-              label: '一致'
-            }, {
-              value: 'fankui',
-              label: '反馈'
-            }, {
-              value: 'xiaolv',
-              label: '效率'
-            }, {
-              value: 'kekong',
-              label: '可控'
-            }]
-          }, {
-            value: 'daohang',
-            label: '导航',
-            children: [{
-              value: 'cexiangdaohang',
-              label: '侧向导航'
-            }, {
-              value: 'dingbudaohang',
-              label: '顶部导航'
-            }]
-          }]
-        }, {
-          value: 'zujian',
-          label: '组件',
-          children: [{
-            value: 'basic',
-            label: 'Basic',
-            children: [{
-              value: 'layout',
-              label: 'Layout 布局'
-            }, {
-              value: 'color',
-              label: 'Color 色彩'
-            }, {
-              value: 'typography',
-              label: 'Typography 字体'
-            }, {
-              value: 'icon',
-              label: 'Icon 图标'
-            }, {
-              value: 'button',
-              label: 'Button 按钮'
-            }]
-          }, {
-            value: 'form',
-            label: 'Form',
-            children: [{
-              value: 'radio',
-              label: 'Radio 单选框'
-            }, {
-              value: 'checkbox',
-              label: 'Checkbox 多选框'
-            }, {
-              value: 'input',
-              label: 'Input 输入框'
-            }, {
-              value: 'input-number',
-              label: 'InputNumber 计数器'
-            }, {
-              value: 'select',
-              label: 'Select 选择器'
-            }, {
-              value: 'cascader',
-              label: 'Cascader 级联选择器'
-            }, {
-              value: 'switch',
-              label: 'Switch 开关'
-            }, {
-              value: 'slider',
-              label: 'Slider 滑块'
-            }, {
-              value: 'time-picker',
-              label: 'TimePicker 时间选择器'
-            }, {
-              value: 'date-picker',
-              label: 'DatePicker 日期选择器'
-            }, {
-              value: 'datetime-picker',
-              label: 'DateTimePicker 日期时间选择器'
-            }, {
-              value: 'upload',
-              label: 'Upload 上传'
-            }, {
-              value: 'rate',
-              label: 'Rate 评分'
-            }, {
-              value: 'form',
-              label: 'Form 表单'
-            }]
-          }, {
-            value: 'data',
-            label: 'Data',
-            children: [{
-              value: 'table',
-              label: 'Table 表格'
-            }, {
-              value: 'tag',
-              label: 'Tag 标签'
-            }, {
-              value: 'progress',
-              label: 'Progress 进度条'
-            }, {
-              value: 'tree',
-              label: 'Tree 树形控件'
-            }, {
-              value: 'pagination',
-              label: 'Pagination 分页'
-            }, {
-              value: 'badge',
-              label: 'Badge 标记'
-            }]
-          }, {
-            value: 'notice',
-            label: 'Notice',
-            children: [{
-              value: 'alert',
-              label: 'Alert 警告'
-            }, {
-              value: 'loading',
-              label: 'Loading 加载'
-            }, {
-              value: 'message',
-              label: 'Message 消息提示'
-            }, {
-              value: 'message-box',
-              label: 'MessageBox 弹框'
-            }, {
-              value: 'notification',
-              label: 'Notification 通知'
-            }]
-          }, {
-            value: 'navigation',
-            label: 'Navigation',
-            children: [{
-              value: 'menu',
-              label: 'NavMenu 导航菜单'
-            }, {
-              value: 'tabs',
-              label: 'Tabs 标签页'
-            }, {
-              value: 'breadcrumb',
-              label: 'Breadcrumb 面包屑'
-            }, {
-              value: 'dropdown',
-              label: 'Dropdown 下拉菜单'
-            }, {
-              value: 'steps',
-              label: 'Steps 步骤条'
-            }]
-          }, {
-            value: 'others',
-            label: 'Others',
-            children: [{
-              value: 'dialog',
-              label: 'Dialog 对话框'
-            }, {
-              value: 'tooltip',
-              label: 'Tooltip 文字提示'
-            }, {
-              value: 'popover',
-              label: 'Popover 弹出框'
-            }, {
-              value: 'card',
-              label: 'Card 卡片'
-            }, {
-              value: 'carousel',
-              label: 'Carousel 走马灯'
-            }, {
-              value: 'collapse',
-              label: 'Collapse 折叠面板'
-            }]
-          }]
-        }, {
-          value: 'ziyuan',
-          label: '资源',
-          children: [{
-            value: 'axure',
-            label: 'Axure Components'
-          }, {
-            value: 'sketch',
-            label: 'Sketch Templates'
-          }, {
-            value: 'jiaohu',
-            label: '组件交互文档'
-          }]
-        },{
-          value: 'zhinan11',
-          label: '指南11',
-        }],
+      showForm: false,
+      companyInfo: {},
       uploadImg: {
         fileId: '',
         imgUrl: ''
       },
+      isEdit: false,
+      firstCodeList: [],
+      serviceCodes: [],
       rules: {},
       temp: {
         name: '',
+        companyId: '',
+        provinceCode: '',
+        cityCode: '',
+        areaCode: '',
+        location: '',
+        phone: '',
+        address: '',
+        phone: '',
         type: '',
+        introduce: ''
       },
+      provinceName: '',
+      cityName: '',
+      areaName: '',
       types: [],
       checkList: [],
       searchResult: [],
@@ -374,6 +212,14 @@ export default {
     // this.getList()
     this.getTypes()
     this.getProvinceList()
+    this.getBusinessTypeList()
+    if(this.$route.query.id){
+      this.isEdit = true
+      let data = {
+        id: this.$route.query.id
+      }
+      this.getCompanyInfo(data)
+    }
   },
   methods: {
     getTypes(){
@@ -384,8 +230,356 @@ export default {
         }
       })
     },
-    refuse(){
+    getBusinessTypeList () {
+      let data = {
+        parentCode: ''
+      }
+      businessTypeList(data).then(res => {
+        if(res.code == 0) {
+          this.firstCodeList = res.data
+          for (let i = 0; i < this.serviceCodes.length; i++) {
+            this.serviceCodes[i].firstCodeList = res.data;
+          }
+        }
+      })
+    },
+    getCompanyInfo(data){
+      data = qs.stringify(data)
+      claimInfo(data).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.companyInfo = res.data
+          console.log(this.companyInfo)
+          this.setData()
+        }
+      })
+    },
+    nameInput(){
+      console.log(1)
+      this.resetForm()
+      this.showForm = false
+    },
+    check(){
+      let data = {
+        name: this.temp.name
+      }
+      console.log(data)
+      data = qs.stringify(data)
+      claimCheck(data).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 0){
+            this.companyInfo = res.data.info
+            this.setData()
+          }else if(res.data.status == -1){
+            this.$message({
+              message: res.data.message,
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+          }
+        }
+      })
+    },
+    setData(){
+      console.log(this.companyInfo.name)
+      this.resetForm()
+      if(this.companyInfo.name){
+        this.showForm = true
+        this.temp.name = this.companyInfo.name
+        this.temp.companyId = this.companyInfo.id
+        this.temp.address = this.companyInfo.address
+        this.temp.type = this.companyInfo.type
+        this.provinceCodeChange(this.companyInfo.provinceCode)
+        this.temp.provinceCode = this.companyInfo.provinceCode
+        this.cityCodeChange(this.companyInfo.cityCode)
+        this.temp.cityCode = this.companyInfo.cityCode
+        this.temp.areaCode = this.companyInfo.areaCode
+        this.temp.introduce = this.companyInfo.introduce
+        if(this.companyInfo.location){
+          this.center[0] = this.companyInfo.location.split(',')[1]
+          this.center[1] = this.companyInfo.location.split(',')[0]
+          this.selectAddressChange(this.center)
+        } else {
+          this.getCurrentPositionLaglng()
+        }
+        if(this.companyInfo.phones.length > 0){
+          this.temp.phone = this.companyInfo.phones[0]
+        }
+        let params = {
+          provinceCode: this.temp.provinceCode
+        }
+        //地区赋值
+        addressProvinces().then(res => {
+          if(res.code == 0){
+            this.provinceList = res.data
+            for(let i=0;i<res.data.length;i++){
+              if (res.data[i].code == this.temp.provinceCode){
+                this.provinceName = res.data[i].name
+                let params = {
+                  provinceCode: this.temp.provinceCode
+                }
+                addressCitys(params).then(res => {
+                  if(res.code == 0){
+                    for(let i=0;i<res.data.length;i++){
+                      this.cityList = res.data
+                      if (res.data[i].code == this.temp.cityCode){
+                        this.cityName = res.data[i].name
+                        let data = {
+                          provinceCode: this.temp.provinceCode,
+                          cityCode: this.temp.cityCode
+                        }
+                        addressAreas(data).then(res => {
+                          this.areaList = res.data
+                          if(res.code == 0){
+                            for(let i=0;i<res.data.length;i++){
+                              if (res.data[i].code == this.temp.areaCode){
+                                this.areaName = res.data[i].name
+                              }
+                            }
+                          }
+                        })
+                      }
+                    }
+                  }
+                })
+              }
+            }
+          }
+        })
 
+        //主营业务赋值
+        for (let i = 0; i < this.companyInfo.codeArray.length; i++) {
+          if(this.companyInfo.codeArray[i].length == 2){
+            let json = {
+              serviceType: {
+                firstCode: '',
+                secondCode: '',
+                thirdCode: ''
+              },
+              showSend: false,
+              showThird: false,
+              firstCodeList: this.firstCodeList
+            }
+            let data1 = {
+              parentCode: this.companyInfo.codeArray[i][1]
+            }
+            businessTypeList(data1).then(res => {
+              if(res.code == 0) {
+                json.secondCodeList = res.data
+                json.serviceType.secondCode = this.companyInfo.codeArray[i][0]
+                if(res.data.length == 0){
+                  json.showSend = false
+                }else{
+                  json.showSend = true
+                }
+              }
+            })
+            json.serviceType.firstCode = this.companyInfo.codeArray[i][1]
+            
+            this.serviceCodes.push(json)
+          }else if(this.companyInfo.codeArray[i].length == 3){
+            let json = {
+              serviceType: {
+                firstCode: '',
+                secondCode: '',
+                thirdCode: ''
+              },
+              showSend: false,
+              showThird: false,
+              firstCodeList: this.firstCodeList
+            }
+            let data1 = {
+              parentCode: this.companyInfo.codeArray[i][2]
+            }
+            businessTypeList(data1).then(res => {
+              if(res.code == 0) {
+                json.secondCodeList = res.data
+                json.serviceType.secondCode = this.companyInfo.codeArray[i][1]
+                if(res.data.length == 0){
+                  json.showSend = false
+                }else{
+                  json.showSend = true
+                }
+                let data2 = {
+                  parentCode: this.companyInfo.codeArray[i][1]
+                }
+                businessTypeList(data2).then(res => {
+                  if(res.code == 0) {
+                    json.thirdCodeList = res.data
+                    json.serviceType.thirdCode = this.companyInfo.codeArray[i][0]
+                    if(res.data.length == 0){
+                      json.showThird = false
+                    }else{
+                      json.showThird = true
+                    }
+                  }
+                })
+              }
+            })
+            json.serviceType.firstCode = this.companyInfo.codeArray[i][2]
+            this.serviceCodes.push(json)
+          }
+        }
+        console.log(this.serviceCodes)
+      }else {
+        this.showForm = true
+      }
+    },
+    resetForm(){
+      // this.temp.name = ''
+      this.temp.companyId = ''
+      this.temp.address = ''
+      this.temp.type = ''
+      this.temp.provinceCode = ''
+      this.temp.cityCode = ''
+      this.temp.areaCode = ''
+      this.temp.location = ''
+      this.temp.phone = ''
+      this.provinceName = ''
+      this.cityName = ''
+      this.areaName = ''
+      this.searchResult = ''
+      this.center = [116.397477,39.908692]
+    },
+    refuse(){
+      if(this.temp.name == '') {
+        this.$message({
+          message: '机构名称不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if(this.temp.type == ''){
+        this.$message({
+          message: '机构类型不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (!this.temp.provinceCode || this.temp.provinceCode == '' || !this.temp.cityCode || this.temp.cityCode == '' || !this.temp.areaCode || this.temp.areaCode == '') {
+        this.$message({
+          message: '所选地区不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+      if(this.temp.address == ''){
+        this.$message({
+          message: '详细地址不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+      if(this.temp.phone == ''){
+        this.$message({
+          message: '联系电话不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+      if(!this.temp.phone.match(/(0\d{2,3}(-)?)?\d{7,8}/) && !this.temp.phone.match(/^(0|86|17951)?1[0-9]{10}$/)){
+        this.$message({
+          message: '联系电话格式不正确',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+
+      let data = {
+        name: this.temp.name,
+        type: this.temp.type,
+        id: this.temp.companyId,
+        cityCode:this.temp.cityCode,
+        areaCode: this.temp.areaCode,
+        provinceCode: this.temp.provinceCode,
+        // contactName: this.temp.contact,
+        address: this.provinceName + this.cityName + this.areaName + this.temp.address,
+        location: this.center[1].toString() + ',' + this.center[0].toString(),
+        phones: [this.temp.phone],
+        introduce: this.temp.introduce,
+        serviceCodes: []
+      }
+
+      for (let i = 0; i < this.serviceCodes.length; i++) {
+        if(this.serviceCodes[i].showSend == false && this.serviceCodes[i].showThird == false){
+          if(this.serviceCodes[i].serviceType.firstCode == ''){
+            this.$message({
+              message: '请选择完子级在提交',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+            return
+          }else{
+            data.serviceCodes.push(this.serviceCodes[i].serviceType.firstCode)
+          }
+        }else{
+          if(this.serviceCodes[i].showThird == true){
+            if(this.serviceCodes[i].serviceType.thirdCode == ''){
+              this.$message({
+                message: '请选择完子级在提交',
+                type: 'error',
+                showClose: true,
+                duration: 1000
+              })
+              return
+            }else{
+              data.serviceCodes.push(this.serviceCodes[i].serviceType.thirdCode)
+            }
+            
+          }else{
+            if(this.serviceCodes[i].serviceType.secondCode == ''){
+              this.$message({
+                message: '请选择完子级在提交',
+                type: 'error',
+                showClose: true,
+                duration: 1000
+              })
+              return
+            }else{
+              data.serviceCodes.push(this.serviceCodes[i].serviceType.secondCode)
+            }
+          }
+        }
+      }
+      console.log(data)
+      data = qs.stringify(data)
+      claimSave(data).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.$message({
+            message: '保存成功',
+            type: 'success',
+            showClose: true,
+            duration: 1000
+          })
+          this.resetForm()
+          this.showForm = false
+        }else{
+          this.$message({
+            message: res.data.message,
+            type: 'error',
+            showClose: true,
+            duration: 1000
+          })
+          this.resetForm()
+          this.showForm = false
+        }
+      })
     },
     getCurrentPositionLaglng(){
       this.getLocationLoading = true
@@ -425,7 +619,7 @@ export default {
       })
       geocoder.getAddress(val, (status, result) => {
         if (status == 'complete') {
-          // this.address = result.regeocode.formattedAddress
+          this.searchInput = result.regeocode.formattedAddress
         }
       })
     },
@@ -461,8 +655,8 @@ export default {
       })
     },
     provinceCodeChange(val){
-      this.cityCode = ''
-      this.areaCode = ''
+      this.temp.cityCode = ''
+      this.temp.areaCode = ''
       this.cityList = []
       this.areaList = []
       let params = {
@@ -480,10 +674,10 @@ export default {
       }
     },
     cityCodeChange(val){
-      this.areaCode = ''
+      this.temp.areaCode = ''
       this.areaList = []
       let data = {
-        provinceCode: this.provinceCode,
+        provinceCode: this.temp.provinceCode,
         cityCode: val
       }
       addressAreas(data).then(res => {
@@ -504,20 +698,99 @@ export default {
         }
       }
     },
-    casa(e){
-      // console.log(e)
-      console.log(e)
-      let oneList = []
-      for (let i = 0; i < this.casList.length; i++) {
-        if(oneList.indexOf(this.casList[i][0]) == -1){
-          oneList.push(this.casList[i][0])
-          this.oneList = oneList
-          console.log(this.oneList)
+    clearFirst(item,e){
+      item.secondCode = ''
+      item.thirdCode = ''
+      item.secondCodeList = []
+      item.thirdCodeList = []
+      item.showSend = false
+      item.showThird = false
+    },
+    clearSend(item,e){
+      item.showThird = false
+      item.thirdCode = ''
+      item.thirdCodeList = []
+    },
+    firstCodeChange(item,e){
+      item.secondCode = ''
+      item.thirdCode = ''
+      item.secondCodeList = []
+      item.thirdCodeList = []
+      item.showSend = false
+      item.showThird = false
+      item.firstCode = e
+      if(item.firstCode != ''){
+        let data = {
+          parentCode: item.firstCode
         }
+        console.log(data)
+        businessTypeList(data).then(res => {
+          if(res.code == 0) {
+            console.log(res)
+            item.secondCodeList = res.data
+            if(res.data.length == 0){
+              item.showSend = false
+            }else{
+              item.showSend = true
+            }
+          }
+        })
+      }else {
+
       }
-      if(this.oneList.length > 3){
+    },
+    secondCodeChange(item,e){
+      item.showThird = false
+      item.thirdCode = ''
+      item.thirdCodeList = []
+      item.secondCode = e
+      if(item.secondCode != ''){
+        let data = {
+          parentCode: item.secondCode
+        }
+        businessTypeList(data).then(res => {
+          if(res.code == 0) {
+            console.log(res)
+            item.thirdCodeList = res.data
+            if(res.data.length == 0){
+              item.showThird = false
+            }else{
+              item.showThird = true
+            }
+          }
+        })
+      }else {
+
+      }
+    },
+    thirdCodeChange(item,e){
+      item.thirdCode = e
+      console.log(this.serviceCodes)
+    },
+    add(){
+      let json = {
+        serviceType: {
+          firstCode: '',
+          secondCode: '',
+          thirdCode: ''
+        },
+        showSend: false,
+        showThird: false,
+        firstCodeList: [],
+        secondCodeList: [],
+        thirdCodeList: []
+      }
+      
+      this.serviceCodes.push(json)
+      this.getBusinessTypeList()
+    },
+    deleteService(item,index){
+      console.log(index)
+      if(this.serviceCodes.length > 1){
+        this.serviceCodes.splice(index,1)
+      }else{
         this.$message({
-          message: '最多三个',
+          message: '至少添加一个主营业务',
           type: 'error',
           showClose: true,
           duration: 1000
@@ -531,7 +804,7 @@ export default {
 
 <style lang="scss" scoped>
 .mapContainer {
-  width: 480px;
+  width: 678px;
   height: 300px;
   margin-top: 16Px;
   margin-bottom: 16px;
@@ -589,7 +862,7 @@ export default {
 .bannerSetting-container {
   padding: 20px;
   .el-vue-amap-container{
-    width: 480px;
+    width: 678px;
     height: 300px;
   }
 }

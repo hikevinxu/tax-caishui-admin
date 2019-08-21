@@ -453,7 +453,7 @@ export const asyncRouterMap = [
     redirect: '/manually/manually',
     name: 'manually',
     meta: {
-      title: '认领企业人工录入',
+      title: '认证企业人工录入',
       icon: 'table'
     },
     children: [
@@ -461,13 +461,13 @@ export const asyncRouterMap = [
         path: 'manually',
         component: () => import('@/views/manually/manually'),
         name: 'manually',
-        meta: { title: '人工认领企业', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '人工入录企业列表', icon: '', noCache: true, roles: ['admin']  }
       },
       {
         path: 'createManually',
         component: () => import('@/views/manually/createManually'),
         name: 'createManually',
-        meta: { title: '添加认领企业', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '添加(编辑)入录企业', icon: '', noCache: true, roles: ['admin']  }
       }
     ]
   },
