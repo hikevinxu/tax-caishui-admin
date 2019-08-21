@@ -61,13 +61,13 @@
 
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
       
-      
     </div>
   </div>
 </template>
 <script>
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import { serviceDownRecords } from '@/api/merchants'
 export default {
   components: { Pagination },
   directives: { waves },
@@ -89,7 +89,11 @@ export default {
   },
   methods: {
     getList() {
-      console.log(this.listQuery)
+      serviceDownRecords().then(res => {
+        if(res.code == 0){
+          console.log(res)
+        }
+      })
     }
   }
 }

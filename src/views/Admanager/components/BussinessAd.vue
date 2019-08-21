@@ -87,7 +87,7 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
-    <el-dialog width="1000px" :title="dialogStatus == 'edit' ? '编辑' : '新增'" :visible.sync="dialogFormVisible">
+    <el-dialog width="1000px" :title="dialogStatus == 'edit' ? '编辑' : '新增'" :visible.sync="dialogFormVisible" top="5vh">
       <div >
         <el-form ref="dataForm" :model="form" label-position="right" label-width="150px" style="margin-left:50px;">
           <el-form-item label="主题：" prop="adTitle">
@@ -142,8 +142,27 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/servicer' && form.goType == 2" label="服务详情图：" prop="elementValue">
-            <Upload v-model="form.firmImg"/>
+          <!-- <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/servicer' && form.goType == 2" label="关联类目：">
+            <el-select v-model="firstServiceCode" placeholder="请选择关联类目" @change="firstServiceCodeChange" style="width: 200px">
+              <el-option v-for="(item,index) in firstServiceCodeList" :key="item+index" :label="item.name" :value="item.code"/>
+            </el-select>
+            <el-select v-if="secondServiceCodeList.length > 0" v-model="secondServiceCode" placeholder="请选择关联类目" @change="secondServiceCodeChange"  style="width: 200px">
+              <el-option v-for="(item,index) in secondServiceCodeList" :key="item+index" :label="item.name" :value="item.code"/>
+            </el-select>
+            <el-select v-if="thirdServiceCodeList.length > 0" v-model="thirdServiceCode" placeholder="请选择关联类目" @change="thirdServiceCodeChange"  style="width: 200px">
+              <el-option v-for="(item,index) in thirdServiceCodeList" :key="item+index" :label="item.name" :value="item.code"/>
+            </el-select>
+          </el-form-item> -->
+          <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/servicer' && form.goType == 2 && serviceList.length > 0" label="选择服务：">
+            <!-- <Upload v-model="form.firmImg"/> -->
+            <el-select style="width: 400px" v-model="serviceId" @change="serviceIdChange" filterable placeholder="请选择">
+              <el-option
+                v-for="item in serviceList"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="备注">
             <el-input type="textarea" style="width: 450px" v-model="form.remark"></el-input>
@@ -221,8 +240,6 @@
       </el-table>
       <div class="listTab">
         <el-button type="primary" @click="addCityFormDialog">添加广告</el-button>
-        <!-- <el-button type="warning">全部上架</el-button>
-        <el-button type="danger">全部下架</el-button> -->
       </div>
     </el-dialog>
     <el-dialog width="1000px" :title="dialogStatus2 == 'create' ? '新增广告' : '编辑广告'" :visible.sync="createCityFormDialog">
@@ -261,6 +278,7 @@
 </template>
 <script>
 import { advertPositionInfoList, advertPublish, advertUnpublish, advertDelete, advertInfoSave, advertRecordIndexCheck, advertRecordSave, advertRecordUpdate, advertInfoUpdate, advertRecordList, companySearch, serviceTypeList, advertRecordDelete, advertRecordPublish, advertRecordUnpublish, advertInfo } from '@/api/adManager'
+import { serviceList } from '@/api/merchants'
 import { addressProvinces, addressCitys } from '@/api/cityList'
 import global from '@/utils/global'
 import waves from '@/directive/waves' // Waves directive
@@ -371,7 +389,15 @@ export default {
         { name: '原生', id: 2},
         { name: '其他URL', id: 1}
       ],
-      tabTitle: 'baseSet'
+      tabTitle: 'baseSet',
+      serviceList: [],
+      serviceId: '',
+      firstServiceCode: '',
+      firstServiceCodeList: [],
+      secondServiceCode: '',
+      secondServiceCodeList: [],
+      thirdServiceCode: '',
+      thirdServiceCodeList: []
     }
   },
   created(){
@@ -537,11 +563,14 @@ export default {
       this.firstCodeList = []
       this.secondCodeList = []
       this.thirdCodeList = []
+      this.serviceId = ''
+      this.serviceList = []
     },
     handleCreate() {
       this.adId = ''
       this.resetForm()
       this.getServiceTypeList()
+      // this.getServiceTypeList2()
       this.dialogFormVisible = true
       this.dialogStatus = 'create'
     },
@@ -557,7 +586,7 @@ export default {
         adValue: this.form.goType == 1 ? this.form.h5Url : this.form.nativeUrl,
         remark: this.form.remark
       }
-      params.adParam = JSON.stringify([{name: 'firmImg', value: this.form.firmImg.fileId, type: 'img'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}])
+      params.adParam = JSON.stringify([{name: 'serviceId', value: this.serviceId, type: 'serviceId'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}])
       this.dialogStatusLoading = true
       advertInfoSave(params).then(res => {
         this.dialogStatusLoading = false
@@ -604,10 +633,22 @@ export default {
           } else if(res.data.info.goType == 2) {
             this.form.nativeUrl = res.data.info.adValue
             if(res.data.info.adParam){
-              this.form.firmImg.imgUrl = JSON.parse(res.data.info.adParam).firmImg
-              this.form.firmImg.fileId = JSON.parse(res.data.info.adParam).firmImg
+              // this.form.firmImg.imgUrl = JSON.parse(res.data.info.adParam).firmImg
+              // this.form.firmImg.fileId = JSON.parse(res.data.info.adParam).firmImg
+              let serviceId = JSON.parse(res.data.info.adParam).serviceId
               this.form.firmId =  JSON.parse(res.data.info.adParam).firmId
               this.form.firmName = JSON.parse(res.data.info.adParam).companyName
+              let param = {
+                pageNum: 1,
+                pageSize: 100,
+                companyId: this.form.firmId
+              }
+              serviceList(param).then(res => {
+                if(res.code == 0){
+                  this.serviceList = res.data.items
+                  this.serviceId = parseInt(serviceId)
+                }
+              })
             }
           }
           let codeList = res.data.codeList
@@ -645,6 +686,7 @@ export default {
           this.dialogFormVisible = true
           this.dialogStatus = 'edit'
           this.getServiceTypeList()
+          // this.getServiceTypeList2()
         }
       })
     },
@@ -659,7 +701,7 @@ export default {
       params.elementValue = this.form.elementValue.fileId
       params.goType = this.form.goType
       params.adValue = this.form.goType == 1 ? this.form.h5Url : this.form.nativeUrl
-      params.adParam = JSON.stringify([{name: 'firmImg', value: this.form.firmImg.fileId, type: 'img'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}])
+      params.adParam = JSON.stringify([{name: 'serviceId', value: this.serviceId, type: 'serviceId'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}])
       params.remark = this.form.remark
       console.log(params)
       this.dialogStatusLoading = true
@@ -1041,9 +1083,82 @@ export default {
     },
     firmNameChange(val){
       this.form.firmId = val
+      this.serviceId = ''
+      let param = {
+        pageNum: 1,
+        pageSize: 100,
+        companyId: val
+      }
+      serviceList(param).then(res => {
+        if(res.code == 0){
+          this.serviceList = res.data.items
+        }
+      })
+    },
+    serviceIdChange(val) {
+      // this.$set(this.form, 'serviceId', val)
     },
     elementValueNameChange(val){
       this.form.elementValue.fileId = val
+    },
+    getServiceTypeList2() {
+      serviceTypeList().then(res => {
+        if(res.code == 0){
+          this.firstServiceCodeList = res.data
+        }
+      })
+    },
+    firstServiceCodeChange(val) {
+      this.secondServiceCode = ''
+      this.thirdServiceCode = ''
+      this.secondServiceCodeList = []
+      this.thirdServiceCodeList = []
+      if(val && val != ''){
+        let param = {
+          parentCode: val
+        }
+        serviceTypeList(param).then(res => {
+          if(res.code == 0){
+            if (res.data.length > 0) {
+              this.secondServiceCodeList = res.data
+            } else {
+              this.listQuery.serviceCode = val
+              this.getServiceList()
+            }
+          }
+        })
+      }
+    },
+    secondServiceCodeChange(val) {
+      this.thirdServiceCode = ''
+      this.thirdServiceCodeList = []
+      if(val && val != ''){
+        let param = {
+          parentCode: val
+        }
+        serviceTypeList(param).then(res => {
+          if(res.code == 0){
+            if (res.data.length > 0) {
+              this.thirdServiceCodeList = res.data
+            } else {
+              this.listQuery.serviceCode = val
+              this.getServiceList()
+            }
+          }
+        })
+      }
+    },
+    thirdServiceCodeChange(val) {
+      this.listQuery.serviceCode = val
+      this.getServiceList()
+    },
+    getServiceList() {
+      serviceList(this.listQuery).then(res => {
+        if(res.code == 0) {
+          this.list = res.data.items
+          this.total = res.data.total
+        }
+      })
     }
   }
 }

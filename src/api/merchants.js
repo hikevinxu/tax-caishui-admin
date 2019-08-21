@@ -90,3 +90,57 @@ export function merchantDown(params) {
 export function merchantDetail(params) {
   return fetchGet('/merchant/detail', params)
 }
+
+/**
+ * 商户上架服务列表
+ * @function serviceList
+ * @type 'post'
+ * @param pageNum Number
+ * @param pageSize Number
+ */
+export function serviceList(params) {
+  return fetchPost('/service/list', params)
+}
+
+/**
+ * 商户上架服务列表
+ * @function serviceShelfDown
+ * @type 'post'
+ * @param id Number
+ * @param downShelfCause String
+ */
+export function serviceShelfDown(params) {
+  const paramsString = qs.stringify(params)
+  return fetchPost('/service/shelf/down', paramsString)
+}
+
+/**
+ * 商户上架服务列表
+ * @function serviceShelfUp
+ * @type 'post'
+ * @param id Number
+ */
+export function serviceShelfUp(params) {
+  const paramsString = qs.stringify(params)
+  return fetchPost('/service/shelf/up', paramsString)
+} 
+
+/**
+ * 商户上架服务列表
+ * @function serviceDetail
+ * @type 'post'
+ * @param id Number
+ */
+export function serviceDetail(params) {
+  return fetchGet('/service/detail', params)
+}
+
+/**
+ * 商户下架记录列表
+ * @function serviceDownRecords
+ * @type 'post'
+ * @param id Number
+ */
+export function serviceDownRecords(params) {
+  return fetchGet('/service/down_records', params)
+}
