@@ -81,6 +81,12 @@
           <el-input v-model="temp.descr" placeholder="请输入服务介绍" type="textarea" autosize/>
         </el-form-item>
 
+        <el-form-item label="是否叶子结点：" prop="leafNode" v-show="textMap[dialogStatus]== '新建'">
+          <el-select  style="width: 200px" v-model="temp.leafNode" clearable placeholder="请选择是否叶子结点">
+            <el-option v-for="(item,index) in leafNodeList" :key="index" :label="item.name" :value="item.val"> </el-option>
+          </el-select>
+        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -118,6 +124,10 @@ export default {
         {name:'已上架',id: true},
         {name:'已下架',id: false}
       ],
+      leafNodeList: [
+        {name: '是',val: true},
+        {name: '否',val: false}
+      ],
       firstCodeList: [],
       serviceType: {
         firstCode: '',
@@ -133,7 +143,8 @@ export default {
         id: '',
         icon: '',
         serviceCode: '',
-        name: ''
+        name: '',
+        leafNode: false
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -143,7 +154,8 @@ export default {
       },
       rules: {
         parentCode: [{ required: true, message: '一级类目必填' }],
-        name: [{ required: true, message: '服务类目名称不为空' }]
+        name: [{ required: true, message: '服务类目名称不为空' }],
+        leafNode: [{ required: true, message: '请选择是否为叶子节点' }]
       }
     }
   },
@@ -284,7 +296,8 @@ export default {
         parentCode: '',
         name: '',
         level: 2,
-        descr: ''
+        descr: '',
+        leafNode: false
       }
       this.uploadImg.imgUrl = ''
       this.uploadImg.fileId = ''
@@ -308,7 +321,8 @@ export default {
             parentCode: this.temp.parentCode,
             name: this.temp.name,
             descr: this.temp.descr,
-            level: 2
+            level: 2,
+            leafNode: this.temp.leafNode
           }
           // console.log(params)
           params = qs.stringify(params)
@@ -436,6 +450,7 @@ export default {
     },
     createCodeChange(value){
       console.log(this.serviceType)
+      this.listQuery.parentCode = value
     }
   }
 }

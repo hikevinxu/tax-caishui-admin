@@ -132,7 +132,8 @@ export default {
         parentCode: '',
         descr: '',
         level: 3,
-        name: ''
+        name: '',
+        leafNode: false
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -283,7 +284,8 @@ export default {
         parentCode: '',
         descr: '',
         level: 3,
-        name: ''
+        name: '',
+        leafNode: false
       }
       // this.uploadImg.imgUrl = ''
       // this.uploadImg.fileId = ''
@@ -307,7 +309,8 @@ export default {
             parentCode: this.temp.parentCode,
             name: this.temp.name,
             level: 3,
-            descr: this.temp.descr
+            descr: this.temp.descr,
+            leafNode: true
           }
           // console.log(params)
           params = qs.stringify(params)
@@ -464,6 +467,7 @@ export default {
     },
     serviceCodeChange(value){
       console.log(this.serviceType)
+      this.listQuery.parentCode = value
     }
   }
 }

@@ -118,7 +118,8 @@ export default {
         name: '',
         parentCode: '',
         level: 1,
-        descr: ''
+        descr: '',
+        leafNode: false
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -283,6 +284,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           // console.log(params)
+          this.temp.leafNode = false
           let temp = qs.stringify(this.temp)
           serviceTypeSave(temp).then((response) => {
             if (response.code == 0) {
