@@ -12,7 +12,7 @@ const global = {
   ],
   pageUrlList: [
     {name: '公司详情页', id: "main/home/queryService/company"},
-    {name: '服务详情页', id: "main/home/queryService/servicer"}
+    {name: '服务详情页', id: "main/home/queryService/service"}
   ]
 }
 export default global
