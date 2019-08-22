@@ -87,6 +87,8 @@
           </el-select>
         </el-form-item>
 
+        <span style="color: red;">（如果该业务非叶子节点，请尽快添加该业务的子节点，避免数据出错）</span>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>

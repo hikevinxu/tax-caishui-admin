@@ -73,7 +73,7 @@
         <el-form-item label="服务介绍：">
           <el-input v-model="temp.descr" placeholder="请输入服务介绍" type="textarea" autosize/>
         </el-form-item>
-
+        <span style="color: red;">（一级业务默认非叶子结点，请尽快添加该业务的子节点，避免数据出错）</span>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
