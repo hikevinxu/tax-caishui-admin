@@ -93,35 +93,35 @@
       <!-- 服务详情弹出框 -->
       <el-dialog :visible.sync="dialogDetailVisible" width="800px" title="服务详情" top="5vh">
         <div class="serviceDetail">
-          <div class="detail_item">
+          <div class="detail_item" v-if="serviceDetailData.companyName">
             <label>企业名称</label>
-            <div>杭州顶呱呱科技有限公司</div>
+            <div>{{serviceDetailData.companyName}}</div>
           </div>
-          <div class="detail_item">
+          <div class="detail_item" v-if="serviceDetailData.serviceName">
             <label>关联服务</label>
-            <div>代理记账</div>
+            <div>{{serviceDetailData.serviceName}}</div>
           </div>
-          <div class="detail_item">
-            <label>关联服务</label>
+          <div class="detail_item" v-if="serviceDetailData.imgs && serviceDetailData.imgs.length > 0">
+            <label>宣传图片</label>
             <div>
               <ul>
                 <li v-for="(item, index) in serviceDetailData.imgs" :key="'imgs'+index" ><img :src="item.img" alt=""></li>
               </ul>
             </div>
           </div>
-          <div class="detail_item">
+          <div class="detail_item" v-if="serviceDetailData.cityNames && serviceDetailData.cityNames.length > 0">
             <label>服务区域</label>
-            <div>杭州顶呱呱科技有限公司</div>
-          </div>
-          <div class="detail_item">
+            <div>{{serviceDetailData.cityNames.join(',')}}</div>
+          </div> 
+          <div class="detail_item" v-if="serviceDetailData.title">
             <label>服务标题</label>
-            <div>代理记账公司 杭州0元公司注册提供注册地址 专业代理记账</div>
+            <div>{{serviceDetailData.title}}</div>
           </div>
-          <div class="detail_item">
+          <div class="detail_item" v-if="serviceDetailData.introduce && serviceDetailData.introduce != ''">
             <label>服务介绍</label>
             <div class="introduce" v-html="serviceDetailData.introduce"></div>
           </div>
-          <div class="detail_item">
+          <div class="detail_item" v-if="serviceDetailData.items && serviceDetailData.items.length > 0">
             <label>服务报价</label>
             <div class="table">
               <el-table
