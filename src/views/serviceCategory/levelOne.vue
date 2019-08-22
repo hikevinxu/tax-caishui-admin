@@ -65,13 +65,13 @@
     <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" /> -->
 
     <el-dialog width="800px" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="margin-left:50px;">
-        <el-form-item label="服务类目名称：" prop="name" v-show="textMap[dialogStatus]== '新建'">
-          <el-input v-model="temp.name" placeholder="请输入服务名字" />
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="150px" style="margin-left:50px;">
+        <el-form-item label="一级业务类目名称：" prop="name" v-show="textMap[dialogStatus]== '新建'">
+          <el-input v-model="temp.name" placeholder="请输入业务名字" />
         </el-form-item>
 
-        <el-form-item label="服务介绍：">
-          <el-input v-model="temp.descr" placeholder="请输入服务介绍" type="textarea" autosize/>
+        <el-form-item label="业务介绍：">
+          <el-input v-model="temp.descr" placeholder="请输入业务介绍" type="textarea" autosize/>
         </el-form-item>
         <span style="color: red;">（一级业务默认非叶子结点，请尽快添加该业务的子节点，避免数据出错）</span>
       </el-form>
@@ -128,7 +128,7 @@ export default {
         create: '新建'
       },
       rules: {
-        name: [{ required: true, message: '类目名称必填', trigger: 'blur' }],
+        name: [{ required: true, message: '业务名称必填', trigger: 'blur' }],
         // descr: [{ required: true, message: '类目名称必填', trigger: 'blur' }]
       }
     }

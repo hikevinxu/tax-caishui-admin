@@ -53,26 +53,26 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
     <el-dialog width="800px" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="150px" style="margin-left:50px;">
 
-        <el-form-item label="一级类目：" prop="icon" v-show="textMap[dialogStatus] == '新建'">
-          <el-select  style="width: 200px" v-model="serviceType.firstCode" @change="createCodeChange" clearable placeholder="请选择一级服务">
+        <el-form-item label="一级业务：" prop="icon" v-show="textMap[dialogStatus] == '新建'">
+          <el-select  style="width: 200px" v-model="serviceType.firstCode" @change="createCodeChange" clearable placeholder="请选择一级业务">
           <el-option v-for="(item,index) in firstCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
         </el-select><span style="margin-left: 10px;">(二级类目数据必须选择完一级类目才有)</span>
         </el-form-item>
 
-        <el-form-item  label="二级类目：" prop="parentCode" v-show="textMap[dialogStatus] == '新建'">
-          <el-select style="width: 200px" v-model="temp.parentCode" @change="serviceCodeChange" clearable placeholder="请选择二级类目">
+        <el-form-item  label="二级业务：" prop="parentCode" v-show="textMap[dialogStatus] == '新建'">
+          <el-select style="width: 200px" v-model="temp.parentCode" @change="serviceCodeChange" clearable placeholder="请选择二级业务">
             <el-option v-for="(item,index) in secondCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="服务名称：" prop="name" v-show="textMap[dialogStatus]== '新建'">
-          <el-input v-model="temp.name" placeholder="请输入服务类目名称" type="text" />
+        <el-form-item label="三级业务名称：" prop="name" v-show="textMap[dialogStatus]== '新建'">
+          <el-input v-model="temp.name" placeholder="请输入业务名称" type="text" />
         </el-form-item>
 
-        <el-form-item label="服务介绍：">
-          <el-input v-model="temp.descr" placeholder="请输入服务介绍" type="textarea" autosize/>
+        <el-form-item label="业务介绍：">
+          <el-input v-model="temp.descr" placeholder="请输入业务介绍" type="textarea" autosize/>
         </el-form-item>
 
       </el-form>
