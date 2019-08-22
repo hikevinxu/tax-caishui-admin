@@ -153,7 +153,7 @@
               <el-option v-for="(item,index) in thirdServiceCodeList" :key="item+index" :label="item.name" :value="item.code"/>
             </el-select>
           </el-form-item> -->
-          <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/servicer' && form.goType == 2 && serviceList.length > 0" label="选择服务：">
+          <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/servicer' && form.goType == 2" label="选择服务：">
             <!-- <Upload v-model="form.firmImg"/> -->
             <el-select style="width: 400px" v-model="serviceId" @change="serviceIdChange" filterable placeholder="请选择">
               <el-option

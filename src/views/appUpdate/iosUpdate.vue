@@ -57,7 +57,7 @@
       <el-table-column label="操作" align="center" width="300px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button style="margin-left: 12px;" type="primary" size="small" @click="handleLookDetail(scope.row)">查看</el-button>
-          <el-button style="margin-left: 12px;" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+          <!-- <el-button style="margin-left: 12px;" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button> -->
           <el-button v-if="scope.row.releaseStatus !== 1" style="margin-left: 12px;" type="success" size="small" @click="handleRelease(scope.row)">发布</el-button>
           <el-button v-if="scope.row.releaseStatus !== 0" style="margin-left: 12px;" type="danger" size="small" @click="handleRecall(scope.row)">撤回</el-button>
         </template>
