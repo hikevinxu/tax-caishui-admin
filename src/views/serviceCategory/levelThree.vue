@@ -25,7 +25,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="三级级类目名称" prop="id" align="center" width="280px">
+      <el-table-column label="三级业务名称" prop="id" align="center" width="280px">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>

@@ -22,7 +22,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="二级级类目名称" prop="id" align="center" width="150px">
+      <el-table-column label="二级业务名称" prop="id" align="center" width="150px">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
@@ -34,7 +34,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="三级类目数量" align="center" width="120px">
+      <el-table-column label="三级业务数量" align="center" width="120px">
         <template slot-scope="scope">
           <span>{{ scope.row.levelThreeCount }}</span>
         </template>

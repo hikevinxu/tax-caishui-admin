@@ -19,7 +19,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="一级类目名称" prop="id" align="center" width="150px">
+      <el-table-column label="一级业务名称" prop="id" align="center" width="150px">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
@@ -31,13 +31,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="二级类目数量" align="center" width="120px">
+      <el-table-column label="二级业务数量" align="center" width="120px">
         <template slot-scope="scope">
           <span>{{ scope.row.levelTwoCount }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="三级类目数量" align="center" width="120px">
+      <el-table-column label="三级业务数量" align="center" width="120px">
         <template slot-scope="scope">
           <span>{{ scope.row.levelThreeCount }}</span>
         </template>
@@ -66,7 +66,7 @@
 
     <el-dialog width="800px" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="150px" style="margin-left:50px;">
-        <el-form-item label="一级业务类目名称：" prop="name" v-show="textMap[dialogStatus]== '新建'">
+        <el-form-item label="一级业务名称：" prop="name" v-show="textMap[dialogStatus]== '新建'">
           <el-input v-model="temp.name" placeholder="请输入业务名字" />
         </el-form-item>
 

@@ -399,7 +399,7 @@ export const asyncRouterMap = [
     redirect: '/serviceCategory/levelOne',
     name: 'levelOne',
     meta: {
-      title: '服务类目管理',
+      title: '服务业务管理',
       icon: 'table'
     },
     children: [
@@ -407,19 +407,19 @@ export const asyncRouterMap = [
         path: 'levelOne',
         component: () => import('@/views/serviceCategory/levelOne'),
         name: 'levelOne',
-        meta: { title: '一级类目管理', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '一级业务管理', icon: '', noCache: true, roles: ['admin']  }
       },
       {
         path: 'levelTwo',
         component: () => import('@/views/serviceCategory/levelTwo'),
         name: 'levelTwo',
-        meta: { title: '二级类目管理', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '二级业务管理', icon: '', noCache: true, roles: ['admin']  }
       },
       {
         path: 'levelThree',
         component: () => import('@/views/serviceCategory/levelThree'),
         name: 'levelThree',
-        meta: { title: '三级类目管理', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '三级业务管理', icon: '', noCache: true, roles: ['admin']  }
       }
     ]
   },
