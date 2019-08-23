@@ -445,12 +445,19 @@ export default {
         parentCode: this.listQuery.parentCode
       }
       console.log(data)
-      serviceTypeList(data).then(res => {
-        if(res.code == 0) {
-          this.list = res.data
-          console.log(res)
-        }
-      })
+      if(this.listQuery.parentCode != ''){
+        serviceTypeList(this.listQuery).then(response => {
+          if(response.code == 0){
+            console.log(response)
+            this.list = response.data
+            // this.total = response.data.total
+          }
+          this.listLoading = false
+        })
+      }else {
+        this.list = []
+        this.listLoading = false
+      }
     },
     createCodeChange(value){
       let data = {
