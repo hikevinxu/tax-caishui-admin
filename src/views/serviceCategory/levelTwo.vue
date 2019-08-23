@@ -22,7 +22,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="二级级类目名称" prop="id" align="center" width="150px">
+      <el-table-column label="二级业务名称" prop="id" align="center" width="150px">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
@@ -34,7 +34,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="三级类目数量" align="center" width="120px">
+      <el-table-column label="三级业务数量" align="center" width="120px">
         <template slot-scope="scope">
           <span>{{ scope.row.levelThreeCount }}</span>
         </template>
@@ -92,7 +92,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogStatus == 'create' ? createData() : editData()">保存</el-button>
+        <el-button type="primary" @click="dialogStatus == 'create' ? createData() : editData()" :loading="loading">保存</el-button>
       </div>
     </el-dialog>
   </div>
@@ -116,6 +116,7 @@ export default {
     return {
       list: null,
       total: 0,
+      loading: false,
       listLoading: false,
       listQuery: {
         pageNum: 1,
@@ -169,14 +170,19 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true
-      serviceTypeList(this.listQuery).then(response => {
-        if(response.code == 0){
-          console.log(response)
-          this.list = response.data
-          // this.total = response.data.total
-        }
+      console.log(this.listQuery.parentCode)
+      if(this.listQuery.parentCode != ''){
+        serviceTypeList(this.listQuery).then(response => {
+          if(response.code == 0){
+            console.log(response)
+            this.list = response.data
+            // this.total = response.data.total
+          }
+          this.listLoading = false
+        })
+      }else {
         this.listLoading = false
-      })
+      }
     },
     // 上架
     handleUp(row) {
@@ -317,6 +323,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.loading = true
           let params = {
             // id: '',
             icon: this.uploadImg.fileId,
@@ -336,6 +343,7 @@ export default {
                 type: 'success',
                 duration: 2000
               })
+              this.loading = false
               this.dialogFormVisible = false
             } else {
               this.$message({
@@ -344,6 +352,8 @@ export default {
                 showClose: true,
                 duration: 1000
               })
+              this.loading = false
+              this.dialogFormVisible = false
             }
             this.getList()
           })
@@ -369,6 +379,11 @@ export default {
     editData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.loading = true
+          console.log(this.uploadImg.fileId)
+          if(this.uploadImg.fileId == undefined){
+            this.uploadImg.fileId = ''
+          }
           let params = {
             id: this.temp.id,
             parentCode: this.temp.parentCode,
@@ -377,6 +392,7 @@ export default {
             level: 2,
             descr: this.temp.descr
           }
+          console.log(params)
           params = qs.stringify(params)
           serviceTypeUpdate(params).then((response) => {
             if (response.code == 0) {
@@ -386,6 +402,7 @@ export default {
                 type: 'success',
                 duration: 2000
               })
+              this.loading = false
               this.dialogFormVisible = false
             } else {
               this.$message({
@@ -394,6 +411,8 @@ export default {
                 showClose: true,
                 duration: 1000
               })
+              this.loading = false
+              this.dialogFormVisible = false
             }
             this.getList()
           })
@@ -443,12 +462,19 @@ export default {
         parentCode: this.listQuery.parentCode
       }
       console.log(data)
-      serviceTypeList(data).then(res => {
-        if(res.code == 0) {
-          this.list = res.data
-          console.log(res)
-        }
-      })
+      if(this.listQuery.parentCode != ''){
+        serviceTypeList(this.listQuery).then(response => {
+          if(response.code == 0){
+            console.log(response)
+            this.list = response.data
+            // this.total = response.data.total
+          }
+          this.listLoading = false
+        })
+      }else {
+        this.list = []
+        this.listLoading = false
+      }
     },
     createCodeChange(value){
       console.log(this.serviceType)

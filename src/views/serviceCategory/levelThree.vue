@@ -25,7 +25,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="三级级类目名称" prop="id" align="center" width="280px">
+      <el-table-column label="三级业务名称" prop="id" align="center" width="280px">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
@@ -55,8 +55,8 @@
     <el-dialog width="800px" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="150px" style="margin-left:50px;">
 
-        <el-form-item label="一级业务：" prop="icon" v-show="textMap[dialogStatus] == '新建'">
-          <el-select  style="width: 200px" v-model="serviceType.firstCode" @change="createCodeChange" clearable placeholder="请选择一级业务">
+        <el-form-item label="一级业务：" prop="firstCode" v-show="textMap[dialogStatus] == '新建'">
+          <el-select  style="width: 200px" v-model="temp.firstCode" @change="createCodeChange" clearable placeholder="请选择一级业务">
           <el-option v-for="(item,index) in firstCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
         </el-select><span style="margin-left: 10px;">(二级类目数据必须选择完一级类目才有)</span>
         </el-form-item>
@@ -78,7 +78,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogStatus == 'create' ? createData() : editData()">保存</el-button>
+        <el-button type="primary" @click="dialogStatus == 'create' ? createData() : editData()" :loading="loading">保存</el-button>
       </div>
     </el-dialog>
   </div>
@@ -102,6 +102,7 @@ export default {
     return {
       list: null,
       total: 0,
+      loading: false,
       listLoading: false,
       firstCode: '',
       listQuery: {
@@ -133,6 +134,7 @@ export default {
         descr: '',
         level: 3,
         name: '',
+        firstCode: '',
         leafNode: false
       },
       dialogFormVisible: false,
@@ -142,8 +144,9 @@ export default {
         create: '新建'
       },
       rules: {
-        parentCode: [{ required: true, message: '二级类目必填' }],
-        name: [{ required: true, message: '类目名称不能为空' }]
+        parentCode: [{ required: true, message: '二级业务必填' }],
+        name: [{ required: true, message: '类目名称不能为空' }],
+        firstCode: [{required: true, message: '一级业务必选'}]
       }
     }
   },
@@ -303,6 +306,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.loading = true
           let params = {
             id: '',
             // icon: this.uploadImg.fileId,
@@ -322,6 +326,7 @@ export default {
                 type: 'success',
                 duration: 2000
               })
+              this.loading = false
               this.dialogFormVisible = false
             } else {
               this.$message({
@@ -330,6 +335,8 @@ export default {
                 showClose: true,
                 duration: 1000
               })
+              this.loading = false
+              this.dialogFormVisible = false
             }
             this.getList()
           })
@@ -355,6 +362,7 @@ export default {
     editData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.loading = true
           let params = {
             id: this.temp.id,
             parentCode: this.temp.parentCode,
@@ -373,6 +381,7 @@ export default {
                 type: 'success',
                 duration: 2000
               })
+              this.loading = false
               this.dialogFormVisible = false
             } else {
               this.$message({
@@ -381,6 +390,8 @@ export default {
                 showClose: true,
                 duration: 1000
               })
+              this.loading = false
+              this.dialogFormVisible = false
             }
             this.getList()
           })
@@ -445,16 +456,23 @@ export default {
         parentCode: this.listQuery.parentCode
       }
       console.log(data)
-      serviceTypeList(data).then(res => {
-        if(res.code == 0) {
-          this.list = res.data
-          console.log(res)
-        }
-      })
+      if(this.listQuery.parentCode != ''){
+        serviceTypeList(this.listQuery).then(response => {
+          if(response.code == 0){
+            console.log(response)
+            this.list = response.data
+            // this.total = response.data.total
+          }
+          this.listLoading = false
+        })
+      }else {
+        this.list = []
+        this.listLoading = false
+      }
     },
     createCodeChange(value){
       let data = {
-        parentCode: this.serviceType.firstCode
+        parentCode: this.temp.firstCode
       }
       console.log(data)
       serviceTypeList(data).then(res => {
