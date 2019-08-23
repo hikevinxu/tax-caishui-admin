@@ -12,6 +12,7 @@
       :data="dataObj"
       :multiple="false"
       :show-file-list="false"
+      :on-remove="handleMove"
       :on-success="handleImageSuccess"
       class="image-uploader"
       drag
@@ -69,6 +70,9 @@ export default {
     handleImageSuccess(file) {
       this.tempUrl = file.data
       this.emitInput(this.tempUrl)
+    },
+    handleMove(file){
+      console.log(file.data)
     },
     beforeUpload() {
       const _self = this

@@ -92,7 +92,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogStatus == 'create' ? createData() : editData()">保存</el-button>
+        <el-button type="primary" @click="dialogStatus == 'create' ? createData() : editData()" :loading="loading">保存</el-button>
       </div>
     </el-dialog>
   </div>
@@ -116,6 +116,7 @@ export default {
     return {
       list: null,
       total: 0,
+      loading: false,
       listLoading: false,
       listQuery: {
         pageNum: 1,
@@ -322,6 +323,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.loading = true
           let params = {
             // id: '',
             icon: this.uploadImg.fileId,
@@ -341,6 +343,7 @@ export default {
                 type: 'success',
                 duration: 2000
               })
+              this.loading = false
               this.dialogFormVisible = false
             } else {
               this.$message({
@@ -349,6 +352,8 @@ export default {
                 showClose: true,
                 duration: 1000
               })
+              this.loading = false
+              this.dialogFormVisible = false
             }
             this.getList()
           })
@@ -374,6 +379,11 @@ export default {
     editData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.loading = true
+          console.log(this.uploadImg.fileId)
+          if(this.uploadImg.fileId == undefined){
+            this.uploadImg.fileId = ''
+          }
           let params = {
             id: this.temp.id,
             parentCode: this.temp.parentCode,
@@ -382,6 +392,7 @@ export default {
             level: 2,
             descr: this.temp.descr
           }
+          console.log(params)
           params = qs.stringify(params)
           serviceTypeUpdate(params).then((response) => {
             if (response.code == 0) {
@@ -391,6 +402,7 @@ export default {
                 type: 'success',
                 duration: 2000
               })
+              this.loading = false
               this.dialogFormVisible = false
             } else {
               this.$message({
@@ -399,6 +411,8 @@ export default {
                 showClose: true,
                 duration: 1000
               })
+              this.loading = false
+              this.dialogFormVisible = false
             }
             this.getList()
           })
