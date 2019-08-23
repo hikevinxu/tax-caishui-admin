@@ -142,7 +142,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <!-- <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/servicer' && form.goType == 2" label="关联类目：">
+          <!-- <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/service' && form.goType == 2" label="关联类目：">
             <el-select v-model="firstServiceCode" placeholder="请选择关联类目" @change="firstServiceCodeChange" style="width: 200px">
               <el-option v-for="(item,index) in firstServiceCodeList" :key="item+index" :label="item.name" :value="item.code"/>
             </el-select>
@@ -153,7 +153,7 @@
               <el-option v-for="(item,index) in thirdServiceCodeList" :key="item+index" :label="item.name" :value="item.code"/>
             </el-select>
           </el-form-item> -->
-          <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/servicer' && form.goType == 2" label="选择服务：">
+          <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/service' && form.goType == 2" label="选择服务：">
             <!-- <Upload v-model="form.firmImg"/> -->
             <el-select style="width: 400px" v-model="serviceId" @change="serviceIdChange" filterable placeholder="请选择">
               <el-option
