@@ -357,6 +357,10 @@ export default {
             }
             this.getList()
           })
+          .catch(err => {
+            this.loading = false
+            this.dialogFormVisible = false
+          })
         }
       })
     },
@@ -415,6 +419,10 @@ export default {
               this.dialogFormVisible = false
             }
             this.getList()
+          })
+          .catch(err => {
+            this.loading = false
+            this.dialogFormVisible = false
           })
         }
       })
