@@ -300,7 +300,12 @@ export default {
         if(this.companyInfo.location){
           this.center[0] = this.companyInfo.location.split(',')[1]
           this.center[1] = this.companyInfo.location.split(',')[0]
-          this.selectAddressChange(this.center)
+          try {
+            this.selectAddressChange(this.center)
+          } catch (err) {
+            this.searchInput = this.companyInfo.address
+            console.log(123)
+          }
         } else {
           this.getCurrentPositionLaglng()
         }
