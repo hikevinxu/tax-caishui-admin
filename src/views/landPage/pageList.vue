@@ -71,7 +71,7 @@
 	      	</el-table-column>
 	    </el-table>
 
-    <pagination v-show="totalCount>0" :total="totalCount" :page.sync="searchData.page" :limit.sync="searchData.size" @pagination="getList" />
+    <pagination v-show="totalCount>0" :total="totalCount" :page.sync="searchData.pageNum" :limit.sync="searchData.pageSize" @pagination="getList" />
 	</div>
 </template>
 
@@ -90,8 +90,8 @@
 					packageName: '',
 					advertisingChannel: '',
 					channelRemark: '',
-					page: 1,
-					size: 10
+					pageNum: 1,
+					pageSize: 10
 				},
 				formLabelWidth: '120px',
 				tableListData: [],
