@@ -2,9 +2,9 @@
   <div class="bannerSetting-container">
     <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right">
 
-      <el-form-item label="机构名称：" v-show="!isEdit">
-        <el-input  @input="nameInput" style="width: 598px;" v-model.trim="temp.name" placeholder="请输入机构名称" />
-        <el-button type="primary" @click="check">鉴定</el-button>
+      <el-form-item label="机构名称：" >
+        <el-input :disabled="disabled"  @input="nameInput" style="width: 598px;" v-model.trim="temp.name" placeholder="请输入机构名称" />
+        <el-button type="primary" v-show="!isEdit" @click="check">鉴定</el-button>
       </el-form-item>
 
      <div v-show="showForm">
@@ -127,6 +127,7 @@ export default {
       casList: [],
       oneList: [],
       showForm: false,
+      disabled: false,
       companyInfo: {},
       uploadImg: {
         fileId: '',
@@ -215,10 +216,13 @@ export default {
     this.getBusinessTypeList()
     if(this.$route.query.id){
       this.isEdit = true
+      this.disabled = true
       let data = {
         id: this.$route.query.id
       }
       this.getCompanyInfo(data)
+    }else {
+      this.disabled = false
     }
   },
   methods: {
@@ -304,7 +308,6 @@ export default {
             this.selectAddressChange(this.center)
           } catch (err) {
             this.searchInput = this.companyInfo.address
-            console.log(123)
           }
         } else {
           this.getCurrentPositionLaglng()
@@ -517,6 +520,10 @@ export default {
         phones: [this.temp.phone],
         introduce: this.temp.introduce,
         serviceCodes: []
+      }
+
+      if(this.isEdit == true){
+        data.address = this.temp.address
       }
 
       for (let i = 0; i < this.serviceCodes.length; i++) {
@@ -785,7 +792,6 @@ export default {
         secondCodeList: [],
         thirdCodeList: []
       }
-      
       this.serviceCodes.push(json)
       this.getBusinessTypeList()
     },
