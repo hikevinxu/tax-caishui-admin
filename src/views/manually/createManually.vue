@@ -55,7 +55,7 @@
       </el-form-item>
       <div class="mapContainer">
         <el-amap vid="amap" ref="map" :center="center" :zoom="zoom" :plugin="plugin" :events="events"></el-amap>
-        <i class="el-icon-location"></i>
+        <img class="el-icon-location" src="@/assets/img/map_pin.png" alt="" srcset="">
       </div>
 
       <el-form-item label="详细地址：">
@@ -307,7 +307,7 @@ export default {
           try {
             this.selectAddressChange(this.center)
           } catch (err) {
-            this.searchInput = this.companyInfo.address
+            // this.searchInput = this.companyInfo.address
           }
         } else {
           this.getCurrentPositionLaglng()
@@ -579,8 +579,14 @@ export default {
             showClose: true,
             duration: 1000
           })
-          this.resetForm()
-          this.showForm = false
+          if(!this.isEdit){
+            this.resetForm()
+            this.showForm = false
+          }else{
+            this.resetForm()
+            this.showForm = false
+            this.$router.push({ path: '/manually'})
+          }
         }else{
           this.$message({
             message: res.data.message,
@@ -825,6 +831,7 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -100%);
+    width: 28px;
   }
   .location {
     width: 38Px;
