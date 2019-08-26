@@ -18,9 +18,8 @@
           highlight-current-row
 	      	style="width: 100%">
 	      	<el-table-column label="序号" type="index" :index="1" width="80px" align="center" >
-            
 	      	</el-table-column>
-	      	<el-table-column label="产品名称" align="center">
+	      	<el-table-column label="产品名称" align="center" width="100px">
             <template slot-scope="scope">
               <span>{{ scope.row.packageName }}</span>
             </template>
@@ -50,15 +49,20 @@
 	          	<span>{{ scope.row.title }}</span>
 	        	</template>
 	      	</el-table-column>
+          <el-table-column label="创建人" align="center">
+          <template slot-scope="scope">
+	          	<span>{{ scope.row.createUser ? scope.row.createUser : '——' }}</span>
+	        	</template>
+	      	</el-table-column>
 	      	<el-table-column label="创建时间" align="center">
           <template slot-scope="scope">
 	          	<span>{{ scope.row.createTime }}</span>
 	        	</template>
 	      	</el-table-column>
-	      	<el-table-column label="操作" align="center">
+	      	<el-table-column label="操作" align="center" width="220">
 	        	<template slot-scope="scope">
 	          	<el-dropdown  @command="handleCommand">
-		            <el-button type="primary">
+		            <el-button type="primary" size="small">
 		              操作
 		            </el-button>
 		            <el-dropdown-menu slot="dropdown">
@@ -67,17 +71,43 @@
 	              		<el-dropdown-item :command="{type: 'deleteItem', item: scope.row}">删除</el-dropdown-item>
 	            	</el-dropdown-menu>
 	          	</el-dropdown>
+              <el-button style="margin-left: 10px;" type="danger" size="small" @click="lookRecords(scope.row)">操作记录</el-button>
 	        	</template>
 	      	</el-table-column>
 	    </el-table>
 
     <pagination v-show="totalCount>0" :total="totalCount" :page.sync="searchData.pageNum" :limit.sync="searchData.pageSize" @pagination="getList" />
+
+    <el-dialog title="操作记录" :visible.sync="dialogTableVisible" width="800px">
+      <el-table 
+      :data="recordData"
+      border
+      >
+        <el-table-column label="序号" type="index" width="80" align="center"></el-table-column>
+        <el-table-column label="操作" width="200" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.operate }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="姓名" width="200" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.userName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="时间" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.createTime }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination v-show="recordDataCount>0" :total="recordDataCount" :page.sync="recordsSearch.pageNum" :limit.sync="recordsSearch.pageSize" @pagination="getRecordList" />
+    </el-dialog>
 	</div>
 </template>
 
 <script>
 	import mixins from './mixins'
-  import { channelPageObtainPaging, channelPageCopy, channelPageDelete } from '@/api/landPage'
+  import { channelPageObtainPaging, channelPageCopy, channelPageDelete, channelPageRecord } from '@/api/landPage'
   import waves from '@/directive/waves' // Waves directive
   import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 	export default {
@@ -99,6 +129,14 @@
         page: 1,
         totalCount: 0,
         totalPage: 0,
+        recordsSearch: {
+          pageNum: 1,
+          pageSize: 10,
+          pageId: ''
+        },
+        recordDataCount: 0,
+        dialogTableVisible: false,
+        recordData: []
 			}
 		},
 		mixins: [mixins],
@@ -133,8 +171,8 @@
         })
 			},
 			search() {
-				this.searchData.page = 1
-				this.searchData.size = 10
+				this.searchData.pageNum = 1
+				this.searchData.pageSize = 10
 			},
 			editItem(item) {
 				this.$router.push({
@@ -195,6 +233,22 @@
         console.log(command)
         this[command.type](command.item)
       },
+      lookRecords(row) {
+        console.log(row)
+        this.recordsSearch.pageNum = 1
+        this.recordsSearch.pageSize = 10
+        this.recordsSearch.pageId = row.id
+        this.getRecordList()
+      },
+      getRecordList() {
+        channelPageRecord(this.recordsSearch).then(res => {
+          if(res.code == 0) {
+            this.dialogTableVisible = true
+            this.recordData = res.data.items
+            this.recordDataCount = res.data.total
+          }
+        })
+      }
 		},
 		created() {
 			this.getList()
