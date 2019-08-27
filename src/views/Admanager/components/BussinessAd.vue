@@ -603,7 +603,13 @@ export default {
         adValue: this.form.goType == 1 ? this.form.h5Url : this.form.nativeUrl,
         remark: this.form.remark
       }
-      params.adParam = JSON.stringify([{name: 'serviceId', value: this.serviceId, type: 'serviceId'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}])
+      let adParam
+      if (!this.serviceId || this.serviceId == '') {
+        adParam = [{name: 'firmId',value: this.form.firmId, type: 'companyId'}]
+      } else {
+        adParam = [{name: 'serviceId', value: this.serviceId, type: 'serviceId'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}]
+      }
+      params.adParam = JSON.stringify(adParam)
       this.dialogStatusLoading = true
       advertInfoSave(params).then(res => {
         this.dialogStatusLoading = false
@@ -735,7 +741,13 @@ export default {
       params.elementValue = this.form.elementValue.fileId
       params.goType = this.form.goType
       params.adValue = this.form.goType == 1 ? this.form.h5Url : this.form.nativeUrl
-      params.adParam = JSON.stringify([{name: 'serviceId', value: this.serviceId, type: 'serviceId'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}])
+      let adParam
+      if (!this.serviceId || this.serviceId == '') {
+        adParam = [{name: 'firmId',value: this.form.firmId, type: 'companyId'}]
+      } else {
+        adParam = [{name: 'serviceId', value: this.serviceId, type: 'serviceId'}, {name: 'firmId',value: this.form.firmId, type: 'companyId'}]
+      }
+      params.adParam = JSON.stringify(adParam)
       params.remark = this.form.remark
       console.log(params)
       this.dialogStatusLoading = true
