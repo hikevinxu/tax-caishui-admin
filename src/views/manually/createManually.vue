@@ -436,7 +436,9 @@ export default {
       }
     },
     resetForm(){
+      // this.companyInfo = {}
       // this.temp.name = ''
+      this.serviceCodes =[]
       this.temp.companyId = ''
       this.temp.address = ''
       this.temp.type = ''
