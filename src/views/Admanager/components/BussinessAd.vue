@@ -575,6 +575,23 @@ export default {
       this.dialogStatus = 'create'
     },
     createData() {
+      if (this.form.goType == 2 && this.form.nativeUrl == 'main/home/queryService/company') {
+        if (!this.form.firmId || this.form.firmId == '') {
+          this.$message.error('请先选择一个公司！')
+          return
+        }
+      }
+
+      if (this.form.goType == 2 && this.form.nativeUrl == 'main/home/queryService/service') {
+        if (!this.form.firmId || this.form.firmId == '') {
+          this.$message.error('请先选择一个公司！')
+          return
+        }
+        if (!this.serviceId || this.serviceId == '') {
+          this.$message.error('请先选择一个服务！')
+          return
+        }
+      }
       console.log(this.form.elementValue.fileId)
       let params = {
         positionNo: this.typeId,
@@ -691,6 +708,23 @@ export default {
       })
     },
     editData() {
+      if (this.form.goType == 2 && this.form.nativeUrl == 'main/home/queryService/company') {
+        if (!this.form.firmId || this.form.firmId == '') {
+          this.$message.error('请先选择一个公司！')
+          return
+        }
+      }
+
+      if (this.form.goType == 2 && this.form.nativeUrl == 'main/home/queryService/service') {
+        if (!this.form.firmId || this.form.firmId == '') {
+          this.$message.error('请先选择一个公司！')
+          return
+        }
+        if (!this.serviceId || this.serviceId == '') {
+          this.$message.error('请先选择一个服务！')
+          return
+        }
+      }
       let params = {
         id: this.adId,
         positionNo: this.typeId,
