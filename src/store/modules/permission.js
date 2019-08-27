@@ -92,7 +92,7 @@ const permission = {
                   redirect: '/adManagerList/adPosition1',
                   name: 'adManagerList',
                   meta: {
-                    title: '广告位管理',
+                    title: '广告投放',
                     icon: 'table'
                   },
                   children: arr

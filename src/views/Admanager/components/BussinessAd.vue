@@ -765,7 +765,7 @@ export default {
     },
     pageUrlChange(){
       this.$forceUpdate()
-      console.log(this.form.nativeUrl)
+      this.serviceId = ''
     },
     searchFirmList(query){
       if (query !== '') {
@@ -783,7 +783,7 @@ export default {
           }
         })
       } else {
-        this.companyList = []
+        this.firmList = []
       }
     },
     firstCodeChange(value) {
