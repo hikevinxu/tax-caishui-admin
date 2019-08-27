@@ -81,7 +81,7 @@ export const asyncRouterMap = [
         path: 'index',
         component: () => import('@/views/Admanager/AdManager'),
         name: 'adManager',
-        meta: { title: '商户广告位配置', icon: 'table', noCache: true, roles: ['admin'] }
+        meta: { title: '广告位配置', icon: 'table', noCache: true, roles: ['admin'] }
       }
     ]
   },
@@ -271,7 +271,7 @@ export const asyncRouterMap = [
     redirect: '/merchants/merchantsAudit',
     name: 'merchants',
     meta: {
-      title: '入驻商户管理',
+      title: '商户入驻管理',
       icon: 'table'
     },
     children: [
@@ -279,13 +279,13 @@ export const asyncRouterMap = [
         path: 'merchantsAudit',
         component: () => import('@/views/merchants/merchantsAudit.vue'),
         name: 'merchantsAudit',
-        meta: { title: '商户入驻审核', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '审核', icon: '', noCache: true, roles: ['admin']  }
       },
       {
         path: 'merchantsAmg',
         component: () => import('@/views/merchants/merchants.vue'),
         name: 'merchantsAmg',
-        meta: { title: '商户管理', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '管理', icon: '', noCache: true, roles: ['admin']  }
       }
     ]
   },
@@ -295,7 +295,7 @@ export const asyncRouterMap = [
     redirect: '/merchantsService/serviceList',
     name: 'merchantsService',
     meta: {
-      title: '商户上架服务管理',
+      title: '商户服务列表',
       icon: 'table'
     },
     children: [
@@ -303,7 +303,7 @@ export const asyncRouterMap = [
         path: 'serviceList',
         component: () => import('@/views/merchants/serviceList.vue'),
         name: 'serviceList',
-        meta: { title: '商户上架服务列表', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '商户服务列表', icon: '', noCache: true, roles: ['admin']  }
       },
       // {
       //   path: 'serviceSoldOutRecords',
@@ -343,7 +343,7 @@ export const asyncRouterMap = [
     redirect: '/landPage/landPageSetting',
     name: 'landPage',
     meta: {
-      title: '推广页面配置',
+      title: '推广落地页',
       icon: 'table'
     },
     children: [
@@ -399,7 +399,7 @@ export const asyncRouterMap = [
     redirect: '/serviceCategory/levelOne',
     name: 'levelOne',
     meta: {
-      title: '服务业务管理',
+      title: '业务管理',
       icon: 'table'
     },
     children: [
@@ -429,7 +429,7 @@ export const asyncRouterMap = [
     redirect: '/newBusiness/newBusiness',
     name: 'newBusiness',
     meta: {
-      title: '新业务申请业务',
+      title: '新业务申请',
       icon: 'table'
     },
     children: [
@@ -437,7 +437,7 @@ export const asyncRouterMap = [
         path: 'newBusiness',
         component: () => import('@/views/newBusiness/newBusiness'),
         name: 'newBusiness',
-        meta: { title: '新业务申请业务', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '新业务申请', icon: '', noCache: true, roles: ['admin']  }
       }
     ]
   },
@@ -447,7 +447,7 @@ export const asyncRouterMap = [
     redirect: '/manually/manually',
     name: 'manually',
     meta: {
-      title: '认证企业人工录入',
+      title: '人工录入企业',
       icon: 'table'
     },
     children: [
@@ -455,7 +455,7 @@ export const asyncRouterMap = [
         path: 'manually',
         component: () => import('@/views/manually/manually'),
         name: 'manually',
-        meta: { title: '人工入录企业列表', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '已收录列表', icon: '', noCache: true, roles: ['admin']  }
       },
       {
         path: 'createManually',
