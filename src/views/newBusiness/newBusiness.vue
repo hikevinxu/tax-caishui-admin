@@ -117,10 +117,15 @@ export default {
     },
     timeChose(e){
       console.log(e)
-      this.listQuery.startTime = e[0]
-      this.listQuery.endTime = e[1]
-      console.log(this.listQuery)
-      this.getList()
+      if(e !=null){
+        this.listQuery.startTime = e[0]
+        this.listQuery.endTime = e[1]
+        this.getList()
+      }else {
+        this.listQuery.startTime = ''
+        this.listQuery.endTime = ''
+        this.getList()
+      }
     }
   }
 }
