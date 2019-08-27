@@ -82,6 +82,7 @@
           <el-form-item v-show="showFailReason" label="添加原因：" prop="failReason">
             <el-input v-model="temp.otherReason" placeholder="请输入下架原因" />
           </el-form-item>
+          <span style="color: red;">下架前请确保所有广告位没有该服务，防止程序出错</span>
         </el-form>
 
         <span slot="footer" class="dialog-footer">

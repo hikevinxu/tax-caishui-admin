@@ -322,7 +322,9 @@ export default {
     // 下架
     handleDown(row) {
       const id = row.id
-      this.$confirm('确认下架?', '提示', {}).then(() => {
+      this.$alert('<p>确认下架?</p><p style="color: red;">(下架前请确保所有广告位没有该商户，防止程序出错)</p>', '提示', {
+        dangerouslyUseHTMLString: true,
+      }).then(() => {
         let query = {
           id: id
         }
