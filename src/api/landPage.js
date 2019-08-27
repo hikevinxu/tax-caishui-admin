@@ -58,3 +58,12 @@ export function channelPageModify(params) {
   let paramsString = qs.stringify(params)
   return fetchPost('/api/channelPage/modify', paramsString)
 }
+
+/**
+ * 获取商户入驻列表
+ * @function channelPageRecord
+ * @type 'get'
+ */
+export function channelPageRecord(params) {
+  return fetchGet('/api/channelPage/record', params)
+}
