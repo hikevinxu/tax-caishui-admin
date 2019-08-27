@@ -11,7 +11,7 @@
         range-separator="至"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
-        value-format="yyyy-MM-dd hh:mm:ss"
+        value-format="yyyy-MM-dd HH:mm:ss"
         @change="timeChose">
       </el-date-picker>
       <el-button v-waves class="filter-item" type="primary" @click="getList">筛选</el-button>

@@ -2,13 +2,13 @@
   <div class="bannerSetting-container">
     <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right">
 
-      <el-form-item label="机构名称：" >
+      <el-form-item label="机构名称：" prop="">
         <el-input :disabled="disabled"  @input="nameInput" style="width: 598px;" v-model.trim="temp.name" placeholder="请输入机构名称" />
         <el-button type="primary" v-show="!isEdit" @click="check">鉴定</el-button>
       </el-form-item>
 
      <div v-show="showForm">
-        <el-form-item label="机构类型：">
+      <el-form-item label="机构类型：" prop="">
         <el-select v-model="temp.type" placeholder="机构类型" style="width: 598px" class="filter-item">
           <el-option v-for="(item,index) in types" :key="item+index" :label="item.name" :value="item.value"/>
         </el-select>
@@ -58,15 +58,15 @@
         <img class="el-icon-location" src="@/assets/img/map_pin.png" alt="" srcset="">
       </div>
 
-      <el-form-item label="详细地址：">
+      <el-form-item label="详细地址：" prop="">
         <el-input style="width: 598px;" v-model="temp.address" placeholder="请输入详细地址" />
       </el-form-item>
 
-      <el-form-item label="服务电话：">
+      <el-form-item label="服务电话：" prop="">
         <el-input style="width: 598px;" v-model="temp.phone" placeholder="请输入服务电话" />
       </el-form-item>
 
-      <el-form-item label="详细介绍：">
+      <el-form-item label="详细介绍：" >
         <el-input type="textarea" autosize :rows="4" style="width: 598px;" v-model="temp.introduce" placeholder="请输入详细介绍" />
       </el-form-item>
 
@@ -136,7 +136,12 @@ export default {
       isEdit: false,
       firstCodeList: [],
       serviceCodes: [],
-      rules: {},
+      rules: {
+        name: [{ required: true, message: '机构名称必填'}],
+        type: [{ required: true, message: '机构类型必选'}],
+        address: [{ required: true, message: '详细地址必填'}],
+        phone: [{ required: true, message: '联系方式必填'}],
+      },
       temp: {
         name: '',
         companyId: '',
@@ -146,7 +151,6 @@ export default {
         location: '',
         phone: '',
         address: '',
-        phone: '',
         type: '',
         introduce: ''
       },
@@ -719,8 +723,8 @@ export default {
       }
     },
     clearFirst(item,e){
-      item.secondCode = ''
-      item.thirdCode = ''
+      item.serviceType.secondCode = ''
+      item.serviceType.thirdCode = ''
       item.secondCodeList = []
       item.thirdCodeList = []
       item.showSend = false
@@ -728,12 +732,12 @@ export default {
     },
     clearSend(item,e){
       item.showThird = false
-      item.thirdCode = ''
+      item.serviceType.thirdCode = ''
       item.thirdCodeList = []
     },
     firstCodeChange(item,e){
-      item.secondCode = ''
-      item.thirdCode = ''
+      item.serviceType.secondCode = ''
+      item.serviceType.thirdCode = ''
       item.secondCodeList = []
       item.thirdCodeList = []
       item.showSend = false
@@ -741,7 +745,7 @@ export default {
       item.firstCode = e
       if(item.firstCode != ''){
         let data = {
-          parentCode: item.firstCode
+          parentCode: item.serviceType.firstCode
         }
         console.log(data)
         businessTypeList(data).then(res => {
@@ -761,12 +765,12 @@ export default {
     },
     secondCodeChange(item,e){
       item.showThird = false
-      item.thirdCode = ''
+      item.serviceType.thirdCode = ''
       item.thirdCodeList = []
-      item.secondCode = e
+      item.serviceType.secondCode = e
       if(item.secondCode != ''){
         let data = {
-          parentCode: item.secondCode
+          parentCode: item.serviceType.secondCode
         }
         businessTypeList(data).then(res => {
           if(res.code == 0) {
