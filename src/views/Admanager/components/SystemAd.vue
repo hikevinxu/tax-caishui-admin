@@ -142,7 +142,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/service' && form.goType == 2" label="服务详情图：" prop="elementValue">
+          <el-form-item  v-if="form.nativeUrl == 'main/home/queryService/servicer' && form.goType == 2" label="服务详情图：" prop="elementValue">
             <Upload v-model="form.firmImg"/>
           </el-form-item>
           <el-form-item label="备注">
