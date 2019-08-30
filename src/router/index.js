@@ -369,6 +369,24 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/intentionList',
+    component: Layout,
+    redirect: '/intentionList/index',
+    name: 'intentionList',
+    meta: {
+      title: '意向收集管理',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/landPage/intentionList'),
+        name: 'intentionIndex',
+        meta: { title: '意向收集列表', icon: '', noCache: true, roles: ['admin']  }
+      }
+    ]
+  },
   // {
   //   path: '/hotWords',
   //   component: Layout,

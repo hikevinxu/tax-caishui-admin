@@ -1,7 +1,7 @@
 <template>
 	<div class="create_page">
 		<div class="form">
-			<el-form label-width="200px" :model="formData" :rules="rules" ref="createPage">
+			<el-form label-width="180px" :model="formData" :rules="rules" ref="createPage" width="800px">
 				<div  style="margin-bottom: 12px;"><span style="font-size: 16px; padding: 15px; border-radius: 5px;">投放目标</span></div>
 				<el-form-item label="投放应用：" prop="packageName">
           <el-select v-model="formData.packageName" placeholder="请选择">
@@ -21,7 +21,7 @@
 	      <el-form-item label="落地页标题：" prop="title">
 		      <el-input type="text" placeholder="请输入落地页标题" v-model="formData.title"></el-input>
 		    </el-form-item>
-	      <el-form-item label="头图：" prop="headImg" v-if="formData.packageName != '风险检测h5'">
+	      <el-form-item label="头图：" prop="headImg">
           <el-upload
             action=""
             :show-file-list="false"
@@ -31,7 +31,7 @@
           </el-upload>
           <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.headImgUrl" @click="deleteHeadImg">删除</el-button>
         </el-form-item>
-	      <el-form-item label="头部浮层：" prop="topImg" v-if="formData.packageName != '风险检测h5'">
+	      <el-form-item label="头部浮层：" prop="topImg">
           <el-upload
             action=""
             :show-file-list="false"
@@ -41,40 +41,49 @@
           </el-upload>
           <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.topImgUrl" @click="deleteTopImg">删除</el-button>
         </el-form-item>
-        <el-form-item label="浮层距顶部高度：" prop="topSpace" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="浮层距顶部高度：" prop="topSpace">
           <el-input type="number" placeholder="请输入浮层距顶部高度：" v-model="formData.topSpace"></el-input>
         </el-form-item>
-        <el-form-item label="表单区域背景颜色：" prop="pageBgColor" v-if="formData.packageName != '风险检测h5'">
-          <el-color-picker v-model="formData.preRegisterBgColor" size="medium"></el-color-picker>
-        </el-form-item>
-        <el-form-item label="页面类型：" prop="pageType" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="页面背景颜色：" prop="pageBgColor">
+          <el-color-picker v-model="formData.pageBgColor" size="medium"></el-color-picker>
+		    </el-form-item>
+        <el-form-item label="页面类型：" prop="pageType">
           <el-radio-group v-model="formData.pageType">
             <el-radio :label="1">预注册</el-radio>
             <el-radio :label="2">直接下载</el-radio>
+            <el-radio :label="3">意向收集</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="页面背景颜色：" prop="pageBgColor" v-if="formData.packageName != '风险检测h5'">
-          <el-color-picker v-model="formData.pageBgColor" size="medium"></el-color-picker>
+        <el-form-item label="意向收集表单类型：" prop="pageType" v-if="formData.pageType == 3">
+          <el-select style="width: 300px;" v-model="formData.formType" placeholder="请选择" @change="formTypeChange">
+            <el-option v-for="item in formTypeList" :label="item.name" :value="item.id" :key="item.id" ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="意向收集表单标题：" prop="formTitle" v-if="formData.pageType == 3">
+          <el-input type="text" placeholder="请输入意向收集表单标题" v-model="formData.formTitle"></el-input>
 		    </el-form-item>
-        <el-form-item label="按钮背景颜色：" prop="buttonBgColor" v-if="formData.packageName != '风险检测h5'">
-          <el-color-picker v-model="formData.buttonBgColor" size="medium"></el-color-picker>
-		    </el-form-item>
-        <el-form-item label="按钮文案颜色：" prop="buttonRemarkColor" v-if="formData.packageName != '风险检测h5'">
-          <el-color-picker v-model="formData.buttonRemarkColor" size="medium"></el-color-picker>
-		    </el-form-item>
-        <el-form-item label="按钮文案：" prop="buttonRemark" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="表单区域背景颜色：" prop="pageBgColor">
+          <el-color-picker v-model="formData.preRegisterBgColor" size="medium"></el-color-picker>
+        </el-form-item>
+        <el-form-item label="按钮文案：" prop="buttonRemark">
           <el-input type="text" placeholder="请输入按钮文案" v-model="formData.buttonRemark"></el-input>
 		    </el-form-item>
-        <el-form-item label="下载地址：" prop="dowloadUrl" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="按钮背景颜色：" prop="buttonBgColor" >
+          <el-color-picker v-model="formData.buttonBgColor" size="medium"></el-color-picker>
+		    </el-form-item>
+        <el-form-item label="按钮文案颜色：" prop="buttonRemarkColor" >
+          <el-color-picker v-model="formData.buttonRemarkColor" size="medium"></el-color-picker>
+		    </el-form-item>
+        <el-form-item label="APP下载地址：" prop="dowloadUrl">
           <el-input type="text" placeholder="请输入下载地址" v-model="formData.dowloadUrl"></el-input>
 		    </el-form-item>
-        <el-form-item label="按钮下方文案颜色：" prop="buttonRemarkColor" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="按钮下方文案颜色：" prop="buttonRemarkColor">
           <el-color-picker v-model="formData.buttonUnderColor" size="medium"></el-color-picker>
 		    </el-form-item>
-        <el-form-item label="按钮下方文案：" prop="buttonUnder" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="按钮下方文案：" prop="buttonUnder">
           <el-input type="textarea" :rows="3" placeholder="请输入按钮下方文案" v-model="formData.buttonUnder"></el-input>
 		    </el-form-item>
-	      <el-form-item label="底图：" prop="tailImg" v-if="formData.packageName != '风险检测h5'">
+	      <el-form-item label="底图：" prop="tailImg">
           <el-upload
             action=""
             :show-file-list="false"
@@ -84,10 +93,10 @@
           </el-upload>
           <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.tailImgUrl" @click="deleteTailImg">删除</el-button>
         </el-form-item>
-        <el-form-item label="风险说明文案颜色：" prop="buttonRemarkColor" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="风险说明文案颜色：" prop="buttonRemarkColor">
           <el-color-picker v-model="formData.riskInfoColor" size="medium"></el-color-picker>
 		    </el-form-item>
-        <el-form-item label="风险说明：" prop="riskInfo" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="风险说明：" prop="riskInfo">
           <el-input type="textarea" :rows="3" placeholder="请输入风险说明" v-model="formData.riskInfo"></el-input>
 		    </el-form-item>
         <el-form-item label="公司名称、备案号文案颜色：" prop="buttonRemarkColor">
@@ -107,7 +116,7 @@
         <el-button type="primary" style="margin-top: 12px;" @click="$router.back()">返回</el-button>
         <el-button type="primary" style="margin-top: 12px;" @click="handleSubmit">保存</el-button>
       </div>
-			<div class="preview" v-if="formData.packageName != '风险检测h5'">
+			<div class="preview">
 				<div class="preview_box" :style="{'background-color': formData.pageBgColor}">
 					<div class="page_title">{{formData.title}}</div>
 					<div class="container1">
@@ -120,6 +129,42 @@
                     <input type="number" pattern="\d*" class="registered-form-phone" placeholder="请输入正确的手机号" readonly>
                   </div>
                 </form>
+              </div>
+              <div class="intentionCollect" v-if="formData.pageType == 3">
+                <div class="intentionCollect_form" v-if="formData.formType == 1">
+                  <div class="title">{{formData.formTitle}}</div>
+                  <div class="form_item">
+                    <label>国家/地区<span>*</span></label>
+                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请选择"></div>
+                  </div>
+                  <div class="form_item">
+                    <label>注册意向<span>*</span></label>
+                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请选择"></div>
+                  </div>
+                  <div class="form_item">
+                    <label>联系电话<span>*</span></label>
+                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="tel" readonly placeholder="请输入"></div>
+                  </div>
+                  <div class="form_item">
+                    <label>如何称呼<span>*</span></label>
+                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请输入"></div>
+                  </div>
+                </div>
+                <div class="intentionCollect_form" v-if="formData.formType == 2">
+                  <div class="title">{{formData.formTitle}}</div>
+                  <div class="form_item">
+                    <label>城市/地区<span>*</span></label>
+                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="如：杭州-西湖区"></div>
+                  </div>
+                  <div class="form_item">
+                    <label>联系电话<span>*</span></label>
+                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="tel" readonly placeholder="请输入"></div>
+                  </div>
+                  <div class="form_item">
+                    <label>如何称呼<span>*</span></label>
+                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请输入"></div>
+                  </div>
+                </div>
               </div>
               <div class="download_btn" :style="{'background-color': formData.buttonBgColor, color: formData.buttonRemarkColor}">{{formData.buttonRemark}}</div>
               <div class="tip form_tip" v-if="formData.buttonUnder" v-html="handleText(formData.buttonUnder)" :style="{color: formData.buttonUnderColor}"></div>	
@@ -141,11 +186,13 @@
 	import mixins from './mixins'
   import { upLoadPicFromWeApp } from '@/api/qiniu'
   import { channelPageAddition } from '@/api/landPage'
+  import global from '@/utils/global'
 	export default {
 		data() {
 			return {
         aaa: '',
-				url: '',
+        url: '',
+        formTypeList: global.formTypeList,
 				formData: {
 					packageName: '财税鱼',
 					advertisingChannel: '',
@@ -173,7 +220,10 @@
 					preRegisterBgColor: '#FFFFFF',
 					buttonUnderColor: '#555555',
 					riskInfoColor: '#555555',
-					companyInfoColor: '#999999'
+          companyInfoColor: '#999999',
+          formType: '',
+          formTypeName: '',
+          formTitle: ''
 				},
 				rules: {}
 			}
@@ -199,8 +249,29 @@
 		mixins: [mixins],
 		methods: {
 			handleSubmit() {
-        console.log(this.formData)
-        channelPageAddition(this.formData).then(res => {
+        let params = this.formData
+        if (this.formData.pageType == 3) {
+          if (!this.formData.formType || this.formData.formType == '') {
+            this.$message({
+              type: 'error',
+              message: '请先选择意向收集表单类型'
+            })
+            return
+          }
+          if (!this.formData.formTitle || this.formData.formTitle == '') {
+            this.$message({
+              type: 'error',
+              message: '请先输入意向收集表单标题'
+            })
+            return
+          }
+          params.formJson = JSON.stringify({
+            formType: this.formData.formType,
+            formTypeName: this.formData.formTypeName,
+            formTitle: this.formData.formTitle
+          })
+        }
+        channelPageAddition(params).then(res => {
           if(res.code == 0){
             this.$message({
               type: 'success',
@@ -292,6 +363,13 @@
         this.formData.tailImg = ''
         this.formData.tailImgUrl = ''
       },
+      formTypeChange(val) {
+        for (let i=0;i<this.formTypeList.length;i++) {
+          if (this.formTypeList[i].id == val) {
+            this.formData.formTypeName = this.formTypeList[i].name
+          }
+        }
+      }
     },
 		created() {
 
@@ -313,10 +391,10 @@
 		// justify-content: center;
 		overflow-y: auto;
 		.form {
-			width: 550px;
+			width: 750px;
 			/deep/ .el-form {
 				margin: 0 auto;
-				width: 450px;
+				width: 550px;
 				flex-shrink: 0;
 				.el-upload {
 				    border: 1px dashed #d9d9d9;
@@ -729,4 +807,56 @@
 		font-size: 12px;
 		line-height: 16px;
 	}
+  .intentionCollect {
+      width: 100%;
+      padding: 10px 0;
+      .title {
+        margin-bottom: 20px;
+        line-height: 20px;
+      }
+      .intentionCollect_form {
+        width: 300px;
+        margin: 0 auto;
+        .form_item {
+          margin-bottom: 10px;
+          label {
+            font-family: PingFangSC-Regular;
+            font-size: 14px;
+            font-weight: 400;
+            span {
+              color: red;
+            }
+          }
+          .select {
+            height: 40px;
+            border-bottom: 1px solid #ccc;
+            line-height: 40px;
+            font-size: 14px;
+            color: #666666;
+            input {
+              width: 100%;
+              outline: none;
+              border: 0;
+            }
+          }
+        }
+      }
+    }
+  ::-webkit-input-placeholder { /* WebKit browsers */
+    font-family: PingFangSC-Light, sans-serif;
+    color:rgba(153,153,153,1);
+    font-size: 14px;
+  }
+
+  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    font-family: PingFangSC-Light, sans-serif;
+    color:rgba(153,153,153,1);
+    font-size: 14px;
+  }
+
+  :-ms-input-placeholder { /* Internet Explorer 10+ */
+    font-family: PingFangSC-Light, sans-serif;
+    color:rgba(153,153,153,1);
+    font-size: 14px;
+  }
 </style>

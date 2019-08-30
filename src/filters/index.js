@@ -118,3 +118,22 @@ export function pageUrlFilters(status) {
   }
 }
 
+/**
+ * 落地页意向收集表单类型
+ * @function formTypeFilters
+ * @param status Number 上下架状态码
+ */
+export function formTypeFilters(status) {
+  switch (status) {
+    case 1:
+      return '海外公司注册'
+      break;
+    case 2:
+      return '公司注册'
+      break;
+    default: 
+      return ''
+      break;
+  }
+}
+
