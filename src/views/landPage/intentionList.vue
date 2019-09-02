@@ -1,7 +1,7 @@
 <template>
   <div class='intentionList'>
     <div class="filter-container">
-      <el-select class="filter-item" style="width: 250px; margin-left: 10px;" @change="getList" v-model="listQuery.formType" placeholder="请选择投放应用">
+      <el-select class="filter-item" style="width: 250px; margin-left: 10px;" @change="searchDataChange" v-model="listQuery.formType" placeholder="请选择投放应用">
         <el-option value="" label="全部"></el-option>
         <el-option v-for="item in formTypeList" :label="item.name" :value="item.id" :key="item.id" > </el-option>
       </el-select>
@@ -85,6 +85,11 @@ export default {
           this.listLoading = false
         }
       })
+    },
+    searchDataChange(){
+      this.listQuery.pageSize = 10
+      this.listQuery.pageNum = 1
+      this.getList()
     }
   }
 }

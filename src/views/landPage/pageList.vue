@@ -2,13 +2,13 @@
 	<div class="land_page">
 		<div class="btn_Box filter-container">
       <el-button v-waves class="filter-item" icon="el-icon-plus" type="primary" @click="$router.push('/landPage/createLandPage')">新建</el-button>
-      <el-select class="filter-item" style="width: 250px; margin-left: 10px;" @change="getList" v-model="searchData.packageName" placeholder="请选择投放应用">
+      <el-select class="filter-item" style="width: 250px; margin-left: 10px;" @change="searchDataChange" v-model="searchData.packageName" placeholder="请选择投放应用">
         <el-option value="" label="全部"></el-option>
         <el-option v-for="item in app" :label="item" :value="item" :key="item" > </el-option>
       </el-select>
       <el-input class="filter-item" type="text" style="width: 250px; margin-left: 10px;" placeholder="请输入投放渠道" v-model="searchData.advertisingChannel"></el-input>
       <el-input class="filter-item" type="text" style="width: 250px; margin-left: 10px;" placeholder="请输入渠道备注" v-model="searchData.channelRemark"></el-input>
-      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" @click="getList" icon="el-icon-search">搜索</el-button>
+      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" @click="searchDataChange" icon="el-icon-search">搜索</el-button>
 	    </div>
 	    <el-table
           v-loading="listLoading"
@@ -248,8 +248,13 @@
             this.recordDataCount = res.data.total
           }
         })
-      }
-		},
+      },
+      searchDataChange() {
+        this.searchData.pageNum = 1
+        this.searchData.pageSize = 10
+        this.getList()
+      },
+    },
 		created() {
 			this.getList()
 		},

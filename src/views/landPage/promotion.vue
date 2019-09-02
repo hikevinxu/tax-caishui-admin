@@ -5,7 +5,7 @@
       <el-input class="filter-item" style="width: 250px; margin-left: 10px;" type="text" placeholder="请输入媒介" v-model="searchData.utmMedium"></el-input>
       <el-date-picker class="filter-item" style="width: 250px; margin-left: 10px;" v-model="searchData.date" type="date" value-format="yyyy-MM-dd" :editable="false" placeholder="选择日期">
       </el-date-picker>
-      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" @click="getList" icon="el-icon-search">搜索</el-button>
+      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" @click="searchDataChange" icon="el-icon-search">搜索</el-button>
     </div>
     <el-table
       :data="tableListData"
@@ -198,7 +198,12 @@
 		    groupTypeFromatter (row, col, cellValue, index) {
 		    	let groupType = this.groupTypeList.filter(item => item.groupType == cellValue);
 		    	return groupType.length > 0 ? groupType[0].groupTypeDesc : ''
-		    },
+        },
+        searchDataChange() {
+          this.searchData.pageNum = 1
+          this.searchData.pageSize = 10
+          this.getList()
+        },
 		},
 		created() {
 			this.getList()
