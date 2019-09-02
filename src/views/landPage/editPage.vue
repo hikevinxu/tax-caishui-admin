@@ -276,13 +276,6 @@
             })
             return
           }
-          if (!this.formData.formTitle || this.formData.formTitle == '') {
-            this.$message({
-              type: 'error',
-              message: '请先输入意向收集表单标题'
-            })
-            return
-          }
           params.formJson = JSON.stringify({
             formType: this.formData.formType,
             formTypeName: this.formData.formTypeName,
@@ -615,7 +608,6 @@
 	}
   .intentionCollect {
       width: 100%;
-      padding: 10px 0;
       .title {
         margin-bottom: 20px;
         line-height: 20px;
