@@ -206,7 +206,7 @@
                   <div v-if="formData.buttonUnder" :style="{'color': formData.buttonUnderColor}" class="buttonUnder" v-html="handleText(formData.buttonUnder)"></div>
                 </div>
                 <div class="download"  v-if="formData.pageType == 2">
-                  <div class="formTitle"  v-if="formData.formTitle">{{formData.formTitle}}</div>
+                  <!-- <div class="formTitle"  v-if="formData.formTitle">{{formData.formTitle}}</div> -->
                   <div class="qrcode"></div>
                   <div class="buttonUnder" :style="{'color': formData.dimensionalColor}" v-if="formData.dimensionalText" v-html="handleText(formData.dimensionalText)"></div>
                 </div>
