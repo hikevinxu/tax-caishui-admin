@@ -357,14 +357,14 @@ export const asyncRouterMap = [
         path: 'createLandPage',
         component: () => import('@/views/landPage/createPage'),
         name: 'createLandPage',
-        meta: { title: '新增落地页', icon: '', noCache: true, roles: ['admin']  },
+        meta: { title: '新增落地页', icon: '', noCache: true, roles: ['admin'], path: '/landPage/landPageSetting'  },
         hidden: true
       },
       {
         path: 'editLandPage',
         component: () => import('@/views/landPage/editPage'),
         name: 'editLandPage',
-        meta: { title: '编辑落地页', icon: '',  hidden: true, noCache: true, roles: ['admin']  },
+        meta: { title: '编辑落地页', icon: '',  hidden: true, noCache: true, roles: ['admin'], path: '/landPage/landPageSetting'  },
         hidden: true
       }
     ]

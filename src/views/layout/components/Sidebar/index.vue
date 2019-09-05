@@ -2,7 +2,7 @@
   <el-scrollbar wrap-class="scrollbar-wrapper">
     <el-menu
       :show-timeout="200"
-      :default-active="$route.path"
+      :default-active="$route.meta.path ? $route.meta.path : $route.path"
       :collapse="isCollapse"
       mode="vertical"
       background-color="#304156"
