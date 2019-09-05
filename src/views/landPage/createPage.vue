@@ -32,20 +32,20 @@
             action=""
             :show-file-list="false"
             :http-request="uploadHeadImg">
-            <img v-if="formData.headImgUrl" :src="formData.headImgUrl" class="avatar">
+            <img v-if="headImgUrl" :src="headImgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.headImgUrl" @click="deleteHeadImg">删除</el-button>
+          <el-button icon="el-icon-delete" size="small" type="danger" v-show="headImgUrl" @click="deleteHeadImg">删除</el-button>
         </el-form-item>
 	      <el-form-item label="头部浮层：" prop="topImg">
           <el-upload
             action=""
             :show-file-list="false"
             :http-request="uploadTopImg">
-            <img v-if="formData.topImgUrl" :src="formData.topImgUrl" class="avatar">
+            <img v-if="topImgUrl" :src="topImgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.topImgUrl" @click="deleteTopImg">删除</el-button>
+          <el-button icon="el-icon-delete" size="small" type="danger" v-show="topImgUrl" @click="deleteTopImg">删除</el-button>
         </el-form-item>
         <el-form-item label="浮层距顶部高度：" prop="topSpace">
           <el-input type="number" placeholder="请输入浮层距顶部高度：" v-model="formData.topSpace"></el-input>
@@ -100,10 +100,10 @@
             action=""
             :show-file-list="false"
             :http-request="uploadTailImg">
-            <img v-if="formData.tailImgUrl" :src="formData.tailImgUrl" class="avatar">
+            <img v-if="tailImgUrl" :src="tailImgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.tailImgUrl" @click="deleteTailImg">删除</el-button>
+          <el-button icon="el-icon-delete" size="small" type="danger" v-show="tailImgUrl" @click="deleteTailImg">删除</el-button>
         </el-form-item>
         <el-form-item label="风险说明文案颜色：" prop="buttonRemarkColor">
           <el-color-picker v-model="formData.riskInfoColor" size="medium"></el-color-picker>
@@ -132,8 +132,8 @@
 				<div class="preview_box" :style="{'background-color': formData.pageBgColor}">
 					<div class="page_title">{{formData.title}}</div>
 					<div class="container1">
-					  <img class="banner" :src="formData.headImgUrl" ref="banner">
-						<img class="topImg" :src="formData.topImgUrl" :style="{top: formData.topSpace + 'px'}">
+					  <img class="banner" :src="headImgUrl" ref="banner">
+						<img class="topImg" :src="topImgUrl" :style="{top: formData.topSpace + 'px'}">
 						<div :style="{'background-color': formData.preRegisterBgColor, 'margin-top': '16px', position: 'relative'}">
               <div class="registered-icon" v-if="formData.pageType == 1">
                 <form class="registered-form" method="post">
@@ -181,7 +181,7 @@
               <div class="download_btn" :style="{'background-color': formData.buttonBgColor, color: formData.buttonRemarkColor}">{{formData.buttonRemark}}</div>
               <div class="tip form_tip" v-if="formData.buttonUnder" v-html="handleText(formData.buttonUnder)" :style="{color: formData.buttonUnderColor}"></div>	
             </div>
-				    <img class="intro" v-if="formData.tailImgUrl" :src="formData.tailImgUrl">
+				    <img class="intro" v-if="tailImgUrl" :src="tailImgUrl">
 				    <div class="bottom_text2 riskInfo" v-if="formData.riskInfo" v-html="handleText(formData.riskInfo)" :style="{color: formData.riskInfoColor}"></div>	
 				    <div class="bottom">
 				    	<div class="line1"></div>
@@ -195,7 +195,7 @@
         <el-dialog :title="formData.title" :modal-append-to-body='false' :visible.sync="pc_preview_dialog" width="1080px" height="960px">
           <div class="landPage_pc"  :style="'background: ' + formData.pageBgColor">
             <div class="landPage_pc_header">
-              <img v-if="formData.headImgUrl" :src="formData.headImgUrl" alt="">
+              <img v-if="headImgUrl" :src="headImgUrl" alt="">
               <div :style="{'background': formData.preRegisterBgColor}" :class="formData.pageType == 3 ? 'form' : 'form otherForm'">
                 <div class="register" v-if="formData.pageType == 1">
                   <div class="formTitle"  v-if="formData.formTitle">{{formData.formTitle}}</div>
@@ -238,7 +238,7 @@
               </div>
             </div>
             <div class="landPage_pc_footer">
-              <img v-if="formData.tailImgUrl" :src="formData.tailImgUrl" alt="">
+              <img v-if="tailImgUrl" :src="tailImgUrl" alt="">
             </div>
             <div class="bottomCopyRight">
               <div class="topText" v-if="formData.riskInfo"><span :style="{'color': formData.riskInfoColor}" v-html="handleText(formData.riskInfo)"></span></div>
@@ -270,9 +270,7 @@
           channelRemark: '',
           clientType: 'h5',
           headImg: '',
-          headImgUrl: '',
           topImg: '',
-          topImgUrl: '',
 					title: '',
 					pageType: 1,
 					pageBgColor: '#FFFFFF',
@@ -282,7 +280,6 @@
 					dowloadUrl: '',
 					buttonUnder: '',
           tailImg: '',
-          tailImgUrl: '',
 					riskInfo: '',
 					companyInfo: '',
 					jsBase: '',
@@ -299,6 +296,9 @@
           dimensionalText: '',
           dimensionalColor: '#555555'
         },
+        headImgUrl: '',
+        topImgUrl: '',
+        tailImgUrl: '',
         pc_preview_dialog: false,
 				rules: {}
 			}
@@ -372,7 +372,7 @@
             oFileReader.readAsDataURL(item.file)
             oFileReader.onloadend = (e) => {
               this.formData.headImg = res.data[0].fileId
-              this.formData.headImgUrl = e.target.result
+              this.headImgUrl = e.target.result
               this.$forceUpdate()
             }
           }
@@ -383,7 +383,7 @@
       deleteHeadImg() {
         this.$forceUpdate()
         this.formData.headImg = ''
-        this.formData.headImgUrl = ''
+        this.headImgUrl = ''
       },
       uploadTopImg (item) {
         if(item.file.type.indexOf('image') == -1) {
@@ -397,7 +397,7 @@
             let oFileReader = new FileReader()
             oFileReader.readAsDataURL(item.file)
             oFileReader.onloadend = (e) => {
-              this.formData.topImgUrl = e.target.result
+              this.topImgUrl = e.target.result
               this.formData.topImg = res.data[0].fileId
               this.$forceUpdate()
             }
@@ -409,7 +409,7 @@
       deleteTopImg() {
         this.$forceUpdate()
         this.formData.topImg = ''
-        this.formData.topImgUrl = ''
+        this.topImgUrl = ''
       },
       uploadTailImg(item) {
         if(item.file.type.indexOf('image') == -1) {
@@ -423,7 +423,7 @@
             let oFileReader = new FileReader()
             oFileReader.readAsDataURL(item.file)
             oFileReader.onloadend = (e) => {
-              this.formData.tailImgUrl = e.target.result
+              this.tailImgUrl = e.target.result
               this.formData.tailImg = res.data[0].fileId
               this.$forceUpdate()
             }
@@ -435,7 +435,7 @@
       deleteTailImg() {
         this.$forceUpdate()
         this.formData.tailImg = ''
-        this.formData.tailImgUrl = ''
+        this.tailImgUrl = ''
       },
       formTypeChange(val) {
         for (let i=0;i<this.formTypeList.length;i++) {
