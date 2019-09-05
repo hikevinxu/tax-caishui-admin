@@ -6,8 +6,8 @@
         <el-option value="" label="全部"></el-option>
         <el-option v-for="item in app" :label="item" :value="item" :key="item" > </el-option>
       </el-select>
-      <el-input class="filter-item" type="text" style="width: 250px; margin-left: 10px;" placeholder="请输入投放渠道" clearable @clear="searchDataChange" v-model="searchData.advertisingChannel"></el-input>
-      <el-input class="filter-item" type="text" style="width: 250px; margin-left: 10px;" placeholder="请输入渠道备注" clearable @clear="searchDataChange" v-model="searchData.channelRemark"></el-input>
+      <el-input class="filter-item" type="text" style="width: 250px; margin-left: 10px;" placeholder="请输入投放渠道" clearable @clear="searchDataChange" @keyup.enter.native="searchDataChange" v-model="searchData.advertisingChannel"></el-input>
+      <el-input class="filter-item" type="text" style="width: 250px; margin-left: 10px;" placeholder="请输入渠道备注" clearable @clear="searchDataChange" @keyup.enter.native="searchDataChange" v-model="searchData.channelRemark"></el-input>
       <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" @click="searchDataChange" icon="el-icon-search">搜索</el-button>
 	    </div>
 	    <el-table
@@ -22,6 +22,11 @@
 	      	<el-table-column label="产品名称" align="center" width="100px">
             <template slot-scope="scope">
               <span>{{ scope.row.packageName }}</span>
+            </template>
+	      	</el-table-column>
+          <el-table-column label="客户端类型" align="center" width="100px">
+            <template slot-scope="scope">
+              <span>{{ scope.row.clientType }}</span>
             </template>
 	      	</el-table-column>
 	      	<el-table-column label="渠道channel" align="center">
