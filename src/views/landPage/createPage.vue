@@ -65,7 +65,7 @@
             <el-option v-for="item in formTypeList" :label="item.name" :value="item.id" :key="item.id" ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="表单标题：" prop="formTitle" v-if="formData.pageType == 3">
+        <el-form-item label="表单标题：" prop="formTitle">
           <el-input type="text" placeholder="请输入表单标题" v-model="formData.formTitle"></el-input>
 		    </el-form-item>
         <el-form-item label="表单区域背景颜色：" prop="pageBgColor">
