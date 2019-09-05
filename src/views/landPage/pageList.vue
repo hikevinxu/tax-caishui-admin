@@ -6,6 +6,11 @@
         <el-option value="" label="全部"></el-option>
         <el-option v-for="item in app" :label="item" :value="item" :key="item" > </el-option>
       </el-select>
+      <el-select class="filter-item" style="width: 250px; margin-left: 10px;" @change="searchDataChange" v-model="searchData.clientType" placeholder="请选择投放应用">
+        <el-option value="" label="全部"></el-option>
+        <el-option label="pc" value="pc"></el-option>
+        <el-option label="h5" value="h5"></el-option>
+      </el-select>
       <el-input class="filter-item" type="text" style="width: 250px; margin-left: 10px;" placeholder="请输入投放渠道" clearable @clear="searchDataChange" @keyup.enter.native="searchDataChange" v-model="searchData.advertisingChannel"></el-input>
       <el-input class="filter-item" type="text" style="width: 250px; margin-left: 10px;" placeholder="请输入渠道备注" clearable @clear="searchDataChange" @keyup.enter.native="searchDataChange" v-model="searchData.channelRemark"></el-input>
       <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" @click="searchDataChange" icon="el-icon-search">搜索</el-button>
@@ -124,7 +129,8 @@
 				searchData: {
 					packageName: '',
 					advertisingChannel: '',
-					channelRemark: '',
+          channelRemark: '',
+          clientType: '',
 					pageNum: 1,
 					pageSize: 10
 				},

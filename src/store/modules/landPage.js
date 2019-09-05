@@ -4,6 +4,7 @@ const landPage = {
       pageSize: 10,
       pageNum: 1,
       packageName: '',
+      clientType: '',
       advertisingChannel: '',
       channelRemark: '',
     }
