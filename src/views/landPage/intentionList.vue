@@ -5,6 +5,11 @@
         <el-option value="" label="全部"></el-option>
         <el-option v-for="item in formTypeList" :label="item.name" :value="item.id" :key="item.id" > </el-option>
       </el-select>
+      <el-select class="filter-item" style="width: 250px; margin-left: 10px;" @change="searchDataChange" v-model="listQuery.clientType" placeholder="请选择投放应用">
+        <el-option value="" label="全部"></el-option>
+        <el-option label="pc" value="pc"></el-option>
+        <el-option label="h5" value="h5"></el-option>
+      </el-select>
     </div>
     <div class="intentionList_table">
       <el-table
@@ -15,6 +20,11 @@
         highlight-current-row
         style="width: 100%">
         <el-table-column label="序号" type="index" :index="1" width="80px" align="center" >
+        </el-table-column>
+        <el-table-column label="客户端类型" align="center" width="100px">
+          <template slot-scope="scope">
+            <span>{{ scope.row.clientType ? scope.row.clientType : 'h5' }}</span>
+          </template>
         </el-table-column>
         <el-table-column label="意向收集表单类型" align="center" width="200px">
           <template slot-scope="scope">
@@ -66,7 +76,8 @@ export default {
         pageSize: 10,
         pageNum: 1,
         pageType: 3,
-        formType: ''
+        formType: '',
+        clientType: ''
       },
       total: 0,
       formTypeList: global.formTypeList
