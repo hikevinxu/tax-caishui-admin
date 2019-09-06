@@ -49,7 +49,7 @@
 
           <el-table-column label="操作" align="center" min-width="200PX" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="text" size="small" @click="changeShelfUp(scope.row)">上架</el-button>
+              <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;color: #f56c6c;" type="text" size="small" @click="changeShelfUp(scope.row)">上架</el-button>
               <el-button v-show="scope.row.shelf == true" style="margin-left: 12PX;color: #5AB3A4;" type="text" size="small" @click="changeShelfDown(scope.row)">下架</el-button>
             </template>
           </el-table-column>
