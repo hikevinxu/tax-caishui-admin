@@ -788,7 +788,7 @@ export default {
       }
     },
     thirdCodeChange(item,e){
-      item.thirdCode = e
+      item.serviceType.thirdCode = e
       console.log(this.serviceCodes)
     },
     add(){

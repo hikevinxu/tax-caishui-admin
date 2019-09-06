@@ -71,6 +71,7 @@
           <el-button v-show="scope.row.companyStatus == 0" style="margin-left: 12px;" type="warning" size="small" @click="handleUp(scope.row)">上架</el-button>
           <el-button v-show="scope.row.companyStatus == 1" style="margin-left: 12px;" type="danger" size="small" @click="handleDown(scope.row)">下架</el-button>
           <el-button style="margin-left: 12px;" type="success" size="small" @click="handleLookDetail(scope.row)">查看</el-button>
+          <el-button style="margin-left: 12px;" type="warning" size="small" @click="goMain(scope.row)">业务管理</el-button>
         </template>
       </el-table-column>
 
@@ -401,6 +402,14 @@ export default {
     },
     imageHide () {
       this.imgShow = false
+    },
+    goMain(row){
+      this.$router.push({
+          path: '/mainBusiness/mainBusiness',
+          query: {
+            id: row.companyId
+          }
+      })
     }
   }
 }
