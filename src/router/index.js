@@ -442,6 +442,25 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/mainBusiness',
+    component: Layout,
+    redirect: '/mainBusiness/mainBusiness',
+    name: 'mainBusiness',
+    hidden: true,
+    meta: {
+      title: '商户主营业务管理',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'mainBusiness',
+        component: () => import('@/views/mainBusiness/mainBusiness'),
+        name: 'mainBusiness',
+        meta: { title: '商户主营业务管理', icon: '', noCache: true, roles: ['admin']  }
+      }
+    ]
+  },
+  {
     path: '/manually',
     component: Layout,
     redirect: '/manually/manually',
