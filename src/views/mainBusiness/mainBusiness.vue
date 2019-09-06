@@ -94,7 +94,7 @@
           <span slot="footer" class="dialog-footer" style="display: flex;justify-content: space-between;align-items: center;">
             <div class="newBtn">
               <span>没有找到相关业务？</span>
-              <span id="newService" @click="goNewService">申请新业务 ></span>
+              <!-- <span id="newService" @click="goNewService">申请新业务 ></span> -->
             </div>
             <div>
               <el-button @click="dialogPvVisible = false">取消</el-button>
@@ -331,6 +331,11 @@ export default {
         console.log(res)
         if(res.code == 0){
           this.list = res.data
+          if(!res.data || res.data.length == 0){
+            this.noData = true
+          }else{
+            this.noData = false
+          }
           // this.total = res.data.total
           for (let i=0;i<this.list.length;i++) {
             let num = 0
@@ -370,11 +375,6 @@ export default {
             }
           }
           console.log(this.listData)
-          if(!res.data || res.data.length == 0){
-            this.noData = true
-          }else{
-            this.noData = false
-          }
         }
       })
     },
@@ -841,11 +841,12 @@ export default {
         return
       }
       let data = {
-        codeList: this.codeList,
+        codes: this.codeList,
         companyId: this.id
       }
       console.log(data)
-      api.serviceBulkAdd(this.codeList).then(res => {
+      // data = qs.stringify(data)
+      api.serviceBulkAdd(data).then(res => {
         console.log(res)
         if(res.code == 0){
           this.$message({

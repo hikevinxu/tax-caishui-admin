@@ -407,7 +407,7 @@ export default {
       this.$router.push({
           path: '/mainBusiness/mainBusiness',
           query: {
-            id: row.id
+            id: row.companyId
           }
       })
     }
