@@ -67,3 +67,12 @@ export function channelPageModify(params) {
 export function channelPageRecord(params) {
   return fetchGet('/api/channelPage/record', params)
 }
+
+/**
+ * 获取意向收集列表
+ * @function channelPageIntentionList
+ * @type 'get'
+ */
+export function channelPageIntentionList(params) {
+  return fetchGet('/api/channelPage/intention/list', params)
+}

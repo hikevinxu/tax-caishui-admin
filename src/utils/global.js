@@ -13,6 +13,11 @@ const global = {
   pageUrlList: [
     {name: '公司详情页', id: "main/home/queryService/company"},
     {name: '服务详情页', id: "main/home/queryService/servicer"}
+  ],
+  // 落地页表单类型
+  formTypeList: [
+    {name: '海外公司注册', id: 1},
+    {name: '公司注册', id: 2}
   ]
 }
 export default global

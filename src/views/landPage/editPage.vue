@@ -18,77 +18,98 @@
 				<el-form-item label="落地页url：" prop="landpageUrl">
           <el-input type="text" placeholder="" v-model="formData.landpageUrl" readonly></el-input>
         </el-form-item>
+        <el-form-item label="客户端类型：" prop="clientType">
+          <el-radio-group disabled v-model="formData.clientType">
+            <el-radio label="h5">移动端</el-radio>
+            <el-radio label="pc">PC端</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="落地页标题：" prop="title">
           <el-input type="text" placeholder="请输入落地页标题" v-model="formData.title"></el-input>
         </el-form-item>
         <el-form-item
-          label="头图：" prop="headImg" v-if="formData.packageName != '风险检测h5'">
+          label="头图：" prop="headImg" >
           <el-upload
             action=""
             :show-file-list="false"
             :http-request="uploadHeadImg">
-            <img v-if="formData.headImgUrl" :src="formData.headImgUrl" class="avatar">
+            <img v-if="headImgUrl" :src="headImgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.headImgUrl" @click="deleteHeadImg">删除</el-button>
+          <el-button icon="el-icon-delete" size="small" type="danger" v-show="headImgUrl" @click="deleteHeadImg">删除</el-button>
         </el-form-item>
-        <el-form-item label="头部浮层：" prop="topImg" v-if="formData.packageName != '风险检测h5'" >
+        <el-form-item label="头部浮层：" prop="topImg"  >
           <el-upload
             action=""
             :show-file-list="false"
             :http-request="uploadTopImg">
-            <img v-if="formData.topImgUrl" :src="formData.topImgUrl" class="avatar">
+            <img v-if="topImgUrl" :src="topImgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.topImgUrl" @click="deleteTopImg">删除</el-button>
+          <el-button icon="el-icon-delete" size="small" type="danger" v-show="topImgUrl" @click="deleteTopImg">删除</el-button>
         </el-form-item>
-        <el-form-item label="浮层距顶部高度：" prop="topSpace" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="浮层距顶部高度：" prop="topSpace" >
           <el-input type="number" placeholder="请输入浮层距顶部高度：" v-model="formData.topSpace"></el-input>
         </el-form-item>
-          <el-form-item label="表单区域背景颜色：" prop="pageBgColor" v-if="formData.packageName != '风险检测h5'">
-            <el-color-picker v-model="formData.preRegisterBgColor" size="medium"></el-color-picker>
+        <el-form-item label="页面背景颜色：" prop="pageBgColor" >
+          <el-color-picker v-model="formData.pageBgColor" size="medium"></el-color-picker>
         </el-form-item>
-        <el-form-item label="页面类型：" prop="pageType" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="页面类型：" prop="pageType">
           <el-radio-group v-model="formData.pageType">
             <el-radio :label="1">预注册</el-radio>
             <el-radio :label="2">直接下载</el-radio>
+            <el-radio :label="3">意向收集</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="页面背景颜色：" prop="pageBgColor" v-if="formData.packageName != '风险检测h5'">
-          <el-color-picker v-model="formData.pageBgColor" size="medium"></el-color-picker>
+        <el-form-item label="意向收集表单类型：" prop="formType" v-if="formData.pageType == 3">
+          <el-select style="width: 300px;" v-model="formData.formType" placeholder="请选择" @change="formTypeChange">
+            <el-option v-for="item in formTypeList" :label="item.name" :value="item.id" :key="item.id" ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="按钮背景颜色：" prop="buttonBgColor" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="表单标题：" prop="formTitle">
+          <el-input type="text" placeholder="请输入表单标题" v-model="formData.formTitle"></el-input>
+		    </el-form-item>
+        <el-form-item label="表单区域背景颜色：" prop="pageBgColor">
+            <el-color-picker v-model="formData.preRegisterBgColor" size="medium"></el-color-picker>
+        </el-form-item>
+        <el-form-item label="按钮背景颜色：" prop="buttonBgColor">
           <el-color-picker v-model="formData.buttonBgColor" size="medium"></el-color-picker>
         </el-form-item>
-        <el-form-item label="按钮文案颜色：" prop="buttonRemarkColor" v-if="formData.packageName != '风险检测h5'">
-          <el-color-picker v-model="formData.buttonRemarkColor" size="medium"></el-color-picker>
-        </el-form-item>
-        <el-form-item label="按钮文案：" prop="buttonRemark" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="按钮文案：" prop="buttonRemark" >
           <el-input type="text" placeholder="请输入按钮文案" v-model="formData.buttonRemark"></el-input>
         </el-form-item>
-        <el-form-item label="下载地址：" prop="dowloadUrl" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="按钮文案颜色：" prop="buttonRemarkColor" >
+          <el-color-picker v-model="formData.buttonRemarkColor" size="medium"></el-color-picker>
+        </el-form-item>
+        <el-form-item label="下载地址：" prop="dowloadUrl" >
           <el-input type="text" placeholder="请输入下载地址" v-model="formData.dowloadUrl"></el-input>
         </el-form-item>
-        <el-form-item label="按钮下方文案颜色：" prop="buttonRemarkColor" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="按钮下方文案颜色：" prop="buttonRemarkColor" >
           <el-color-picker v-model="formData.buttonUnderColor" size="medium"></el-color-picker>
         </el-form-item>
-        <el-form-item label="按钮下方文案：" prop="buttonUnder" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="按钮下方文案：" prop="buttonUnder" >
           <el-input type="textarea" :rows="3" placeholder="请输入按钮下方文案" v-model="formData.buttonUnder"></el-input>
         </el-form-item>
-        <el-form-item label="底图：" prop="tailImg" v-if="formData.packageName != '风险检测h5'" >
+        <el-form-item label="二维码下方文案颜色：" prop="dimensionalColor" v-if="formData.clientType == 'pc'">
+          <el-color-picker v-model="formData.dimensionalColor" size="medium"></el-color-picker>
+		    </el-form-item>
+        <el-form-item label="二维码下方文案：" prop="dimensionalText" v-if="formData.clientType == 'pc'">
+          <el-input type="textarea" :rows="3" placeholder="请输入按钮下方文案" v-model="formData.dimensionalText"></el-input>
+		    </el-form-item>
+        <el-form-item label="底图：" prop="tailImg">
           <el-upload
             action=""
             :show-file-list="false"
             :http-request="uploadTailImg">
-            <img v-if="formData.tailImgUrl" :src="formData.tailImgUrl" class="avatar">
+            <img v-if="tailImgUrl" :src="tailImgUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <el-button icon="el-icon-delete" size="small" type="danger" v-show="formData.tailImgUrl" @click="deleteTailImg">删除</el-button>
+          <el-button icon="el-icon-delete" size="small" type="danger" v-show="tailImgUrl" @click="deleteTailImg">删除</el-button>
         </el-form-item>
-        <el-form-item label="风险说明文案颜色：" prop="buttonRemarkColor" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="风险说明文案颜色：" prop="buttonRemarkColor" >
           <el-color-picker v-model="formData.riskInfoColor" size="medium"></el-color-picker>
         </el-form-item>
-        <el-form-item label="风险说明：" prop="riskInfo" v-if="formData.packageName != '风险检测h5'">
+        <el-form-item label="风险说明：" prop="riskInfo" >
           <el-input type="textarea" :rows="3" placeholder="请输入风险说明" v-model="formData.riskInfo"></el-input>
         </el-form-item>
         <el-form-item label="公司名称、备案号文案颜色：" prop="buttonRemarkColor">
@@ -109,12 +130,12 @@
         <el-button type="primary" style="margin-top: 12px;" @click="handleSubmit">保存</el-button>
       </div>
 		</div>
-		<div class="preview" v-if="formData.packageName != '风险检测h5'">
+		<div class="preview" v-if="formData.clientType == 1">
 			<div class="preview_box" :style="{'background-color': formData.pageBgColor}">
 				<div class="page_title">{{formData.title}}</div>
 				<div class="container1">
-				  <img class="banner" :src="formData.headImgUrl" ref="banner">
-					<img class="topImg" :src="formData.topImgUrl" :style="{top: formData.topSpace + 'px'}">
+				  <img class="banner" :src="headImgUrl" ref="banner">
+					<img class="topImg" :src="topImgUrl" :style="{top: formData.topSpace + 'px'}">
 					<div :style="{'background-color': formData.preRegisterBgColor, 'margin-top': '16px', position: 'relative'}">
 						<div class="registered-icon" v-if="formData.pageType == 1">
               <form class="registered-form" method="post">
@@ -123,10 +144,46 @@
                 </div>
               </form>
             </div>
+            <div class="intentionCollect" v-if="formData.pageType == 3">
+              <div class="intentionCollect_form" v-if="formData.formType == 1">
+                <div class="title">{{formData.formTitle}}</div>
+                <div class="form_item">
+                  <label>国家/地区<span>*</span></label>
+                  <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请选择"></div>
+                </div>
+                <div class="form_item">
+                  <label>注册意向<span>*</span></label>
+                  <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请选择"></div>
+                </div>
+                <div class="form_item">
+                  <label>联系电话<span>*</span></label>
+                  <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="tel" readonly placeholder="请输入"></div>
+                </div>
+                <div class="form_item">
+                  <label>如何称呼<span>*</span></label>
+                  <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请输入"></div>
+                </div>
+              </div>
+              <div class="intentionCollect_form" v-if="formData.formType == 2">
+                <div class="title">{{formData.formTitle}}</div>
+                <div class="form_item">
+                  <label>城市/地区<span>*</span></label>
+                  <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="如：杭州-西湖区"></div>
+                </div>
+                <div class="form_item">
+                  <label>联系电话<span>*</span></label>
+                  <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="tel" readonly placeholder="请输入"></div>
+                </div>
+                <div class="form_item">
+                  <label>如何称呼<span>*</span></label>
+                  <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请输入"></div>
+                </div>
+              </div>
+            </div>
             <div class="download_btn" :style="{'background-color': formData.buttonBgColor, color: formData.buttonRemarkColor}">{{formData.buttonRemark}}</div>
             <div class="tip form_tip" v-if="formData.buttonUnder" v-html="handleText(formData.buttonUnder)" :style="{color: formData.buttonUnderColor}"></div>	
 					</div>
-          <img class="intro" v-if="formData.tailImgUrl" :src="formData.tailImgUrl">
+          <img class="intro" v-if="tailImgUrl" :src="tailImgUrl">
           <div class="bottom_text2 riskInfo" v-if="formData.riskInfo" v-html="handleText(formData.riskInfo)" :style="{color: formData.riskInfoColor}"></div>	
           <div class="bottom">
             <div class="line1"></div>
@@ -135,6 +192,65 @@
 				</div>
 			</div>
 		</div>
+    <div class="pc-preview" v-if="formData.clientType == 'pc'">
+      <el-button type="primary" @click="pc_preview_dialog = true">在线预览</el-button>
+      <el-dialog title="pc端预览" :modal-append-to-body='false' :visible.sync="pc_preview_dialog" width="1080px">
+        <div class="landPage_pc"  :style="'background: ' + formData.pageBgColor">
+          <div class="landPage_pc_header">
+            <img v-if="headImgUrl" :src="headImgUrl" alt="">
+            <div :style="{'background': formData.preRegisterBgColor}" :class="formData.pageType == 3 ? 'form' : 'form otherForm'">
+              <div class="register" v-if="formData.pageType == 1">
+                <div class="formTitle"  v-if="formData.formTitle">{{formData.formTitle}}</div>
+                <div class="form_item">
+                  <input type="text" maxlength="11" readonly placeholder="您的手机号" />
+                </div>
+                <div :style="{'background': formData.buttonBgColor, color: formData.buttonRemarkColor}" class="submitForm">{{formData.buttonRemark}}</div>
+                <div v-if="formData.buttonUnder" :style="{'color': formData.buttonUnderColor}" class="buttonUnder" v-html="handleText(formData.buttonUnder)"></div>
+              </div>
+              <div class="download"  v-if="formData.pageType == 2">
+                <!-- <div class="formTitle"  v-if="formData.formTitle">{{formData.formTitle}}</div> -->
+                <div class="qrcode"></div>
+                <div class="buttonUnder" :style="{'color': formData.dimensionalColor}" v-if="formData.dimensionalText" v-html="handleText(formData.dimensionalText)"></div>
+              </div>
+              <div class="intention" v-if="formData.pageType == 3">
+                <div class="formTitle"  v-if="formData.formTitle">{{formData.formTitle}}</div>
+                <div class="form_item" v-if="formData.formType == 1">
+                  <div class="select">
+                    <label>请选择国家和地区<span class="selectIcon"></span></label>
+                  </div>
+                </div>
+                <div class="form_item" v-if="formData.formType == 1">
+                  <div class="select">
+                    <label>注册意向<span class="selectIcon"></span></label>
+                  </div>
+                </div>
+                <div class="form_item" v-if="formData.formType == 2">
+                  <input type="text" readonly placeholder="城市/地区 如：杭州-西湖区" />
+                </div>
+                <div class="form_item">
+                  <input type="text" readonly placeholder="您的称呼" />
+                </div>
+                <div class="form_item">
+                  <input type="text" maxlength="11" readonly placeholder="您的手机号" />
+                </div>
+                <div :style="{'background': formData.buttonBgColor, color: formData.buttonRemarkColor}" class="submitForm">{{formData.buttonRemark}}</div>
+                <div v-if="formData.buttonUnder" :style="{'color': formData.buttonUnderColor}" class="buttonUnder" v-html="handleText(formData.buttonUnder)"></div>
+                
+              </div>
+            </div>
+          </div>
+          <div class="landPage_pc_footer">
+            <img v-if="tailImgUrl" :src="tailImgUrl" alt="">
+          </div>
+          <div class="bottomCopyRight">
+            <div class="topText" v-if="formData.riskInfo"><span :style="{'color': formData.riskInfoColor}" v-html="handleText(formData.riskInfo)"></span></div>
+            <div class="bottomText" v-if="formData.companyInfo">
+              <span :style="{'color': formData.companyInfoColor}" v-html="handleText(formData.companyInfo)"></span>
+            </div>
+          </div>
+        </div>
+      </el-dialog>
+    </div>
 	</div>
 </template>
 
@@ -143,19 +259,20 @@
   import { channelPageObtainDetail } from '@/api/landPage'
   import { upLoadPicFromWeApp } from '@/api/qiniu'
   import { channelPageModify } from '@/api/landPage'
+  import global from '@/utils/global'
 	export default {
 		data() {
 			return {
-				url: '',
+        url: '',
+        formTypeList: global.formTypeList,
 				formData: {
 					packageName: '小白贷款',
 					advertisingChannel: '',
 					channelRemark: '',
-					landpageUrl: '',
+          landpageUrl: '',
+          clientType: '',
           headImg: '',
-          headImgUrl: '',
           topImg: '',
-          topImgUrl: '',
 					title: '',
 					pageType: '',
 					pageBgColor: '#FFFFFF',
@@ -165,7 +282,6 @@
 					dowloadUrl: '',
 					buttonUnder: '',
           tailImg: '',
-          tailImgUrl: '',
 					riskInfo: '',
 					companyInfo: '',
 					jsBase: '',
@@ -174,8 +290,16 @@
 					preRegisterBgColor: '#FFFFFF',
 					buttonUnderColor: '#555555',
 					riskInfoColor: '#555555',
-					companyInfoColor: '#999999'
-				},
+          companyInfoColor: '#999999',
+          formType: '1',
+          formTitle: '',
+          dimensionalColor: '#555555',
+          dimensionalText: ''
+        },
+        headImgUrl: '',
+        topImgUrl: '',
+        tailImgUrl: '',
+        pc_preview_dialog: false,
 				rules: {}
 			}
 		},
@@ -204,16 +328,49 @@
         }
         channelPageObtainDetail(params).then(res => {
           if(res.code == 0) {
+            if (res.data.formJson) {
+              res.data.formType = JSON.parse(res.data.formJson).formType
+              res.data.formTypeName = JSON.parse(res.data.formJson).formTypeName
+              res.data.formTitle = JSON.parse(res.data.formJson).formTitle
+            }
+            res.data.id = this.$route.query.id
+            if (res.data.headImg) {
+              this.headImgUrl = res.data.headImg
+            }
+            if (res.data.topImg) {
+              this.topImgUrl = res.data.topImg
+            }
+            if (res.data.tailImg) {
+              this.tailImgUrl = res.data.tailImg
+            }
             this.formData = res.data
-            this.formData.id = this.$route.query.id
-            this.formData.headImgUrl = res.data.headImg
-            this.formData.topImgUrl = res.data.topImg
-            this.formData.tailImgUrl = res.data.tailImg
           }
         })
 			},
 			handleSubmit() {
-        channelPageModify(this.formData).then(res => {
+        let params = this.formData
+        if (this.formData.pageType == 3) {
+          if (!this.formData.formType || this.formData.formType == '') {
+            this.$message({
+              type: 'error',
+              message: '请先选择意向收集表单类型'
+            })
+            return
+          }
+          params.formJson = JSON.stringify({
+            formType: this.formData.formType,
+            formTypeName: this.formData.formTypeName,
+            formTitle: this.formData.formTitle
+          })
+        }else if(this.formData.pageType == 1) {
+          params.formJson = JSON.stringify({
+            formType: '',
+            formTypeName: '',
+            formTitle: this.formData.formTitle
+          })
+        }
+        
+        channelPageModify(params).then(res => {
           if(res.code == 0){
             this.$message({
               type: 'success',
@@ -240,7 +397,7 @@
             oFileReader.readAsDataURL(item.file)
             oFileReader.onloadend = (e) => {
               this.formData.headImg = res.data[0].fileId
-              this.formData.headImgUrl = e.target.result
+              this.headImgUrl = e.target.result
               this.$forceUpdate()
             }
           }
@@ -251,7 +408,7 @@
       deleteHeadImg() {
         this.$forceUpdate()
         this.formData.headImg = ''
-        this.formData.headImgUrl = ''
+        this.headImgUrl = ''
       },
       uploadTopImg (item) {
         if(item.file.type.indexOf('image') == -1) {
@@ -265,7 +422,7 @@
             let oFileReader = new FileReader()
             oFileReader.readAsDataURL(item.file)
             oFileReader.onloadend = (e) => {
-              this.formData.topImgUrl = e.target.result
+              this.topImgUrl = e.target.result
               this.formData.topImg = res.data[0].fileId
               this.$forceUpdate()
             }
@@ -277,7 +434,7 @@
       deleteTopImg() {
         this.$forceUpdate()
         this.formData.topImg = ''
-        this.formData.topImgUrl = ''
+        this.topImgUrl = ''
       },
       uploadTailImg(item) {
         if(item.file.type.indexOf('image') == -1) {
@@ -292,7 +449,7 @@
             oFileReader.readAsDataURL(item.file)
             oFileReader.onloadend = (e) => {
               this.$forceUpdate()
-              this.formData.tailImgUrl = e.target.result
+              this.tailImgUrl = e.target.result
               this.formData.tailImg = res.data[0].fileId
               this.$forceUpdate()
             }
@@ -304,7 +461,14 @@
       deleteTailImg() {
         this.$forceUpdate()
         this.formData.tailImg = ''
-        this.formData.tailImgUrl = ''
+        this.tailImgUrl = ''
+      },
+      formTypeChange(val) {
+        for (let i=0;i<this.formTypeList.length;i++) {
+          if (this.formTypeList[i].id == val) {
+            this.formData.formTypeName = this.formTypeList[i].name
+          }
+        }
       }
 		},
 		created() {
@@ -327,10 +491,10 @@
 		// justify-content: center;
 		overflow-y: auto;
 		.form {
-			width: 550px;
+			width: 750px;
 			/deep/ .el-form {
 				margin: 0 auto;
-				width: 450px;
+				width: 550px;
 				flex-shrink: 0;
 				.el-upload {
 				    border: 1px dashed #d9d9d9;
@@ -530,4 +694,244 @@
     box-sizing: border-box;
     background: #fff url('../../assets/img/phone.png') 12px center no-repeat;
 	}
+  .intentionCollect {
+      width: 100%;
+      .title {
+        margin-bottom: 20px;
+        line-height: 20px;
+      }
+      .intentionCollect_form {
+        width: 300px;
+        margin: 0 auto;
+        .form_item {
+          margin-bottom: 10px;
+          label {
+            font-family: PingFangSC-Regular;
+            font-size: 14px;
+            font-weight: 400;
+            span {
+              color: red;
+            }
+          }
+          .select {
+            height: 40px;
+            border-bottom: 1px solid #ccc;
+            line-height: 40px;
+            font-size: 14px;
+            color: #666666;
+            input {
+              width: 100%;
+              outline: none;
+              border: 0;
+            }
+          }
+        }
+      }
+    }
+  ::-webkit-input-placeholder { /* WebKit browsers */
+    font-family: PingFangSC-Light, sans-serif;
+    color:rgba(153,153,153,1);
+    font-size: 14px;
+  }
+
+  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    font-family: PingFangSC-Light, sans-serif;
+    color:rgba(153,153,153,1);
+    font-size: 14px;
+  }
+
+  :-ms-input-placeholder { /* Internet Explorer 10+ */
+    font-family: PingFangSC-Light, sans-serif;
+    color:rgba(153,153,153,1);
+    font-size: 14px;
+  }
+  .create_page {
+    .pc-preview {
+      position: fixed;
+      top: 100px;
+			right: 100px;
+    } 
+  }
+</style>
+<style lang="scss" >
+.el-dialog__body {
+  width: 1080px;
+  height: 600px;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  .landPage_pc {
+    .landPage_pc_header {
+      width: 100%;
+      position: relative;
+      img {
+        display: block;
+        width: 100%;
+      }
+      .form {
+        position: absolute;
+        top: 106Px;
+        right: 90Px;
+        width: 315Px;
+        background:rgba(255,255,255,1);
+        border-radius: 3Px;
+        box-sizing: border-box;
+        padding: 20Px;
+        .register,
+        .download,
+        .intention {
+          .formTitle {
+            font-size: 16Px;
+            margin-bottom: 20Px;
+            font-family: Alibaba PuHuiTi;
+            font-weight: 400;
+            color: rgba(252,96,57,1);
+            line-height: 30Px;
+            text-align: center;
+          }
+          .form_item {
+            width: 100%;
+            height: 40Px;
+            box-sizing: border-box;
+            background-color: #fff;
+            margin-bottom: 12Px;
+            cursor: pointer;
+            input {
+              display: block;
+              width: 100%;
+              height: 100%;
+              box-sizing: border-box;
+              padding: 14Px;
+              line-height: 18Px;
+              font-size: 14Px;
+              font-family:PingFang SC;
+              font-weight: 400;
+              color:rgba(51,51,51,1);
+              border: 1Px solid rgba(211,211,211,1);
+              border-radius: 3Px;
+              outline: none;
+            }
+            .select {
+              width: 100%;
+              height: 100%;
+              line-height: 10Px;
+              font-size: 14Px;
+              font-family: PingFang SC;
+              font-weight: 400;
+              color:rgba(51,51,51,1);
+              -webkit-user-select:none;
+              -moz-user-select:none;
+              -ms-user-select:none;
+              user-select:none;
+              label {
+                display: block;
+                width: 100%;
+                height: 100%;
+                box-sizing: border-box;
+                padding: 14Px;
+                font-size: 14Px;
+                font-family: PingFang SC;
+                font-weight: 400;
+                color:rgba(51,51,51,1);
+                border: 1Px solid rgba(211,211,211,1);
+                border-radius: 3Px;
+                position: relative;
+                cursor: pointer;
+                span {
+                  width: 0px;           /*  宽高设置为0，很重要，否则达不到效果 */
+                  height: 0px;
+                  border: 5Px solid #666;
+                  border-bottom-color: transparent;   /* 设置透明背景色 */
+                  border-left-color: transparent;
+                  border-right-color: transparent;
+                  position: absolute;
+                  right: 14Px;
+                  top: 17Px;
+                }
+              }
+            }
+          }
+          .qrcode {
+            width: 200Px;
+            height: 200Px;
+            margin: 0 auto;
+            background-image: linear-gradient(135deg, #FFAD71 0%, #FF7F4A 100%);
+          }
+          .submitForm {
+            margin-top: 24Px;
+            width: 100%;
+            height: 40Px;
+            background: linear-gradient(0deg,rgba(251,87,52,1) 0%,rgba(255,124,72,1) 100%);
+            border-radius: 3Px;
+            cursor: pointer;
+            font-size: 14Px;
+            line-height: 40Px;
+            color: #fff;
+            text-align: center;
+          }
+          .buttonUnder {
+            text-align: center;
+            font-family: PingFang SC;
+            font-weight: 400;
+            font-size: 12Px;
+            margin-top: 8Px;
+          }
+        }
+      }
+      .otherForm {
+        top: 180Px;
+      }
+      ::-webkit-input-placeholder { /* WebKit browsers */
+        font-size: 14Px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color:rgba(51,51,51,1);
+      }
+
+      ::-moz-placeholder { /* Mozilla Firefox 19+ */
+        font-size: 14Px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color:rgba(51,51,51,1);
+      }
+
+      :-ms-input-placeholder { /* Internet Explorer 10+ */
+        font-size: 14Px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color:rgba(51,51,51,1);
+      }
+      input[type=number] {
+          -moz-appearance:textfield;
+      }
+      input[type=number]::-webkit-inner-spin-button,
+      input[type=number]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+      }
+    }
+    .landPage_pc_footer {
+      width: 100%;
+      img {
+        display: block;
+        width: 100%;
+      }
+    }
+    .bottomCopyRight {
+      margin: 0 65Px;
+      text-align: center;
+      font-family: PingFang SC;
+      font-weight: 400;
+      font-size: 12Px;
+      margin-top: 10Px;
+      line-height: 30Px;
+      margin-bottom: 20Px;
+      .topText {
+        line-height: 30Px;
+        border-bottom: 1px solid #ccc;
+      }
+    }
+  }
+}
 </style>
