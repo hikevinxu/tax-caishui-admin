@@ -8,7 +8,7 @@
       <el-select v-model="listQuery.status" placeholder="状态" style="width: 150px" class="filter-item">
         <el-option v-for="(item,index) in statusList" :key="item+index" :label="item.name" :value="item.id"/>
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" @click="getList">筛选</el-button>
+      <el-button v-waves class="filter-item" type="primary" @click="getDetailList">筛选</el-button>
       <!-- <el-date-picker
         v-model="listQuery.submitTime"
         type="datetime"
@@ -284,6 +284,10 @@ export default {
           this.listLoading = false
         }
       })
+    },
+    getDetailList(){
+      this.listQuery.pageNum = 1
+      this.getList()
     },
     getTypes(){
       merchantApplyTypes().then(res => {
