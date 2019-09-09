@@ -1,7 +1,11 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button v-waves class="filter-item" type="primary" @click="handleCreate">添加</el-button>
+      <div class="filter-container">
+        <el-button v-waves class="filter-item" type="primary" @click="handleCreate">添加</el-button>
+        <el-input class="filter-item" style="width: 250px" v-model="listQuery.companyName" placeholder="请输入公司名称" />
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getList">搜索</el-button>
+      </div>
     </div>
 
     <el-table
@@ -89,8 +93,7 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
-        pageNum: 1,
-        pageSize: 10
+        companyName: ''
       },
       temp: {
         name: ''
@@ -105,7 +108,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true
-      salesInviteList().then(response => {
+      salesInviteList(this.listQuery).then(response => {
         if (response.code === 0) {
           this.list = response.data
           this.listLoading = false
