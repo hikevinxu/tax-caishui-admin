@@ -130,7 +130,7 @@
         <el-button type="primary" style="margin-top: 12px;" @click="handleSubmit">保存</el-button>
       </div>
 		</div>
-		<div class="preview" v-if="formData.clientType == 1">
+		<div class="preview" v-if="formData.clientType == 'h5'">
 			<div class="preview_box" :style="{'background-color': formData.pageBgColor}">
 				<div class="page_title">{{formData.title}}</div>
 				<div class="container1">
