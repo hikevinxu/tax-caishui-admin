@@ -38,7 +38,7 @@
           </el-upload>
           <el-button icon="el-icon-delete" size="small" type="danger" v-show="headImgUrl" @click="deleteHeadImg">删除</el-button>
         </el-form-item>
-        <el-form-item label="头部浮层：" prop="topImg"  >
+        <!-- <el-form-item label="头部浮层：" prop="topImg"  >
           <el-upload
             action=""
             :show-file-list="false"
@@ -47,10 +47,10 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
           <el-button icon="el-icon-delete" size="small" type="danger" v-show="topImgUrl" @click="deleteTopImg">删除</el-button>
-        </el-form-item>
-        <el-form-item label="浮层距顶部高度：" prop="topSpace" >
+        </el-form-item> -->
+        <!-- <el-form-item label="浮层距顶部高度：" prop="topSpace" >
           <el-input type="number" placeholder="请输入浮层距顶部高度：" v-model="formData.topSpace"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="页面背景颜色：" prop="pageBgColor" >
           <el-color-picker v-model="formData.pageBgColor" size="medium"></el-color-picker>
         </el-form-item>
@@ -60,6 +60,9 @@
             <el-radio :label="2">直接下载</el-radio>
             <el-radio :label="3">意向收集</el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item label="是否显示节税计算器：">
+          <el-switch v-model="formData.showCounter"></el-switch>
         </el-form-item>
         <el-form-item label="意向收集表单类型：" prop="formType" v-if="formData.pageType == 3">
           <el-select style="width: 300px;" v-model="formData.formType" placeholder="请选择" @change="formTypeChange">
@@ -136,7 +139,37 @@
 				<div class="container1">
 				  <img class="banner" :src="headImgUrl" ref="banner">
 					<img class="topImg" :src="topImgUrl" :style="{top: formData.topSpace + 'px'}">
-					<div :style="{'background-color': formData.preRegisterBgColor, 'margin-top': '16px', position: 'relative'}">
+          <div class="taxCalculator" v-if="formData.showCounter" :style="{'background-color': formData.preRegisterBgColor}">
+            <div class="tax-top">
+              <div class="tab">
+                <div style="color: #FF7F4A;" class="tab-item">企业节税计算器</div>
+                <div style="background: #fafafa" class="tab-item">个人节税计算器</div>
+              </div>
+              <div class="tax-Content">
+                <div class="tax_form_item">
+                  <label>企业增值税率</label>
+                  <input style="text-align: right;" type="text" readonly placeholder="请选择">
+                </div>
+                <div class="tax_form_item">
+                  <label>企业开票金额</label>
+                  <input style="text-align: right;" type="tel" readonly placeholder="请输入整数">
+                  <span>万元</span>
+                </div>
+                <div class="tax_form_item">
+                  <label>企业年利润</label>
+                  <input style="text-align: right;" type="tel" readonly  placeholder="请输入整数">
+                  <span>万元</span>
+                </div>
+              </div>
+              <div class="tax-Content_bottom">
+                <p><span>应缴纳税</span><span>--万元</span></p>
+                <p><span>预计节税</span><span>--万元</span></p>
+              </div>
+            </div>
+            <span :style="{'background': formData.preRegisterBgColor}" class="yuan"></span>
+            <span :style="{'background': formData.preRegisterBgColor}" class="yuan"></span>
+          </div>
+					<div :style="{'background-color': formData.preRegisterBgColor, 'padding': '16px 0', position: 'relative'}">
 						<div class="registered-icon" v-if="formData.pageType == 1">
               <form class="registered-form" method="post">
                 <div class="registered-form-item">
@@ -294,7 +327,8 @@
           formType: '1',
           formTitle: '',
           dimensionalColor: '#555555',
-          dimensionalText: ''
+          dimensionalText: '',
+          showCounter: false
         },
         headImgUrl: '',
         topImgUrl: '',
@@ -561,6 +595,7 @@
 	}
 	.banner {
 		width: 100%;
+    display: block;
 	}
 	.topImg {
 		position: absolute;
@@ -744,6 +779,141 @@
     font-family: PingFangSC-Light, sans-serif;
     color:rgba(153,153,153,1);
     font-size: 14px;
+  }
+  .taxCalculator {
+    width: 100%;
+    background-color: #FF7F4A;
+    position: relative;
+    .yuan {
+      width: 10px;
+      height: 10px;
+      background-color: #FF7F4A;
+      border-radius: 5px;
+      position: absolute;
+      bottom: 64px;
+      right: 24px;
+      &:last-child{
+        left: 24px;
+      }
+    }
+    .tax-top {
+      width: 300px;
+      margin: 0 auto;
+      background: transparent;
+      .tab {
+        width: 100%;
+        height: 40px;
+        .tab-item {
+          width: 50%;
+          float: left;
+          height: 40px;
+          text-align: center;
+          border-radius: 5px 5px 0 0;
+          background-color: #ffffff;
+          line-height: 40px;
+          font-family: PingFangSC-Medium;
+          font-size: 14px;
+          color: rgba(0,0,0,0.60);
+        }
+      }
+    }
+    .tax-Content {
+      width: 300px;
+      background-color: #fff;
+      padding: 16px;
+      padding-top: 8px;
+      .tax_form_item {
+        height: 36px;
+        background: #FAFAFA;
+        box-sizing: border-box;
+        border: 1px solid rgba(0,0,0,0.04);
+        border-radius: 2px;
+        padding: 8px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        position: relative;
+        label {
+          float: left;
+          width: 100px;
+          font-family: PingFangSC-Regular;
+          font-size: 13px;
+          color: rgba(0,0,0,0.60);
+          text-align: left;
+          line-height: 20px;
+        }
+        input {
+          float: right;
+          width: 120px;
+          height: 20px;
+          background-color: #FAFAFA;
+          font-family: PingFangSC-Regular;
+          text-align: right;
+          line-height: 20px;
+          padding-right: 38px;
+          font-size: 13px;
+          color: rgba(0,0,0,0.60);
+          outline: none;
+          border: 0;
+        }
+        span {
+          position: absolute;
+          top: 8px;
+          right: 12px;
+          font-family: PingFangSC-Regular;
+          font-size: 13px;
+          color: rgba(0,0,0,0.60);
+          text-align: right;
+          line-height: 20px;
+        }
+        &:last-child {
+          margin-bottom: 0px;
+        }
+        ::-webkit-input-placeholder { /* WebKit browsers */
+          font-family: PingFangSC-Light, sans-serif;
+          color: rgba(0,0,0,0.26);
+          font-size: 13px;
+        }
+
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+          font-family: PingFangSC-Light, sans-serif;
+          color: rgba(0,0,0,0.26);
+          font-size: 13px;
+        }
+
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+          font-family: PingFangSC-Light, sans-serif;
+          color: rgba(0,0,0,0.26);
+          font-size: 13px;
+        }
+      }
+    }
+    .tax-Content_bottom {
+      margin-top: 2px;
+      background: #FFEADA;
+      padding: 4px 0;
+      border-radius: 2px;
+      p {
+        margin: 0;
+        line-height: 30px;
+        font-family: PingFangSC-Medium;
+        font-size: 14px;
+        color: rgba(0,0,0,0.38);
+        text-align: left;
+        padding: 0 28px 0 24px;
+        overflow: hidden;
+        span {
+          display: block;
+          width: 50%;
+          float: left;
+          &:nth-last-child(1) {
+            text-align: right;
+          }
+        }
+        &:nth-last-child(1) {
+          color: #FF7F4A;
+        }
+      }
+    }
   }
   .create_page {
     .pc-preview {
