@@ -225,58 +225,118 @@
 			</div>
       <div class="pc-preview" v-if="formData.clientType == 'pc'">
         <el-button type="primary" @click="pc_preview_dialog = true">在线预览</el-button>
-        <el-dialog :title="formData.title" :modal-append-to-body='false' :visible.sync="pc_preview_dialog" width="1080px" height="960px">
+        <el-dialog :title="formData.title" :modal-append-to-body='false' :visible.sync="pc_preview_dialog" width="1280px" height="960px">
           <div class="landPage_pc"  :style="'background: ' + formData.pageBgColor">
-            <div class="landPage_pc_header">
-              <img v-if="headImgUrl" :src="headImgUrl" alt="">
-              <div :style="{'background': formData.preRegisterBgColor}" :class="formData.pageType == 3 ? 'form' : 'form otherForm'">
-                <div class="register" v-if="formData.pageType == 1">
-                  <div class="formTitle"  v-if="formData.formTitle">{{formData.formTitle}}</div>
-                  <div class="form_item">
-                    <input type="text" maxlength="11" readonly placeholder="您的手机号" />
-                  </div>
-                  <div :style="{'background': formData.buttonBgColor, color: formData.buttonRemarkColor}" class="submitForm">{{formData.buttonRemark}}</div>
-                  <div v-if="formData.buttonUnder" :style="{'color': formData.buttonUnderColor}" class="buttonUnder" v-html="handleText(formData.buttonUnder)"></div>
-                </div>
-                <div class="download"  v-if="formData.pageType == 2">
-                  <!-- <div class="formTitle"  v-if="formData.formTitle">{{formData.formTitle}}</div> -->
-                  <div class="qrcode"></div>
-                  <div class="buttonUnder" :style="{'color': formData.dimensionalColor}" v-if="formData.dimensionalText" v-html="handleText(formData.dimensionalText)"></div>
-                </div>
-                <div class="intention" v-if="formData.pageType == 3">
-                  <div class="formTitle"  v-if="formData.formTitle">{{formData.formTitle}}</div>
-                  <div class="form_item" v-if="formData.formType == 1">
-                    <div class="select">
-                      <label>请选择国家和地区<span class="selectIcon"></span></label>
+            <div class="landPagePC">
+              <div class="landPagePC-center">
+                <div class="headImgContent">
+                  <img class="headImg" v-if="headImgUrl" :src="headImgUrl" alt="">
+                  <div class="headContent">
+                    <div class="form" :style="{'background': formData.preRegisterBgColor}">
+                      <div class="taxCalculator-pc" v-if="formData.showCounter">
+                        <div class="taxCalculator-header">
+                          <div class="title">节税计算器</div>
+                          <ul class="tab">
+                            <li :class="activeTab == 1 ? 'active' : ''" @click="activeTab = 1">企业</li>
+                            <li :class="activeTab == 2 ? 'active' : ''" @click="activeTab = 2">个人</li>
+                          </ul>
+                        </div>
+                        <div v-if="activeTab == 1" class="taxCalculator-content">
+                          <div class="tax-form">
+                            <div class="tax-formItem">
+                              <label>企业增值税率</label>
+                              <input type="tel" readonly placeholder="请选择">
+                            </div>
+                            <div class="tax-formItem">
+                              <label>企业开票金额</label>
+                              <input type="tel" readonly placeholder="请输入整数">
+                              <span>万元</span>
+                            </div>
+                            <div class="tax-formItem">
+                              <label>企业年利润</label>
+                              <input type="tel"  readonly placeholder="请输入整数">
+                              <span>万元</span>
+                            </div>
+                          </div>
+                          <div class="tax-bottom">
+                            <p><span>应缴纳税</span><span>--万元</span></p>
+                            <p><span>预计节税</span><span>--万元</span></p>
+                          </div>
+                        </div>
+                        <div v-if="activeTab == 2" class="taxCalculator-content">
+                          <div class="tax-form">
+                            <div class="tax-formItem">
+                              <label>工资薪金（月）</label>
+                              <input type="tel" readonly placeholder="如：8000">
+                              <span>元</span>
+                            </div>
+                            <div class="tax-formItem">
+                              <label>劳务报酬（月）</label>
+                              <input type="tel" readonly placeholder="如：8000">
+                              <span>元</span>
+                            </div>
+                            <div class="tax-formItem">
+                              <label>年终奖（年）</label>
+                              <input type="tel" readonly placeholder="如：8000">
+                              <span>元</span>
+                            </div>
+                          </div>
+                          <div class="tax-bottom">
+                            <p><span>应缴纳税</span><span>--元</span></p>
+                            <p><span>预计节税</span><span>--元</span></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="register" v-if="formData.pageType == 1">
+                        <div class="formTitle"  v-if="formData.formTitle && formData.showCounter == false">{{formData.formTitle}}</div>
+                        <div class="form_item">
+                          <input type="text" maxlength="11" readonly placeholder="您的手机号" />
+                        </div>
+                        <div id="captcha"></div>
+                        <div :style="{'background': formData.buttonBgColor, 'color': formData.buttonRemarkColor}" class="submitForm">{{formData.buttonRemark}}</div>
+                        <div v-if="formData.buttonUnder" :style="{'color': formData.buttonUnderColor}" class="buttonUnder" v-html="handleText(formData.buttonUnder)"></div>
+                      </div>
+                      <div class="download"  v-if="formData.pageType == 2 && formData.showCounter == false">
+                        <div class="qrcode"></div>
+                        <div class="buttonUnder" :style="{'color': formData.dimensionalColor}" v-if="formData.dimensionalText" v-html="handleText(formData.dimensionalText)"></div>
+                        <div id="captcha"></div>
+                      </div>
+                      <div class="download"  v-if="formData.pageType == 2 && formData.showCounter == true">
+                        <div :style="{'background': formData.buttonBgColor, color: formData.buttonRemarkColor}" class="submitForm">{{formData.buttonRemark}}</div>
+                        <div v-if="formData.buttonUnder" :style="{'color': formData.buttonUnderColor}" class="buttonUnder" v-html="handleText(formData.buttonUnder)"></div>
+                        <div id="captcha"></div>
+                      </div>
+                      <div class="intention" v-if="formData.pageType == 3">
+                        <div class="formTitle"  v-if="formData.formTitle">{{formData.formTitle}}</div>
+                        <div class="form_item" v-if="formData.formType == 1">
+                          <input type="text" readonly  placeholder="请选择国家和地区" />
+                        </div>
+                        <div class="form_item" v-if="formData.formType == 1">
+                          <input type="text" readonly  placeholder="请选择注册意向" />
+                        </div>
+                        <div class="form_item" v-if="formData.formType == 2">
+                          <input type="text" readonly  placeholder="城市/地区 如：杭州-西湖区" />
+                        </div>
+                        <div class="form_item">
+                          <input type="text" readonly placeholder="您的称呼" />
+                        </div>
+                        <div class="form_item">
+                          <input type="text" maxlength="11" readonly placeholder="您的手机号" />
+                        </div>
+                        <div :style="{'background': formData.buttonBgColor, color: formData.buttonRemarkColor}" class="submitForm">{{formData.buttonRemark}}</div>
+                        <div v-if="formData.buttonUnder" :style="{'color': formData.buttonUnderColor}" class="buttonUnder" v-html="handleText(formData.buttonUnder)"></div>
+                        <div id="captcha"></div>
+                      </div>
                     </div>
                   </div>
-                  <div class="form_item" v-if="formData.formType == 1">
-                    <div class="select">
-                      <label>注册意向<span class="selectIcon"></span></label>
-                    </div>
-                  </div>
-                  <div class="form_item" v-if="formData.formType == 2">
-                    <input type="text" readonly placeholder="城市/地区 如：杭州-西湖区" />
-                  </div>
-                  <div class="form_item">
-                    <input type="text" readonly placeholder="您的称呼" />
-                  </div>
-                  <div class="form_item">
-                    <input type="text" maxlength="11" readonly placeholder="您的手机号" />
-                  </div>
-                  <div :style="{'background': formData.buttonBgColor, color: formData.buttonRemarkColor}" class="submitForm">{{formData.buttonRemark}}</div>
-                  <div v-if="formData.buttonUnder" :style="{'color': formData.buttonUnderColor}" class="buttonUnder" v-html="handleText(formData.buttonUnder)"></div>
-                 
                 </div>
-              </div>
-            </div>
-            <div class="landPage_pc_footer">
-              <img v-if="tailImgUrl" :src="tailImgUrl" alt="">
-            </div>
-            <div class="bottomCopyRight">
-              <div class="topText" v-if="formData.riskInfo"><span :style="{'color': formData.riskInfoColor}" v-html="handleText(formData.riskInfo)"></span></div>
-              <div class="bottomText" v-if="formData.companyInfo">
-                <span :style="{'color': formData.companyInfoColor}" v-html="handleText(formData.companyInfo)"></span>
+                <img class="footerImg" v-if="tailImgUrl" :src="tailImgUrl" alt="">
+                <div class="footContent">
+                  <div class="topText" v-if="formData.riskInfo"><span :style="{'color': formData.riskInfoColor}" v-html="handleText(formData.riskInfo)"></span></div>
+                  <div class="bottomText" v-if="formData.companyInfo">
+                    <span :style="{'color': formData.companyInfoColor}" v-html="handleText(formData.companyInfo)"></span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -334,7 +394,8 @@
         topImgUrl: '',
         tailImgUrl: '',
         pc_preview_dialog: false,
-				rules: {}
+        rules: {},
+        activeTab: 1
 			}
 		},
 		watch: {
@@ -1111,187 +1172,252 @@
     } 
   }
 .el-dialog__body {
-  width: 1080px;
+  width: 1280px;
   height: 960px;
 }
 </style>
 <style lang="scss" >
 .el-dialog__body {
-  width: 1080px;
+  width: 1280px;
   height: 600px;
   overflow: scroll;
   &::-webkit-scrollbar {
     display: none;
   }
   .landPage_pc {
-    .landPage_pc_header {
+    .landPagePC {
       width: 100%;
+      margin: 0 auto;
       position: relative;
-      img {
+      .landPagePC-center {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, 0);
+      }
+      .headImgContent {
+        position: relative;
+      }
+      .footerImg,
+      .headImg {
         display: block;
         width: 100%;
       }
-      .form {
+      .headContent {
+        width: 1000Px;
+        height: 100%;
         position: absolute;
-        top: 106Px;
-        right: 90Px;
-        width: 315Px;
-        background:rgba(255,255,255,1);
-        border-radius: 3Px;
-        box-sizing: border-box;
-        padding: 20Px;
-        .register,
-        .download,
-        .intention {
-          .formTitle {
-            font-size: 16Px;
-            margin-bottom: 20Px;
-            font-family: Alibaba PuHuiTi;
-            font-weight: 400;
-            color: rgba(252,96,57,1);
-            line-height: 30Px;
-            text-align: center;
-          }
-          .form_item {
+        top: 0;
+        left: 50%;
+        margin-left: -500Px;
+        .form {
+          width: 400Px;
+          background-color: #fff;
+          position: absolute;
+          top: 50%;
+          right: 0;
+          transform: translate(0, -50%);
+          margin-top: -30Px;
+          border-radius: 4Px;
+          box-sizing: border-box;
+          padding: 24PX 36Px;
+          .taxCalculator-pc {
             width: 100%;
-            height: 40Px;
-            box-sizing: border-box;
-            background-color: #fff;
-            margin-bottom: 12Px;
-            cursor: pointer;
-            input {
-              display: block;
+            padding: 24Px 0;
+            .taxCalculator-header {
               width: 100%;
-              height: 100%;
-              box-sizing: border-box;
-              padding: 14Px;
-              line-height: 18Px;
-              font-size: 14Px;
-              font-family:PingFang SC;
-              font-weight: 400;
-              color:rgba(51,51,51,1);
-              border: 1Px solid rgba(211,211,211,1);
-              border-radius: 3Px;
-              outline: none;
+              height: 36Px;
+              .title {
+                float: left;
+                font-family: PingFangSC-Medium;
+                font-size: 20Px;
+                color: rgba(0,0,0,0.87);
+                line-height: 36Px;
+              }
+              .tab {
+                padding: 0;
+                margin: 0;
+                float: right;
+                font-family: PingFangSC-Medium;
+                font-size: 14Px;
+                color: #FF7F4A;
+                text-align: left;
+                line-height: 32Px;
+                border: 2Px solid #FF7F4A;
+                background-color: #FF7F4A;
+                border-radius: 18Px;
+                li {
+                  padding: 0;
+                  margin: 0;
+                  float: left;
+                  width: 96Px;
+                  height: 32Px;
+                  border-radius: 16Px;
+                  text-align: center;
+                  color: #fff;
+                  cursor: pointer;
+                  list-style: none;
+                }
+                li.active {
+                  background-color: #fff;
+                  color: #FF7F4A;
+                }
+              }
             }
-            .select {
+            .taxCalculator-content {
               width: 100%;
-              height: 100%;
-              line-height: 10Px;
-              font-size: 14Px;
-              font-family: PingFang SC;
+              .tax-form {
+                padding: 16Px 0;
+                .tax-formItem {
+                  margin-top: 8Px;
+                  position: relative;
+                  display: flex;
+                  label {
+                    display: block;
+                    width: 100Px;
+                    font-family: PingFangSC-Regular;
+                    font-size: 13Px;
+                    color: rgba(0,0,0,0.60);
+                    text-align: left;
+                    line-height: 36Px;
+                  }
+                  input {
+                    flex: 1;
+                    height: 36Px;
+                    padding: 8Px 40Px 8Px 12Px;
+                    box-sizing: border-box;
+                    border: 1px solid rgba(0,0,0,0.12);
+                    border-radius: 2Px;
+                    outline: none;
+                    font-size: 13Px;
+                    color: rgba(0,0,0,0.60);
+                    line-height: 20Px;
+                  }
+                  span {
+                    position: absolute;
+                    right: 12Px;
+                    top: 0;
+                    font-family: PingFangSC-Regular;
+                    font-size: 13Px;
+                    color: rgba(0,0,0,0.60);
+                    text-align: right;
+                    line-height: 36Px;
+                  }
+                }
+              }
+              .tax-bottom {
+                width: 100%;
+                height: 88Px;
+                background: #FFEADA;
+                border-radius: 2Px;
+                font-family: PingFangSC-Medium;
+                font-size: 14Px;
+                color: rgba(0,0,0,0.38);
+                text-align: left;
+                line-height: 20Px;
+                box-sizing: border-box;
+                padding: 8Px 0;
+                p {
+                  padding: 0;
+                  margin: 0;
+                  display: block;
+                  width: 100%;
+                  line-height: 36Px;
+                  overflow: hidden;
+                  span {
+                    float: left;
+                    margin-left: 24Px;
+                    &:last-child {
+                      float: right;
+                      margin-right: 24Px;
+                    }
+                  }
+                  &:last-child{
+                    color: #FF7F4A;
+                  }
+                }
+              }
+            }
+          }
+          .register,
+          .download,
+          .intention {
+            .formTitle {
+              font-size: 16Px;
+              margin-bottom: 20Px;
+              font-family: Alibaba PuHuiTi;
               font-weight: 400;
-              color:rgba(51,51,51,1);
-              -webkit-user-select:none;
-              -moz-user-select:none;
-              -ms-user-select:none;
-              user-select:none;
-              label {
+              color: rgba(252,96,57,1);
+              line-height: 30Px;
+              text-align: center;
+            }
+            .form_item {
+              width: 100%;
+              height: 40Px;
+              box-sizing: border-box;
+              background-color: #fff;
+              margin-bottom: 12Px;
+              cursor: pointer;
+              input {
                 display: block;
                 width: 100%;
                 height: 100%;
                 box-sizing: border-box;
                 padding: 14Px;
+                line-height: 18Px;
                 font-size: 14Px;
-                font-family: PingFang SC;
+                font-family:PingFang SC;
                 font-weight: 400;
                 color:rgba(51,51,51,1);
                 border: 1Px solid rgba(211,211,211,1);
                 border-radius: 3Px;
-                position: relative;
-                cursor: pointer;
-                span {
-                  width: 0px;           /*  宽高设置为0，很重要，否则达不到效果 */
-                  height: 0px;
-                  border: 5Px solid #666;
-                  border-bottom-color: transparent;   /* 设置透明背景色 */
-                  border-left-color: transparent;
-                  border-right-color: transparent;
-                  position: absolute;
-                  right: 14Px;
-                  top: 17Px;
-                }
+                outline: none;
               }
             }
-          }
-          .qrcode {
-            width: 200Px;
-            height: 200Px;
-            margin: 0 auto;
-            background-image: linear-gradient(135deg, #FFAD71 0%, #FF7F4A 100%);
-          }
-          .submitForm {
-            margin-top: 24Px;
-            width: 100%;
-            height: 40Px;
-            background: linear-gradient(0deg,rgba(251,87,52,1) 0%,rgba(255,124,72,1) 100%);
-            border-radius: 3Px;
-            cursor: pointer;
-            font-size: 14Px;
-            line-height: 40Px;
-            color: #fff;
-            text-align: center;
-          }
-          .buttonUnder {
-            text-align: center;
-            font-family: PingFang SC;
-            font-weight: 400;
-            font-size: 12Px;
-            margin-top: 8Px;
+            .qrcode {
+              width: 300Px;
+              height: 300Px;
+              margin: 0 auto;
+              background-image: linear-gradient(135deg, #FFAD71 0%, #FF7F4A 100%);
+              #canvas {
+                width: 100%!important;
+                height: 100%!important;
+              }
+            }
+            .submitForm {
+              margin-top: 24Px;
+              width: 100%;
+              height: 40Px;
+              background: linear-gradient(0deg,rgba(251,87,52,1) 0%,rgba(255,124,72,1) 100%);
+              border-radius: 3Px;
+              cursor: pointer;
+              font-size: 14Px;
+              line-height: 40Px;
+              color: #fff;
+              text-align: center;
+            }
+            .buttonUnder {
+              text-align: center;
+              font-family: PingFang SC;
+              font-weight: 400;
+              font-size: 12Px;
+              margin-top: 8Px;
+            }
           }
         }
       }
-      .otherForm {
-        top: 180Px;
-      }
-      ::-webkit-input-placeholder { /* WebKit browsers */
-        font-size: 14Px;
+      .footContent {
+        text-align: center;
         font-family: PingFang SC;
         font-weight: 400;
-        color:rgba(51,51,51,1);
-      }
-
-      ::-moz-placeholder { /* Mozilla Firefox 19+ */
-        font-size: 14Px;
-        font-family: PingFang SC;
-        font-weight: 400;
-        color:rgba(51,51,51,1);
-      }
-
-      :-ms-input-placeholder { /* Internet Explorer 10+ */
-        font-size: 14Px;
-        font-family: PingFang SC;
-        font-weight: 400;
-        color:rgba(51,51,51,1);
-      }
-      input[type=number] {
-          -moz-appearance:textfield;
-      }
-      input[type=number]::-webkit-inner-spin-button,
-      input[type=number]::-webkit-outer-spin-button {
-          -webkit-appearance: none;
-          margin: 0;
-      }
-    }
-    .landPage_pc_footer {
-      width: 100%;
-      img {
-        display: block;
-        width: 100%;
-      }
-    }
-    .bottomCopyRight {
-      margin: 0 65Px;
-      text-align: center;
-      font-family: PingFang SC;
-      font-weight: 400;
-      font-size: 12Px;
-      margin-top: 10Px;
-      line-height: 30Px;
-      margin-bottom: 20Px;
-      .topText {
+        font-size: 12Px;
+        margin-top: 10Px;
         line-height: 30Px;
-        border-bottom: 1px solid #ccc;
+        margin-bottom: 20Px;
+        .topText {
+          line-height: 30Px;
+        }
       }
     }
   }
