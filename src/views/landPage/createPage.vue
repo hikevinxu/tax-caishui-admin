@@ -331,7 +331,7 @@
                   </div>
                 </div>
                 <img class="footerImg" v-if="tailImgUrl" :src="tailImgUrl" alt="">
-                <div class="footContent" :style="'background: ' + formData.pageBgColor">
+                <div class="footContent">
                   <div class="topText" v-if="formData.riskInfo"><span :style="{'color': formData.riskInfoColor}" v-html="handleText(formData.riskInfo)"></span></div>
                   <div class="bottomText" v-if="formData.companyInfo">
                     <span :style="{'color': formData.companyInfoColor}" v-html="handleText(formData.companyInfo)"></span>
@@ -1191,7 +1191,7 @@
       position: relative;
       .landPagePC-center {
         width: 100%;
-        position: absolute;
+        position: relative;
         top: 0;
         left: 50%;
         transform: translate(-50%, 0);
