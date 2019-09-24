@@ -333,7 +333,7 @@
                 </div>
               </div>
               <img class="footerImg" v-if="tailImgUrl" :src="tailImgUrl" alt="">
-              <div class="footContent">
+              <div class="footContent" :style="'background: ' + formData.pageBgColor">
                 <div class="topText" v-if="formData.riskInfo"><span :style="{'color': formData.riskInfoColor}" v-html="handleText(formData.riskInfo)"></span></div>
                 <div class="bottomText" v-if="formData.companyInfo">
                   <span :style="{'color': formData.companyInfoColor}" v-html="handleText(formData.companyInfo)"></span>
@@ -1220,9 +1220,8 @@
         font-family: PingFang SC;
         font-weight: 400;
         font-size: 12Px;
-        margin-top: 10Px;
         line-height: 30Px;
-        margin-bottom: 20Px;
+        padding: 10Px 0 20Px 0;
         .topText {
           line-height: 30Px;
         }
