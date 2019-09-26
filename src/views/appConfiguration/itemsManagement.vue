@@ -44,7 +44,7 @@
       
       <el-table-column :label="$t('table.actions')" align="center" min-width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button style="margin-left: 12px;" type="warning" size="small" @click="handleAdd(scope.row)" v-show="scope.row.type != 1">添加值</el-button>
+          <el-button style="margin-left: 12px;" type="warning" size="small" @click="handleAdd(scope.row)" v-show="scope.row.type == 2 || scope.row.type == 3">添加值</el-button>
           <el-button style="margin-left: 12px;" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
           <el-button style="margin-left: 12px;" type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
         </template>
@@ -110,7 +110,7 @@
           </el-select>
         </el-form-item> -->
 
-        <el-form-item label="值：" >
+        <el-form-item label="值："  v-show="tempEdit.type == 2 || tempEdit.type == 3">
           <div style="display:flex;">
             <div class="inputList">
               <div v-for="(item,index) in tempEdit.voList" :key="index" style="display: flex;">
