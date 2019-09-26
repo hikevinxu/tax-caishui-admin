@@ -469,12 +469,9 @@ export default {
               this.createData.introduceContent = ''
               this.submit(this.createData)
             }else{
-              this.$message({
-                message: '请填写数据后保存',
-                type: 'warning',
-                showClose: true,
-                duration: 1000
-              })
+              this.createData.serviceCode = this.value1
+              this.createData.introduceContent = ''
+              this.submit(this.createData)
             }
           }else{
             this.createData.serviceCode = this.value1
