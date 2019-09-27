@@ -175,14 +175,14 @@ export default {
           name: '复选',
           value: 3,
         },
-        {
-          name: '地区',
-          value: 4,
-        },
-        {
-          name: '时间框',
-          value: 5,
-        }
+        // {
+        //   name: '地区',
+        //   value: 4,
+        // },
+        // {
+        //   name: '时间框',
+        //   value: 5,
+        // }
       ],
       temp: {
         type: '',
