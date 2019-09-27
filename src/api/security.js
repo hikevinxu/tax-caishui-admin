@@ -48,14 +48,24 @@ export function qualificateSave(params) {
 }
 
 /**
+ * 添加标签
+ * @function 
+ * @type 'post'
+ * @param word String 词条名称
+ */
+export function qualificateEdit(params) {
+  const paramsString = qs.stringify(params)
+  return fetchPost('/api/serviceAssurance/modify', paramsString)
+}
+
+/**
  * 编辑标签
  * @function 
  * @type 'post'
  * @param word String 词条名称
  */
 export function qualificateDetail(params) {
-  const paramsString = qs.stringify(params)
-  return fetchGet('/api/serviceAssurance/detail', paramsString)
+  return fetchGet('/api/serviceAssurance/detail', params)
 }
 
 /**

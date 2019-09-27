@@ -44,6 +44,7 @@
       
       <el-table-column :label="$t('table.actions')" align="center" min-width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+          <el-button style="margin-left: 12px;" type="primary" size="small" @click="handleEdit(scope.row)" >编辑</el-button>
           <el-button style="margin-left: 12px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.shelf == 2 || scope.row.shelf == 0">上架</el-button>
           <el-button style="margin-left: 12px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.shelf == 1">下架</el-button>
           <el-button style="margin-left: 12px;" type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
@@ -78,7 +79,7 @@
 </template>
 
 <script>
-import { qualificateList, qualificateDown, qualificateUp, qualificateSave, qualificateDetail, qualificateDelete } from '@/api/security'
+import { qualificateList, qualificateDown, qualificateUp, qualificateSave, qualificateDetail, qualificateDelete,qualificateEdit } from '@/api/security'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import Upload from '@/components/Upload/uploadImgTemp'
@@ -107,6 +108,7 @@ export default {
         status: '',
         pageSize: 10
       },
+      id: '',
       temp: {
         title: '',
         icon: '',
@@ -221,6 +223,23 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    handleEdit(row){
+      this.id = row.id
+      let data = {
+        id: row.id
+      }
+      qualificateDetail(data).then(response => {
+        console.log(response)
+        if(response.code == 0){
+          this.uploadImg.imgUrl = response.data.icon
+          this.uploadImg.fileId = response.data.icon
+          this.uploadImg1.imgUrl = response.data.iconGrey
+          this.uploadImg1.fileId = response.data.iconGrey
+          this.temp.title = response.data.title
+          this.dialogFormVisible = true
+        }
+      })
+    },
     // 词条删除
     handleDelete(row) {
       const id = row.id
@@ -265,6 +284,37 @@ export default {
           }
           console.log(this.temp)
           qualificateSave(this.temp).then((response) => {
+            if (response.code == 0) {
+              this.$notify({
+                title: '成功',
+                message: '添加成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.dialogFormVisible = false
+            }
+            this.getList()
+          })
+        }
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.temp.id = this.id
+          if(this.uploadImg.fileId != '' && this.uploadImg.fileId != undefined ){
+            this.temp.icon = this.uploadImg.fileId
+          }else {
+            this.temp.icon = ''
+          }
+
+          if(this.uploadImg1.fileId != '' && this.uploadImg1.fileId != undefined ){
+            this.temp.iconGrey = this.uploadImg1.fileId
+          }else {
+            this.temp.iconGrey = ''
+          }
+          console.log(this.temp)
+          qualificateEdit(this.temp).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
