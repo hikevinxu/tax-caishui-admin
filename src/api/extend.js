@@ -13,6 +13,17 @@ export function extendList(params) {
 }
 
 /**
+ * 操作记录
+ * @function 
+ * @type 'post'
+ * @param pageNum Number
+ * @param pageSize Number
+ */
+export function operateList(params) {
+  return fetchGet('/operate/list', params)
+}
+
+/**
  * 获取配置项下拉框
  * @function 
  * @type 'post'

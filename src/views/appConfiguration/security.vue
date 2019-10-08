@@ -2,6 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-button v-waves class="filter-item" type="primary" @click="handleCreate">添加</el-button>
+      <el-button v-waves class="filter-item" type="danger" @click="dialogOperationVisible = true">操作记录</el-button>
     </div>
 
     <el-table
@@ -44,6 +45,8 @@
       
       <el-table-column :label="$t('table.actions')" align="center" min-width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+          <el-button style="margin-left: 12px;" type="primary" size="small" @click="handleIncr(scope.row)">排序上升</el-button>
+          <el-button style="margin-left: 12px;" type="success" size="small" @click="handleDecr(scope.row)">排序下降</el-button>
           <el-button style="margin-left: 12px;" type="primary" size="small" @click="handleEdit(scope.row)" >编辑</el-button>
           <el-button style="margin-left: 12px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.shelf == 2 || scope.row.shelf == 0">上架</el-button>
           <el-button style="margin-left: 12px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.shelf == 1">下架</el-button>
@@ -75,11 +78,61 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="操作记录" :visible.sync="dialogOperationVisible">
+      <el-table
+      :data="listOperation"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;">
+        <el-table-column label="ID" prop="id" align="center" width="80px">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="用户" width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.userName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作" width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.operate }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作Id" width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.operateId }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作条目" width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.title }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作时间" min-width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.createTime }}</span>
+          </template>
+        </el-table-column>
+
+      </el-table>
+      <pagination v-show="operaTotal>0" :total="operaTotal" :page.sync="listOperaQuery.pageNum" :limit.sync="listOperaQuery.pageSize" @pagination="getOperaList" />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogOperationVisible = false">确认</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { qualificateList, qualificateDown, qualificateUp, qualificateSave, qualificateDetail, qualificateDelete,qualificateEdit } from '@/api/security'
+import { qualificateList, qualificateDown, qualificateUp, qualificateSave, qualificateDetail, qualificateDelete,qualificateEdit,qualificateDecr,qualificateIncr,operateList } from '@/api/security'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import Upload from '@/components/Upload/uploadImgTemp'
@@ -101,11 +154,18 @@ export default {
   data() {
     return {
       list: null,
+      listOperation: null,
       total: 0,
+      operaTotal: 0,
       listLoading: true,
       listQuery: {
         pageNum: 1,
         status: '',
+        pageSize: 10
+      },
+      listOperaQuery: {
+        pageNum: 1,
+        type: 2,
         pageSize: 10
       },
       id: '',
@@ -123,6 +183,7 @@ export default {
         fileId: ''
       },
       dialogFormVisible: false,
+      dialogOperationVisible: false,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
@@ -135,6 +196,7 @@ export default {
   },
   created() {
     this.getList()
+    
   },
   methods: {
     getList() {
@@ -145,8 +207,19 @@ export default {
           console.log(response)
           this.list = response.data
           // this.total = response.data.total
+          this.getOperaList()
         }
         this.listLoading = false
+      })
+    },
+    getOperaList() {
+      operateList(this.listOperaQuery).then(response => {
+        // console.log(response)
+        if(response.code == 0){
+          console.log(response)
+          this.listOperation = response.data.items
+          this.operaTotal = response.data.total
+        }
       })
     },
     handleUp(row) {
@@ -201,6 +274,60 @@ export default {
           this.getList()
         })
       })
+    },
+    //上升
+    handleIncr(row) {
+      const id = row.id
+      // this.$confirm('确认下架?', '提示', {}).then(() => {
+        let query = {
+          id: id,
+        }
+        qualificateIncr(query).then(response => {
+          if (response.code == 0) {
+            this.$notify({
+              title: '成功',
+              message: '排序成功',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$message({
+              message: '排序失败',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+          }
+          this.getList()
+        })
+      // })
+    },
+    //下降
+    handleDecr(row) {
+      const id = row.id
+      // this.$confirm('确认下架?', '提示', {}).then(() => {
+        let query = {
+          id: id,
+        }
+        qualificateDecr(query).then(response => {
+          if (response.code == 0) {
+            this.$notify({
+              title: '成功',
+              message: '排序成功',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$message({
+              message: '排序失败',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+          }
+          this.getList()
+        })
+      // })
     },
     //重置表单
     resetTemp() {

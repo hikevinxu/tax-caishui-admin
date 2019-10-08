@@ -2,6 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-button v-waves class="filter-item" type="primary" @click="handleCreate">添加</el-button>
+      <el-button v-waves class="filter-item" type="danger" @click="dialogOperationVisible = true">操作记录</el-button>
     </div>
 
     <el-table
@@ -14,7 +15,13 @@
       <el-table-column type="index" width="50" align="center">
       </el-table-column>
 
-      <el-table-column label="类目" width="450px" align="center">
+      <el-table-column label="一级类目" width="250px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.parentServiceName }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="二级类目" width="250px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.serviceName }}</span>
         </template>
@@ -89,11 +96,55 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="操作记录" :visible.sync="dialogOperationVisible">
+      <el-table
+      :data="listOperation"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;">
+        <el-table-column label="ID" prop="id" align="center" width="80px">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="用户" width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.userName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作" width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.operate }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作条目" width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.title }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作时间" min-width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.createTime }}</span>
+          </template>
+        </el-table-column>
+        
+      </el-table>
+      <pagination v-show="operaTotal>0" :total="operaTotal" :page.sync="listOperaQuery.pageNum" :limit.sync="listOperaQuery.pageSize" @pagination="getOperaList" />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogOperationVisible = false">确认</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { extendList,extendRelatedSave,extendTypeList,extendRelatedDetail,extendRelatedDelete } from '@/api/extend'
+import { extendList,extendRelatedSave,extendTypeList,extendRelatedDetail,extendRelatedDelete, operateList } from '@/api/extend'
 import { serviceTypeList } from '@/api/service'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -116,11 +167,18 @@ export default {
   data() {
     return {
       list: null,
+      listOperation: null,
       total: 0,
+      operaTotal: 0,
       listLoading: true,
       listQuery: {
         pageNum: 1,
         status: '',
+        pageSize: 10
+      },
+      listOperaQuery: {
+        pageNum: 1,
+        type: 5,
         pageSize: 10
       },
       temp: {
@@ -141,6 +199,7 @@ export default {
       firstCodeList: [],
       secondCodeList: [],
       dialogFormVisible: false,
+      dialogOperationVisible: false,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
@@ -155,7 +214,8 @@ export default {
     this.getList()
     this.getBusinessTypeList()
     this.getExtendList()
-    console.log(this.temp.extendCodes)
+    
+    // console.log(this.temp.extendCodes)
   },
   methods: {
     /**
@@ -170,6 +230,7 @@ export default {
           console.log(response)
           this.list = response.data.items
           this.total = response.data.total
+          this.getOperaList()
         }
         this.listLoading = false
       })
@@ -179,6 +240,16 @@ export default {
         console.log(response)
         if(response.code == 0){
           this.extendList = response.data
+        }
+      })
+    },
+    getOperaList() {
+      operateList(this.listOperaQuery).then(response => {
+        // console.log(response)
+        if(response.code == 0){
+          console.log(response)
+          this.listOperation = response.data.items
+          this.operaTotal = response.data.total
         }
       })
     },

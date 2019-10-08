@@ -2,6 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-button v-waves class="filter-item" type="primary" @click="handleCreate">添加</el-button>
+      <el-button v-waves class="filter-item" type="danger" @click="dialogOperationVisible = true">操作记录</el-button>
     </div>
 
     <el-table
@@ -29,9 +30,15 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="值" align="center" width="450px">
+      <el-table-column label="值" align="center" width="350px">
         <template slot-scope="scope">
           <span>{{ scope.row.attrNames }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="类型" align="center" width="100px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.type | typeFilters }}</span>
         </template>
       </el-table-column>
 
@@ -127,11 +134,61 @@
         <el-button type="primary" @click="edit">确定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="操作记录" :visible.sync="dialogOperationVisible">
+      <el-table
+      :data="listOperation"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;">
+        <el-table-column label="ID" prop="id" align="center" width="80px">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="用户" width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.userName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作" width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.operate }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作Id" width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.operateId }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作条目" width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.title }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作时间" min-width="150px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.createTime }}</span>
+          </template>
+        </el-table-column>
+        
+      </el-table>
+      <pagination v-show="operaTotal>0" :total="operaTotal" :page.sync="listOperaQuery.pageNum" :limit.sync="listOperaQuery.pageSize" @pagination="getOperaList" />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogOperationVisible = false">确认</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { extendPage, extendSave, extendDelete, extendAttrSave, extendDetail, extendEdit } from '@/api/extend'
+import { extendPage, extendSave, extendDelete, extendAttrSave, extendDetail, extendEdit, operateList } from '@/api/extend'
 import { serviceTypeList } from '@/api/service'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -141,23 +198,30 @@ export default {
   components: { Pagination,Upload },
   directives: { waves },
   filters: {
-    releaseStatusFilters (val) {
+    typeFilters (val) {
       if(val  == 1){
-        return val = '已上架'
+        return val = '文本'
       }else if(val == 2){
-        return val = '已下架'
-      }else if(val == 0){
-        return val = '待上架'
+        return val = '单选'
+      }else if(val == 3){
+        return val = '复选'
       }
     },
   },
   data() {
     return {
       list: null,
+      listOperation: null,
       total: 0,
+      operaTotal: 0,
       listLoading: true,
       listQuery: {
         pageNum: 1,
+        pageSize: 10
+      },
+      listOperaQuery: {
+        pageNum: 1,
+        type: 3,
         pageSize: 10
       },
       id: '',
@@ -210,6 +274,7 @@ export default {
       dialogFormVisible: false,
       dialogFormVisibleAdd: false,
       dialogFormVisibleEdit: false,
+      dialogOperationVisible: false,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
@@ -230,6 +295,7 @@ export default {
   },
   created() {
     this.getList()
+    
   },
   methods: {
     /**
@@ -244,8 +310,19 @@ export default {
           console.log(response)
           this.list = response.data.items
           this.total = response.data.total
+          this.getOperaList()
         }
         this.listLoading = false
+      })
+    },
+    getOperaList() {
+      operateList(this.listOperaQuery).then(response => {
+        // console.log(response)
+        if(response.code == 0){
+          console.log(response)
+          this.listOperation = response.data.items
+          this.operaTotal = response.data.total
+        }
       })
     },
     /**
