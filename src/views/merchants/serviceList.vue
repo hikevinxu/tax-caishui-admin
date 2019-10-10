@@ -118,6 +118,22 @@
             <label>服务标题</label>
             <div>{{serviceDetailData.title}}</div>
           </div>
+          <div class="detail_item" v-if="serviceDetailData.handleProcessDuration">
+            <label>办理步骤及所需时间</label>
+            <div>{{serviceDetailData.handleProcessDuration}}</div>
+          </div>
+          <div class="detail_item" v-if="serviceDetailData.handleMaterial">
+            <label>办理所需材料</label>
+            <div>{{serviceDetailData.handleMaterial}}</div>
+          </div>
+          <div class="detail_item" v-if="serviceDetailData.deliveryMaterial">
+            <label>交付材料</label>
+            <div>{{serviceDetailData.deliveryMaterial}}</div>
+          </div>
+          <div class="detail_item" v-if="serviceDetailData.deliveryDuration">
+            <label>交付时长</label>
+            <div>{{serviceDetailData.deliveryDuration}}</div>
+          </div>
           <div class="detail_item" v-if="serviceDetailData.introduce && serviceDetailData.introduce != ''">
             <label>服务介绍</label>
             <div class="introduce" v-html="serviceDetailData.introduce"></div>
