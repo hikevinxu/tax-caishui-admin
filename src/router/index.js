@@ -332,6 +332,42 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/appConfiguration',
+    component: Layout,
+    redirect: '/appConfiguration/security',
+    name: 'appConfiguration',
+    meta: {
+      title: 'App配置',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'qualification',
+        component: () => import('@/views/appConfiguration/qualification'),
+        name: 'qualification',
+        meta: { title: '平台资质', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'security',
+        component: () => import('@/views/appConfiguration/security'),
+        name: 'security',
+        meta: { title: '服务保障', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'formConfiguration',
+        component: () => import('@/views/appConfiguration/formConfiguration'),
+        name: 'formConfiguration',
+        meta: { title: '表单配置', icon: '', noCache: true, roles: ['admin']  }
+      },
+      {
+        path: 'itemsManagement',
+        component: () => import('@/views/appConfiguration/itemsManagement'),
+        name: 'itemsManagement',
+        meta: { title: '询价单配置', icon: '', noCache: true, roles: ['admin']  }
+      }
+    ]
+  },
+  {
     path: '/appUpdate',
     component: Layout,
     redirect: '/appUpdate/iosUpdate',
