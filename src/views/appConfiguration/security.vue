@@ -69,7 +69,7 @@
         </el-form-item>
 
         <el-form-item label="标题：" prop="title">
-          <el-input style="width: 300px" v-model="temp.title" placeholder="请输入标题" />
+          <el-input style="width: 300px" maxlength="4" v-model="temp.title" placeholder="请输入标题" />
         </el-form-item>
 
       </el-form>
