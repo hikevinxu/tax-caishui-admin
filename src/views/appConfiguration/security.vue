@@ -446,7 +446,7 @@ export default {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
-                message: '添加成功',
+                message: '修改成功',
                 type: 'success',
                 duration: 2000
               })
