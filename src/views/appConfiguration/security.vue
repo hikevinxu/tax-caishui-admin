@@ -351,6 +351,7 @@ export default {
       })
     },
     handleEdit(row){
+      this.dialogStatus = 'Edit'
       this.id = row.id
       let data = {
         id: row.id
