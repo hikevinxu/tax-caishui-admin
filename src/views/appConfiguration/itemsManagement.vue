@@ -3,6 +3,12 @@
     <div class="filter-container">
       <el-button v-waves class="filter-item" type="primary" @click="handleCreate">添加</el-button>
       <el-button v-waves class="filter-item" type="danger" @click="dialogOperationVisible = true">操作记录</el-button>
+      <el-select  class="filter-item" style="width: 200px" v-model="firstCode" @change="firstCodeChange" clearable placeholder="请选择一级服务">
+        <el-option v-for="(item,index) in firstCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
+      </el-select>
+      <el-select class="filter-item" style="width: 200px" v-model="listQuery.serviceCode" @change="secondCodeChange" clearable placeholder="请选择二级服务">
+        <el-option v-for="(item,index) in secondCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
+      </el-select>
     </div>
 
     <el-table
@@ -18,6 +24,18 @@
         </template>
       </el-table-column>
 
+      <el-table-column label="一级类目" width="200px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.parentServiceName }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="二级类目" width="200px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.serviceName }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="名称" width="250px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
@@ -30,7 +48,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="值" align="center" width="350px">
+      <el-table-column label="值" align="center" width="300px">
         <template slot-scope="scope">
           <span>{{ scope.row.attrNames }}</span>
         </template>
@@ -62,6 +80,18 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="120px" style="margin-left:50px;">
+
+        <el-form-item label="一级业务：" prop="firstCode" v-show="dialogStatus == 'create'">
+          <el-select  style="width: 300px" v-model="temp.firstCode" @change="createCodeChange" clearable placeholder="请选择一级业务">
+          <el-option v-for="(item,index) in firstCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
+        </el-select>
+        </el-form-item>
+
+        <el-form-item  label="二级业务：" prop="serviceCode" v-show="dialogStatus == 'create'">
+          <el-select style="width: 300px" v-model="temp.serviceCode" @change="serviceCodeChange" clearable placeholder="请选择二级业务">
+            <el-option v-for="(item,index) in secondCodeList" :key="item.code+index" :label="item.name" :value="item.code"> </el-option>
+          </el-select>
+        </el-form-item>
 
         <el-form-item label="扩展名称：" prop="name">
           <el-input style="width: 300px" v-model="temp.name" placeholder="请输入扩展名称" />
@@ -103,7 +133,7 @@
     <el-dialog title="Edit" :visible.sync="dialogFormVisibleEdit">
       <el-form ref="dataForm" :rules="rules2" :model="tempEdit" label-position="right" label-width="120px" style="margin-left:50px;">
 
-        <el-form-item label="值：" prop="name">
+        <el-form-item label="名称：" prop="name">
           <el-input style="width: 300px" v-model="tempEdit.name" placeholder="请输入标题" />
         </el-form-item>
 
@@ -217,8 +247,10 @@ export default {
       listLoading: true,
       listQuery: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        serviceCode: ''
       },
+      firstCode: '',
       listOperaQuery: {
         pageNum: 1,
         type: 3,
@@ -237,6 +269,8 @@ export default {
         }
       ],
       temp: {
+        firstCode: '',
+        serviceCode: '',
         type: '',
         remark: '',
         name: ''
@@ -259,6 +293,8 @@ export default {
         imgUrl: '',
         fileId: ''
       },
+      firstCodeList: [],
+      secondCodeList: [],
       dialogFormVisible: false,
       dialogFormVisibleAdd: false,
       dialogFormVisibleEdit: false,
@@ -269,6 +305,7 @@ export default {
         create: 'Create'
       },
       rules: {
+        serviceCode:  [{ required: true, message: '类目必选'}],
         name: [{ required: true, message: '扩展名称必填', trigger: 'blur' }],
         type: [{ required: true, message: '类型必选' }]
       },
@@ -283,7 +320,7 @@ export default {
   },
   created() {
     this.getList()
-    
+    this.getBusinessTypeList()
   },
   methods: {
     /**
@@ -377,6 +414,8 @@ export default {
     //重置表单
     resetTemp() {
       this.temp = {
+        firstCode: '',
+        serviceCode: '',
         name: '',
         type: 1,
         remark: ''
@@ -536,6 +575,69 @@ export default {
         })
         return
       }
+    },
+    getBusinessTypeList () {
+      let data = {
+        parentCode: ''
+      }
+      serviceTypeList().then(res => {
+        if(res.code == 0) {
+          this.firstCodeList = res.data
+          console.log(res)
+        }
+      })
+    },
+    firstCodeChange(value) {
+      let data = {
+        parentCode: this.firstCode
+      }
+      this.listQuery.serviceCode = ''
+      console.log(data)
+      serviceTypeList(data).then(res => {
+        if(res.code == 0) {
+          this.secondCodeList = res.data
+          console.log(res)
+        }
+      })
+    },
+    secondCodeChange(value){
+      let data = {
+        serviceCode: this.listQuery.serviceCode
+      }
+      console.log(data)
+      if(this.listQuery.serviceCode != ''){
+        extendPage(this.listQuery).then(response => {
+          if(response.code == 0){
+            console.log(response)
+            this.list = response.data.items
+            this.total = response.data.total
+          }
+          this.listLoading = false
+        })
+      }else {
+        this.list = []
+        this.listLoading = false
+      }
+    },
+    createCodeChange(value) {
+      this.temp.serviceCode = ''
+      this.secondCodeList = []
+      let data = {
+        parentCode: this.temp.firstCode
+      }
+      console.log(data)
+      serviceTypeList(data).then(res => {
+        if(res.code == 0) {
+          this.showCreateSend = true
+          this.secondCodeList = res.data
+          console.log(res)
+        }
+      })
+    },
+    serviceCodeChange(value){
+      console.log(value)
+      this.temp.serviceCode = value
+      console.log(this.temp)
     }
   }
 }
