@@ -367,12 +367,12 @@ export const asyncRouterMap = [
         name: 'security',
         meta: { title: '服务保障', icon: '', noCache: true, roles: ['admin']  }
       },
-      {
-        path: 'formConfiguration',
-        component: () => import('@/views/appConfiguration/formConfiguration'),
-        name: 'formConfiguration',
-        meta: { title: '表单配置', icon: '', noCache: true, roles: ['admin']  }
-      },
+      // {
+      //   path: 'formConfiguration',
+      //   component: () => import('@/views/appConfiguration/formConfiguration'),
+      //   name: 'formConfiguration',
+      //   meta: { title: '表单配置', icon: '', noCache: true, roles: ['admin']  }
+      // },
       {
         path: 'itemsManagement',
         component: () => import('@/views/appConfiguration/itemsManagement'),

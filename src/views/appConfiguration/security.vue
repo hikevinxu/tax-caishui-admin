@@ -69,7 +69,7 @@
         </el-form-item>
 
         <el-form-item label="标题：" prop="title">
-          <el-input style="width: 300px" v-model="temp.title" placeholder="请输入标题" />
+          <el-input style="width: 300px" maxlength="4" v-model="temp.title" placeholder="请输入标题" />
         </el-form-item>
 
       </el-form>
@@ -351,6 +351,7 @@ export default {
       })
     },
     handleEdit(row){
+      this.dialogStatus = 'Edit'
       this.id = row.id
       let data = {
         id: row.id
@@ -445,7 +446,7 @@ export default {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',
-                message: '添加成功',
+                message: '修改成功',
                 type: 'success',
                 duration: 2000
               })

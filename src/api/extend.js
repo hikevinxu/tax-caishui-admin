@@ -24,7 +24,7 @@ export function operateList(params) {
 }
 
 /**
- * 获取配置项下拉框
+ * 保存
  * @function 
  * @type 'post'
  * @param pageNum Number
@@ -32,6 +32,17 @@ export function operateList(params) {
  */
 export function extendRelatedSave(params) {
   return fetchPost('/service_type/extend_related/save', params)
+}
+
+/**
+ * 编辑
+ * @function 
+ * @type 'post'
+ * @param pageNum Number
+ * @param pageSize Number
+ */
+export function extendRelatedModify(params) {
+  return fetchPost('/service_type/extend_related/modify', params)
 }
 
 /**

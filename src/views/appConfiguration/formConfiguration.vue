@@ -144,7 +144,7 @@
 </template>
 
 <script>
-import { extendList,extendRelatedSave,extendTypeList,extendRelatedDetail,extendRelatedDelete, operateList } from '@/api/extend'
+import { extendList,extendRelatedSave,extendRelatedModify,extendTypeList,extendRelatedDetail,extendRelatedDelete, operateList } from '@/api/extend'
 import { serviceTypeList } from '@/api/service'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -457,7 +457,7 @@ export default {
             extendCodes: extendCodes
           }
           console.log(data)
-          extendRelatedSave(data).then((response) => {
+          extendRelatedModify(data).then((response) => {
             if (response.code == 0) {
               this.$notify({
                 title: '成功',

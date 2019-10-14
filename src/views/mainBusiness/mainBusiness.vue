@@ -28,11 +28,11 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="子子业务" width="250PX" align="center">
+          <!-- <el-table-column label="子子业务" width="250PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.thirdName }}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
           <!-- <el-table-column label="介绍类型" width="300PX" align="center">
             <template slot-scope="scope">
