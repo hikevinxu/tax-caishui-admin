@@ -66,12 +66,13 @@
         </template>
       </el-table-column> -->
 
-      <el-table-column label="操作" align="center" width="300px" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="400px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button v-show="scope.row.companyStatus == 0" style="margin-left: 12px;" type="warning" size="small" @click="handleUp(scope.row)">上架</el-button>
           <el-button v-show="scope.row.companyStatus == 1" style="margin-left: 12px;" type="danger" size="small" @click="handleDown(scope.row)">下架</el-button>
           <el-button style="margin-left: 12px;" type="success" size="small" @click="handleLookDetail(scope.row)">查看</el-button>
           <el-button style="margin-left: 12px;" type="warning" size="small" @click="goMain(scope.row)">业务管理</el-button>
+          <el-button style="margin-left: 12px;" type="warning" size="small" @click="goServiceManager(scope.row)">服务管理</el-button>
         </template>
       </el-table-column>
 
@@ -410,6 +411,14 @@ export default {
     goMain(row){
       this.$router.push({
           path: '/mainBusiness/mainBusiness',
+          query: {
+            id: row.companyId
+          }
+      })
+    },
+    goServiceManager(row) {
+      this.$router.push({
+          path: '/merchants/serviceManager',
           query: {
             id: row.companyId
           }

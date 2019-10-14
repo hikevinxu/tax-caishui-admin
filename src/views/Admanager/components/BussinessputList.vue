@@ -25,9 +25,9 @@
         <el-select style="width: 150px" v-model="secondCode"  @change="secondCodeChange" clearable placeholder="请选择二级服务">
           <el-option v-for="(item,index) in secondCodeList" :key="item.name+index" :label="item.name" :value="item.code"> </el-option>
         </el-select>
-        <el-select style="width: 150px" v-model="thirdCode"  @change="thirdCodeChange" clearable placeholder="请选择三级服务">
+        <!-- <el-select style="width: 150px" v-model="thirdCode"  @change="thirdCodeChange" clearable placeholder="请选择三级服务">
           <el-option v-for="(item,index) in thirdCodeList" :key="item.name+index" :label="item.name" :value="item.code"> </el-option>
-        </el-select>
+        </el-select> -->
       </span>
       <el-date-picker class="filter-item" v-model="putTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" @change="timeChange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       <el-input class="filter-item" style="width: 250px" v-model="listQuery.adTitle" placeholder="请输入搜索主题" />
