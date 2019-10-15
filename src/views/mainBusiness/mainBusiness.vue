@@ -81,14 +81,14 @@
                 </el-option>
               </el-select>
 
-              <el-select v-show="showOptions3" style="width: 33%" v-model="value2" placeholder="请选择">
+              <!-- <el-select v-show="showOptions3" style="width: 33%" v-model="value2" placeholder="请选择">
                 <el-option
                   v-for="item in options3"
                   :key="item.code"
                   :label="item.name"
                   :value="item.code">
                 </el-option>
-              </el-select>
+              </el-select> -->
             </div>
           </div>
           <span slot="footer" class="dialog-footer" style="display: flex;justify-content: space-between;align-items: center;">
