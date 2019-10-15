@@ -68,5 +68,13 @@ export default {
    */
   serviceEdit (params) {
     return fetchGet('/merchant/service/edit', params)
-  }
+  },
+  /**
+   * 根据二级服务编号查询服务介绍模版
+   * @function serviceTemplate
+   * @type 'Post'
+   */
+  serviceTemplate (params) {
+    return fetchGet('/merchant/service/template', params)
+  },
 }

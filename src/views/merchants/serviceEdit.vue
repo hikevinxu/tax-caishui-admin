@@ -328,6 +328,19 @@ export default {
       this.thirdServiceCodeList = []
       if (this.secondServiceCode && this.secondServiceCode != '') {
         this.serviceCode = this.secondServiceCode
+        if(!this.$route.query.id) {
+          let params = {
+            serviceCode: this.serviceCode
+          }
+          serviceManager.serviceTemplate(params).then(res => {
+            if(res.code == 0){
+              this.handleProcessDuration = res.data.handleProcessDuration
+              this.handleMaterial = res.data.handleMaterial
+              this.deliveryMaterial = res.data.deliveryMaterial
+              this.deliveryDuration = res.data.deliveryDuration
+            }
+          })
+        }
         // for(let i=0;i<this.secondServiceCodeList.length;i++){
         //   if(this.secondServiceCodeList[i].code == this.secondServiceCode) {
         //     if (this.secondServiceCodeList[i].childs && this.secondServiceCodeList[i].childs.length != 0) {
