@@ -270,13 +270,23 @@ export default {
     }
   },
   created() {
-    this.getList()
-    this.getTypes()
+    let name = localStorage.getItem('name')
+    if(name){
+      this.listQuery.name = name
+      this.getList()
+      this.getTypes()
+    }else {
+      this.getList()
+      this.getTypes()
+    }
   },
   methods: {
     // 获取列表
     getList() {
       this.listLoading = true
+      if(this.listQuery.name != ''){
+        localStorage.setItem('name',this.listQuery.name)
+      }
       merchantList(this.listQuery).then(response => {
         if (response.code === 0) {
           console.log(response)
