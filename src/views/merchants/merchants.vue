@@ -210,8 +210,7 @@ export default {
       listQuery: {
         pageNum: 1,
         pageSize: 10,
-        submitTime: '',
-        status: ''
+        name: ''
       },
       statusList: [
         {
@@ -270,23 +269,16 @@ export default {
     }
   },
   created() {
-    let name = localStorage.getItem('name')
-    if(name){
-      this.listQuery.name = name
-      this.getList()
-      this.getTypes()
-    }else {
-      this.getList()
-      this.getTypes()
-    }
+    console.log(this.listQuery)
+    this.listQuery.name = this.$store.getters.companyName
+    this.getList()
+    this.getTypes()
   },
   methods: {
     // 获取列表
     getList() {
       this.listLoading = true
-      if(this.listQuery.name != ''){
-        localStorage.setItem('name',this.listQuery.name)
-      }
+      this.$store.dispatch('saveName', this.listQuery.name)
       merchantList(this.listQuery).then(response => {
         if (response.code === 0) {
           console.log(response)
