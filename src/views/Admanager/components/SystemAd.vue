@@ -21,9 +21,9 @@
         <el-select style="width: 150px" v-model="secondCodeFilter"  @change="secondCodeSearch" clearable placeholder="请选择二级服务">
           <el-option v-for="(item,index) in secondCodeList" :key="item.name+index" :label="item.name" :value="item.code"> </el-option>
         </el-select>
-        <el-select style="width: 150px" v-model="thirdCodeFilter"  @change="thirdCodeSearch" clearable placeholder="请选择三级服务">
+        <!-- <el-select style="width: 150px" v-model="thirdCodeFilter"  @change="thirdCodeSearch" clearable placeholder="请选择三级服务">
           <el-option v-for="(item,index) in thirdCodeList" :key="item.name+index" :label="item.name" :value="item.code"> </el-option>
-        </el-select>
+        </el-select> -->
       </span>
       <el-button v-waves class="filter-item" type="success" icon="el-icon-search" @click="getList">筛选</el-button>
     </div>

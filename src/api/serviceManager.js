@@ -11,7 +11,8 @@ export default {
    * @param shelf boolean
    */
   serviceList (params) {
-    return fetchPost('/service/list', params)
+    let paramsString = qs.stringify(params)
+    return fetchPost('/merchant/service/list', paramsString)
   },
   /**
    * 添加服务
@@ -19,7 +20,7 @@ export default {
    * @type 'Post'
    */
   serviceAdd (params) {
-    return fetchPost('/service/add', params)
+    return fetchPost('/merchant/service/add', params)
   },
   /**
    * 服务编辑
@@ -28,7 +29,7 @@ export default {
    * @param id Number
    */
   serviceUpdate (params) {
-    return fetchPost('/service/update', params)
+    return fetchPost('/merchant/service/update', params)
   },
   /**
    * 服务下架
@@ -38,7 +39,7 @@ export default {
    */
   serviceShelfDown (params) {
     let paramsString = qs.stringify(params)
-    return fetchPost('/service/shelf/down', paramsString)
+    return fetchPost('/merchant/service/shelf/down', paramsString)
   },
   /**
    * 服务上架
@@ -48,9 +49,8 @@ export default {
    */
   serviceShelfUp (params) {
     let paramsString = qs.stringify(params)
-    return fetchPost('/service/shelf/up', paramsString)
+    return fetchPost('/merchant/service/shelf/up', paramsString)
   },
-  
   /**
    * 主营业务
    * @function serviceItemTrees
@@ -58,7 +58,7 @@ export default {
    * @param id Number
    */
   serviceItemTrees (params) {
-    return fetchGet('/service/service_items', params)
+    return fetchGet('/merchant/service/service_items', params)
   },
   /**
    * 主营业务
@@ -67,6 +67,6 @@ export default {
    * @param id Number
    */
   serviceEdit (params) {
-    return fetchGet('/service/edit', params)
+    return fetchGet('/merchant/service/edit', params)
   }
 }

@@ -106,7 +106,21 @@ export const asyncRouterMap = [
         component: () => import('@/views/merchants/merchants.vue'),
         name: 'merchantsAmg',
         meta: { title: '管理', icon: '', noCache: true, roles: ['admin']  }
-      }
+      },
+      {
+        path: 'serviceManager',
+        component: () => import('@/views/merchants/serviceManager.vue'),
+        name: 'serviceManager',
+        meta: { title: '服务管理', icon: '', noCache: true, roles: ['admin'], path: '/merchants/merchantsAmg' },
+        hidden: true
+      },
+      {
+        path: 'serviceEdit',
+        component: () => import('@/views/merchants/serviceEdit.vue'),
+        name: 'serviceEdit',
+        meta: { title: '管理', icon: '', noCache: true, roles: ['admin'], path: '/merchants/merchantsAmg' },
+        hidden: true
+      },
     ]
   },
   {
