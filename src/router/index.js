@@ -118,7 +118,7 @@ export const asyncRouterMap = [
         path: 'serviceEdit',
         component: () => import('@/views/merchants/serviceEdit.vue'),
         name: 'serviceEdit',
-        meta: { title: '管理', icon: '', noCache: true, roles: ['admin'], path: '/merchants/merchantsAmg' },
+        meta: { title: '添加/编辑服务', icon: '', noCache: true, roles: ['admin'], path: '/merchants/merchantsAmg' },
         hidden: true
       },
     ]
@@ -367,12 +367,12 @@ export const asyncRouterMap = [
         name: 'security',
         meta: { title: '服务保障', icon: '', noCache: true, roles: ['admin']  }
       },
-      // {
-      //   path: 'formConfiguration',
-      //   component: () => import('@/views/appConfiguration/formConfiguration'),
-      //   name: 'formConfiguration',
-      //   meta: { title: '表单配置', icon: '', noCache: true, roles: ['admin']  }
-      // },
+      {
+        path: 'formConfiguration',
+        component: () => import('@/views/appConfiguration/formConfiguration'),
+        name: 'formConfiguration',
+        meta: { title: '表单配置', icon: '', noCache: true, roles: ['admin']  }
+      },
       {
         path: 'itemsManagement',
         component: () => import('@/views/appConfiguration/itemsManagement'),
