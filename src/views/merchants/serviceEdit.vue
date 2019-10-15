@@ -338,6 +338,7 @@ export default {
               this.handleMaterial = res.data.handleMaterial
               this.deliveryMaterial = res.data.deliveryMaterial
               this.deliveryDuration = res.data.deliveryDuration
+              this.title = res.data.title
             }
           })
         }
