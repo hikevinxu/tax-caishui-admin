@@ -261,12 +261,12 @@ export const asyncRouterMap = [
         name: 'levelTwo',
         meta: { title: '二级业务管理', icon: '', noCache: true, roles: ['admin']  }
       },
-      {
-        path: 'levelThree',
-        component: () => import('@/views/serviceCategory/levelThree'),
-        name: 'levelThree',
-        meta: { title: '三级业务管理', icon: '', noCache: true, roles: ['admin']  }
-      }
+      // {
+      //   path: 'levelThree',
+      //   component: () => import('@/views/serviceCategory/levelThree'),
+      //   name: 'levelThree',
+      //   meta: { title: '三级业务管理', icon: '', noCache: true, roles: ['admin']  }
+      // }
     ]
   },
   {
