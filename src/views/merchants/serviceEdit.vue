@@ -334,11 +334,23 @@ export default {
           }
           serviceManager.serviceTemplate(params).then(res => {
             if(res.code == 0){
-              this.handleProcessDuration = res.data.handleProcessDuration
-              this.handleMaterial = res.data.handleMaterial
-              this.deliveryMaterial = res.data.deliveryMaterial
-              this.deliveryDuration = res.data.deliveryDuration
-              this.title = res.data.title
+              if (res.data) {
+                if (res.data.handleProcessDuration) {
+                  this.handleProcessDuration = res.data.handleProcessDuration
+                }
+                if (res.data.handleMaterial) {
+                  this.handleMaterial = res.data.handleMaterial
+                }
+                if (res.data.deliveryMaterial) {
+                  this.deliveryMaterial = res.data.deliveryMaterial
+                }
+                if (res.data.deliveryDuration) {
+                  this.deliveryDuration = res.data.deliveryDuration
+                }
+                if (res.data.title) {
+                  this.title = res.data.title
+                }
+              }
             }
           })
         }
