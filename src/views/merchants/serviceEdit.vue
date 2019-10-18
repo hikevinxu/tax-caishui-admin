@@ -654,7 +654,7 @@ export default {
           logo: this.serviceLogoId,
           serviceCode: this.serviceCode,
           title: this.title,
-          items: this.servicePrice,
+          items: items,
           deliveryDuration: this.deliveryDuration,
           deliveryMaterial: this.deliveryMaterial,
           handleMaterial: this.handleMaterial,
