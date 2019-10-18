@@ -53,6 +53,13 @@
         </template>
       </el-table-column>
 
+      <el-table-column label="微信绑定" align="center">
+        <template slot-scope="scope">
+          <span v-show="scope.row.isWeiChat">已绑定</span>
+          <span v-show="!scope.row.isWeiChat">未绑定</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="发布状态" width="150px" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.companyStatus == 1">{{ scope.row.companyStatus | releaseStatusFilters  }}</el-tag>
