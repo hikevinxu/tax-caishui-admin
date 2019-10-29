@@ -417,6 +417,24 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {   path: '/giving',
+      component: Layout,
+      redirect: '/giving/giving',
+      name: 'giving',
+      meta: {
+        title: '商户赠送金币',
+        icon: 'table',
+        roles: ['MER_INFO_MA']
+      },
+      children: [
+        {
+          path: 'giving',
+          component: () => import('@/views/giving/giving'),
+          name: 'giving',
+          meta: { title: '商户赠送金币', icon: '', noCache: true, roles: ['MER_INFO_MA']}
+        }
+      ]
+    },
   {
     path: '/appUpdate',
     component: Layout,
