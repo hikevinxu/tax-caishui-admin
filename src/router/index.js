@@ -134,7 +134,7 @@ export const asyncRouterMap = [
         path: 'merchantsAmg',
         component: () => import('@/views/merchants/merchants.vue'),
         name: 'merchantsAmg',
-        meta: { title: '商户信息管理', icon: '', noCache: true, roles: ['MER_INFO_SET']  }
+        meta: { title: '商户信息配置', icon: '', noCache: true, roles: ['MER_INFO_SET']  }
       },
       {
         path: '/giving/giving',
