@@ -190,6 +190,7 @@ export default {
     handleGiving(row) {
       this.resetTemp()
       this.temp.accountId = row.id
+      this.temp.amount = null
       this.name = row.name
       this.dialogGiving = true
     },
@@ -209,6 +210,15 @@ export default {
     createData() {
       // this.$refs['dataForm'].validate((valid) => {
       //   if (valid) {
+          if(this.temp.amount > 1000){
+            this.$message({
+              message: '赠币不能超过1000',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+            return
+          }
           presentBonus(this.temp).then((response) => {
             if (response.code == 0) {
               this.$notify({
