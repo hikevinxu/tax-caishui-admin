@@ -1,5 +1,6 @@
-import { loginByUsername } from '@/api/login'
+import { loginByUsername, userPermissions } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { Message } from 'element-ui'
 
 const user = {
   state: {
@@ -11,6 +12,8 @@ const user = {
     avatar: '',
     introduction: '',
     roles: [],
+    currentRoles: [],
+    permissions: [],
     setting: {
       articlePlatform: []
     }
@@ -40,6 +43,15 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_USERID: (state, userId) => {
+      state.userId = userId
+    },
+    SET_PERMISSIONS: (state, permissions) => {
+      state.permissions = permissions
+    },
+    SET_CURRENT_ROLES: (state, currentRoles) => {
+      state.currentRoles = currentRoles
     }
   },
 
@@ -56,11 +68,20 @@ const user = {
           password: userInfo.password
         }
         loginByUsername(params).then(response => {
-          const data = response.data
-          commit('SET_TOKEN', data.accessToken)
-          // commit('SET_NAME', data.authInfo.username)
-          setToken(response.data.accessToken)
-          resolve()
+          if (response.data.permissions.length != 0) {
+            const data = response.data
+            commit('SET_TOKEN', data.accessToken)
+            setToken(response.data.accessToken)
+            // commit('SET_USERID', data.authInfo.id)
+            // localStorage.setItem('userId', data.authInfo.id)
+            resolve()
+          } else {
+            Message({
+              message: '您没有任何权限，请通知管理员修改权限！',
+              type: 'error',
+              duration: 2 * 1000
+            })
+          }
         }).catch(error => {
           reject(error)
         })
@@ -70,31 +91,33 @@ const user = {
     // 获取用户信息
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        const userMap = {
-          admin: {
-            roles: ['admin'],
-            token: 'admin',
-            introduction: '我是超级管理员',
-            avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-            name: '超级管理员'
-          },
-          editor: {
-            roles: ['editor'],
-            token: 'editor',
-            introduction: '我是编辑',
-            avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-            name: 'Normal Editor'
+        userPermissions().then(res => {
+          if(res.code == 0) {
+            if (res.data.permissions.length == 0) {
+              commit('SET_TOKEN', '')
+              commit('SET_ROLES', [])
+              removeToken()
+              resolve()
+            }
+            const userMap = {
+              admin: {
+                roles: res.data.permissions,
+                avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+                name: res.data.userName,
+                currentRoles: res.data.roles
+              }
+            }
+            const response = {
+              data: userMap.admin
+            }
+            const data = response.data
+            commit('SET_ROLES', data.roles)
+            commit('SET_NAME', data.name)
+            commit('SET_AVATAR', data.avatar)
+            commit('SET_CURRENT_ROLES', data.currentRoles)
+            resolve(response)
           }
-        }
-        const response = {
-          data: userMap.admin
-        }
-        const data = response.data
-        commit('SET_ROLES', data.roles)
-        commit('SET_NAME', data.name)
-        commit('SET_AVATAR', data.avatar)
-        commit('SET_INTRODUCTION', data.introduction)
-        resolve(response)
+        })
       })
     },
 

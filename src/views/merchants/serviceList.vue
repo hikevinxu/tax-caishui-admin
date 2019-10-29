@@ -7,9 +7,9 @@
       <el-select class="filter-item" v-if="secondServiceCodeList.length > 0" v-model="secondServiceCode" placeholder="请选择关联类目" @change="secondServiceCodeChange"  style="width: 200px">
         <el-option v-for="(item,index) in secondServiceCodeList" :key="item+index" :label="item.name" :value="item.code"/>
       </el-select>
-      <el-select class="filter-item" v-if="thirdServiceCodeList.length > 0" v-model="thirdServiceCode" placeholder="请选择关联类目" @change="thirdServiceCodeChange"  style="width: 200px">
+      <!-- <el-select class="filter-item" v-if="thirdServiceCodeList.length > 0" v-model="thirdServiceCode" placeholder="请选择关联类目" @change="thirdServiceCodeChange"  style="width: 200px">
         <el-option v-for="(item,index) in thirdServiceCodeList" :key="item+index" :label="item.name" :value="item.code"/>
-      </el-select>
+      </el-select> -->
       <el-select class="filter-item" v-model="listQuery.companyId" filterable remote reserve-keyword placeholder="请输入公司全称" style="width: 350px" @change="companyChange" :remote-method="searchCompanyList" :loading="loading">
         <el-option v-for="item in companyList" :key="item.name" :label="item.name" :value="item.id"></el-option>
       </el-select>
@@ -117,6 +117,22 @@
           <div class="detail_item" v-if="serviceDetailData.title">
             <label>服务标题</label>
             <div>{{serviceDetailData.title}}</div>
+          </div>
+          <div class="detail_item" v-if="serviceDetailData.handleProcessDuration">
+            <label>办理步骤及所需时间</label>
+            <div>{{serviceDetailData.handleProcessDuration}}</div>
+          </div>
+          <div class="detail_item" v-if="serviceDetailData.handleMaterial">
+            <label>办理所需材料</label>
+            <div>{{serviceDetailData.handleMaterial}}</div>
+          </div>
+          <div class="detail_item" v-if="serviceDetailData.deliveryMaterial">
+            <label>交付材料</label>
+            <div>{{serviceDetailData.deliveryMaterial}}</div>
+          </div>
+          <div class="detail_item" v-if="serviceDetailData.deliveryDuration">
+            <label>交付时长</label>
+            <div>{{serviceDetailData.deliveryDuration}}</div>
           </div>
           <div class="detail_item" v-if="serviceDetailData.introduce && serviceDetailData.introduce != ''">
             <label>服务介绍</label>
@@ -313,23 +329,25 @@ export default {
       }
     },
     secondServiceCodeChange(val) {
-      this.thirdServiceCode = ''
-      this.thirdServiceCodeList = []
-      if(val && val != ''){
-        let param = {
-          parentCode: val
-        }
-        serviceTypeList(param).then(res => {
-          if(res.code == 0){
-            if (res.data.length > 0) {
-              this.thirdServiceCodeList = res.data
-            } else {
-              this.listQuery.serviceCode = val
-              this.getList()
-            }
-          }
-        })
-      }
+      this.listQuery.serviceCode = val
+      this.getList()
+      // this.thirdServiceCode = ''
+      // this.thirdServiceCodeList = []
+      // if(val && val != ''){
+      //   let param = {
+      //     parentCode: val
+      //   }
+      //   serviceTypeList(param).then(res => {
+      //     if(res.code == 0){
+      //       if (res.data.length > 0) {
+      //         this.thirdServiceCodeList = res.data
+      //       } else {
+      //         this.listQuery.serviceCode = val
+      //         this.getList()
+      //       }
+      //     }
+      //   })
+      // }
     },
     thirdServiceCodeChange(val) {
       this.listQuery.serviceCode = val

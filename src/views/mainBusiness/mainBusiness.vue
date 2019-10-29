@@ -28,11 +28,11 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="子子业务" width="250PX" align="center">
+          <!-- <el-table-column label="子子业务" width="250PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.thirdName }}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
           <!-- <el-table-column label="介绍类型" width="300PX" align="center">
             <template slot-scope="scope">
@@ -81,14 +81,14 @@
                 </el-option>
               </el-select>
 
-              <el-select v-show="showOptions3" style="width: 33%" v-model="value2" placeholder="请选择">
+              <!-- <el-select v-show="showOptions3" style="width: 33%" v-model="value2" placeholder="请选择">
                 <el-option
                   v-for="item in options3"
                   :key="item.code"
                   :label="item.name"
                   :value="item.code">
                 </el-option>
-              </el-select>
+              </el-select> -->
             </div>
           </div>
           <span slot="footer" class="dialog-footer" style="display: flex;justify-content: space-between;align-items: center;">
@@ -469,12 +469,9 @@ export default {
               this.createData.introduceContent = ''
               this.submit(this.createData)
             }else{
-              this.$message({
-                message: '请填写数据后保存',
-                type: 'warning',
-                showClose: true,
-                duration: 1000
-              })
+              this.createData.serviceCode = this.value1
+              this.createData.introduceContent = ''
+              this.submit(this.createData)
             }
           }else{
             this.createData.serviceCode = this.value1

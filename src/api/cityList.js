@@ -29,3 +29,12 @@ export function addressCitys(params) {
 export function addressAreas(params) {
   return fetchGet('/address/areas', params)
 }
+
+/**
+ * 获取全球地区列表
+ * @function getGlobalTrees
+ * @type 'Get'
+ */
+export function getGlobalTrees (params) {
+  return fetchGet('/address/globalTrees', params)
+}
