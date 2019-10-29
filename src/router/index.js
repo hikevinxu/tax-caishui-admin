@@ -76,12 +76,40 @@ export const asyncRouterMap = [
   {
     path: '/adManager',
     component: Layout,
+    meta: {
+      roles: ['AD_MA']
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/Admanager/AdManager'),
         name: 'adManager',
-        meta: { title: '广告位配置', icon: 'table', noCache: true, roles: ['admin'] }
+        meta: { title: '广告位配置', icon: 'table', noCache: true, roles: ['AD_MA'] }
+      }
+    ]
+  },
+  {
+    path: '/userManager',
+    component: Layout,
+    redirect: '/userManager/index',
+    name: 'merchants',
+    meta: {
+      title: '用户管理',
+      icon: 'table',
+      roles: ['USER_MA']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/userManager/userManager'),
+        name: 'userManager',
+        meta: { title: '用户管理', noCache: true, roles: ['USER_MA'] }
+      },
+      {
+        path: 'roleManager',
+        component: () => import('@/views/userManager/roleManager'),
+        name: 'roleManager',
+        meta: { title: '角色权限', noCache: true, roles: ['USER_MA'] }
       }
     ]
   },
@@ -92,33 +120,34 @@ export const asyncRouterMap = [
     name: 'merchants',
     meta: {
       title: '商户入驻管理',
-      icon: 'table'
+      icon: 'table',
+      roles: ['MER_AUDIT', 'MER_INFO_SET']
     },
     children: [
       {
         path: 'merchantsAudit',
         component: () => import('@/views/merchants/merchantsAudit.vue'),
         name: 'merchantsAudit',
-        meta: { title: '审核', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '审核', icon: '', noCache: true, roles: ['MER_AUDIT']  }
       },
       {
         path: 'merchantsAmg',
         component: () => import('@/views/merchants/merchants.vue'),
         name: 'merchantsAmg',
-        meta: { title: '管理', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '管理', icon: '', noCache: true, roles: ['MER_INFO_SET']  }
       },
       {
         path: 'serviceManager',
         component: () => import('@/views/merchants/serviceManager.vue'),
         name: 'serviceManager',
-        meta: { title: '服务管理', icon: '', noCache: true, roles: ['admin'], path: '/merchants/merchantsAmg' },
+        meta: { title: '服务管理', icon: '', noCache: true, roles: ['MER_INFO_SET'], path: '/merchants/merchantsAmg' },
         hidden: true
       },
       {
         path: 'serviceEdit',
         component: () => import('@/views/merchants/serviceEdit.vue'),
         name: 'serviceEdit',
-        meta: { title: '添加/编辑服务', icon: '', noCache: true, roles: ['admin'], path: '/merchants/merchantsAmg' },
+        meta: { title: '添加/编辑服务', icon: '', noCache: true, roles: ['MER_INFO_SET'], path: '/merchants/merchantsAmg' },
         hidden: true
       },
     ]
@@ -130,14 +159,15 @@ export const asyncRouterMap = [
     name: 'merchantsService',
     meta: {
       title: '商户服务列表',
-      icon: 'table'
+      icon: 'table',
+      roles: ['MER_INFO_MA']
     },
     children: [
       {
         path: 'serviceList',
         component: () => import('@/views/merchants/serviceList.vue'),
         name: 'serviceList',
-        meta: { title: '商户服务列表', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '商户服务列表', icon: '', noCache: true, roles: ['MER_INFO_MA']  }
       },
     ]
   },
@@ -148,14 +178,15 @@ export const asyncRouterMap = [
     name: 'homePageSetting',
     meta: {
       title: '首页功能配置',
-      icon: 'table'
+      icon: 'table',
+      roles: ['AD_MA']
     },
     children: [
       {
         path: 'tagSetting',
         component: () => import('@/views/homePageSetting/tagSetting'),
         name: 'tagSetting',
-        meta: { title: '系统标签功能配置', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '系统标签功能配置', icon: '', noCache: true, roles: ['AD_MA']  }
       },
       // {
       //   path: 'citySetting',
@@ -172,27 +203,28 @@ export const asyncRouterMap = [
     name: 'landPage',
     meta: {
       title: '推广落地页',
-      icon: 'table'
+      icon: 'table',
+      roles: ['PROMOTION_SET']
     },
     children: [
       {
         path: 'landPageSetting',
         component: () => import('@/views/landPage/pageList'),
         name: 'landPageSetting',
-        meta: { title: '落地页配置', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '落地页配置', icon: '', noCache: true, roles: ['PROMOTION_SET']  }
       },
       {
         path: 'createLandPage',
         component: () => import('@/views/landPage/createPage'),
         name: 'createLandPage',
-        meta: { title: '新增落地页', icon: '', noCache: true, roles: ['admin'], path: '/landPage/landPageSetting'  },
+        meta: { title: '新增落地页', icon: '', noCache: true, roles: ['PROMOTION_SET'], path: '/landPage/landPageSetting'  },
         hidden: true
       },
       {
         path: 'editLandPage',
         component: () => import('@/views/landPage/editPage'),
         name: 'editLandPage',
-        meta: { title: '编辑落地页', icon: '',  hidden: true, noCache: true, roles: ['admin'], path: '/landPage/landPageSetting'  },
+        meta: { title: '编辑落地页', icon: '',  hidden: true, noCache: true, roles: ['PROMOTION_SET'], path: '/landPage/landPageSetting'  },
         hidden: true
       }
     ]
@@ -204,14 +236,15 @@ export const asyncRouterMap = [
     name: 'intentionList',
     meta: {
       title: '意向收集管理',
-      icon: 'table'
+      icon: 'table',
+      roles: ['INTENTION_LIST']
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/landPage/intentionList'),
         name: 'intentionIndex',
-        meta: { title: '意向收集列表', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '意向收集列表', icon: '', noCache: true, roles: ['INTENTION_LIST']  }
       }
     ]
   },
@@ -246,20 +279,21 @@ export const asyncRouterMap = [
     name: 'levelOne',
     meta: {
       title: '业务管理',
-      icon: 'table'
+      icon: 'table',
+      roles: ['SERVICE_CATALOG_MA']
     },
     children: [
       {
         path: 'levelOne',
         component: () => import('@/views/serviceCategory/levelOne'),
         name: 'levelOne',
-        meta: { title: '一级业务管理', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '一级业务管理', icon: '', noCache: true, roles: ['SERVICE_CATALOG_MA']  }
       },
       {
         path: 'levelTwo',
         component: () => import('@/views/serviceCategory/levelTwo'),
         name: 'levelTwo',
-        meta: { title: '二级业务管理', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '二级业务管理', icon: '', noCache: true, roles: ['SERVICE_CATALOG_MA']  }
       },
       // {
       //   path: 'levelThree',
@@ -276,14 +310,15 @@ export const asyncRouterMap = [
     name: 'newBusiness',
     meta: {
       title: '新业务申请',
-      icon: 'table'
+      icon: 'table',
+      roles: ['BUSINESS_APPLY']
     },
     children: [
       {
         path: 'newBusiness',
         component: () => import('@/views/newBusiness/newBusiness'),
         name: 'newBusiness',
-        meta: { title: '新业务申请', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '新业务申请', icon: '', noCache: true, roles: ['BUSINESS_APPLY']  }
       }
     ]
   },
@@ -306,42 +341,42 @@ export const asyncRouterMap = [
       }
     ]
   },
-  {
-    path: '/manually',
-    component: Layout,
-    redirect: '/manually/manually',
-    name: 'manually',
-    meta: {
-      title: '人工录入企业',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'manually',
-        component: () => import('@/views/manually/manually'),
-        name: 'manually',
-        meta: { title: '已收录列表', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'createManually',
-        component: () => import('@/views/manually/createManually'),
-        name: 'createManually',
-        meta: { title: '添加(编辑)入录企业', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
+  // {
+  //   path: '/manually',
+  //   component: Layout,
+  //   redirect: '/manually/manually',
+  //   name: 'manually',
+  //   meta: {
+  //     title: '人工录入企业',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'manually',
+  //       component: () => import('@/views/manually/manually'),
+  //       name: 'manually',
+  //       meta: { title: '已收录列表', icon: '', noCache: true, roles: ['admin']  }
+  //     },
+  //     {
+  //       path: 'createManually',
+  //       component: () => import('@/views/manually/createManually'),
+  //       name: 'createManually',
+  //       meta: { title: '添加(编辑)入录企业', icon: '', noCache: true, roles: ['admin']  }
+  //     }
+  //   ]
+  // },
   {
     path: '/salesManager',
     component: Layout,
     redirect: '/salesManager/index',
     name: 'salesManager',
-    meta: { title: '销售推广邀请链接管理', icon: 'table' },
+    meta: { title: '销售推广邀请链接管理', icon: 'table', roles: ['SALER_MANAGER_MA'] },
     children: [
       {
         path: 'index',
         component: () => import('@/views/salesManager/index'),
         name: 'index',
-        meta: { title: '销售推广邀请管理', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '销售推广邀请管理', icon: '', noCache: true, roles: ['SALER_MANAGER_MA']  }
       }
     ]
   },
@@ -352,32 +387,33 @@ export const asyncRouterMap = [
     name: 'appConfiguration',
     meta: {
       title: 'App配置',
-      icon: 'table'
+      icon: 'table',
+      roles: ['APP_SET']
     },
     children: [
       {
         path: 'qualification',
         component: () => import('@/views/appConfiguration/qualification'),
         name: 'qualification',
-        meta: { title: '平台资质', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '平台资质', icon: '', noCache: true, roles: ['APP_SET']  }
       },
       {
         path: 'security',
         component: () => import('@/views/appConfiguration/security'),
         name: 'security',
-        meta: { title: '服务保障', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '服务保障', icon: '', noCache: true, roles: ['APP_SET']  }
       },
       // {
       //   path: 'formConfiguration',
       //   component: () => import('@/views/appConfiguration/formConfiguration'),
       //   name: 'formConfiguration',
-      //   meta: { title: '表单配置', icon: '', noCache: true, roles: ['admin']  }
+      //   meta: { title: '表单配置', icon: '', noCache: true, roles: ['APP_SET']  }
       // },
       {
         path: 'itemsManagement',
         component: () => import('@/views/appConfiguration/itemsManagement'),
         name: 'itemsManagement',
-        meta: { title: '询价单配置', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: '询价单配置', icon: '', noCache: true, roles: ['APP_SET']  }
       }
     ]
   },
@@ -388,20 +424,21 @@ export const asyncRouterMap = [
     name: 'appUpdate',
     meta: {
       title: 'App升级配置',
-      icon: 'table'
+      icon: 'table',
+      roles: ['APP_UPGRADE_SET']
     },
     children: [
       {
         path: 'iosUpdate',
         component: () => import('@/views/appUpdate/iosUpdate'),
         name: 'ios',
-        meta: { title: 'ios升级配置', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: 'ios升级配置', icon: '', noCache: true, roles: ['APP_UPGRADE_SET']  }
       },
       {
         path: 'andriodUpdate',
         component: () => import('@/views/appUpdate/andriodUpdate'),
         name: 'android',
-        meta: { title: 'android升级配置', icon: '', noCache: true, roles: ['admin']  }
+        meta: { title: 'android升级配置', icon: '', noCache: true, roles: ['APP_UPGRADE_SET']  }
       }
     ]
   },
