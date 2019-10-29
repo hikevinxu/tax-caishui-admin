@@ -119,7 +119,7 @@ export const asyncRouterMap = [
     redirect: '/merchants/merchantsAudit',
     name: 'merchants',
     meta: {
-      title: '商户入驻管理',
+      title: '商户管理',
       icon: 'table',
       roles: ['MER_AUDIT', 'MER_INFO_SET']
     },
@@ -135,6 +135,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/merchants/merchants.vue'),
         name: 'merchantsAmg',
         meta: { title: '商户信息管理', icon: '', noCache: true, roles: ['MER_INFO_SET']  }
+      },
+      {
+        path: '/giving/giving',
+        component: () => import('@/views/giving/giving'),
+        name: 'giving',
+        meta: { title: '商户赠送金币', icon: '', noCache: true, roles: ['MER_INFO_MA']}
       },
       {
         path: '/mainBusiness/mainBusiness',
@@ -419,24 +425,6 @@ export const asyncRouterMap = [
       }
     ]
   },
-  {   path: '/giving',
-      component: Layout,
-      redirect: '/giving/giving',
-      name: 'giving',
-      meta: {
-        title: '商户赠送金币',
-        icon: 'table',
-        roles: ['MER_INFO_MA']
-      },
-      children: [
-        {
-          path: 'giving',
-          component: () => import('@/views/giving/giving'),
-          name: 'giving',
-          meta: { title: '商户赠送金币', icon: '', noCache: true, roles: ['MER_INFO_MA']}
-        }
-      ]
-    },
   {
     path: '/appUpdate',
     component: Layout,
