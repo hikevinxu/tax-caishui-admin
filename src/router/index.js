@@ -128,13 +128,20 @@ export const asyncRouterMap = [
         path: 'merchantsAudit',
         component: () => import('@/views/merchants/merchantsAudit.vue'),
         name: 'merchantsAudit',
-        meta: { title: '审核', icon: '', noCache: true, roles: ['MER_AUDIT']  }
+        meta: { title: '商户入驻审核', icon: '', noCache: true, roles: ['MER_AUDIT']  }
       },
       {
         path: 'merchantsAmg',
         component: () => import('@/views/merchants/merchants.vue'),
         name: 'merchantsAmg',
-        meta: { title: '管理', icon: '', noCache: true, roles: ['MER_INFO_SET']  }
+        meta: { title: '商户信息管理', icon: '', noCache: true, roles: ['MER_INFO_SET']  }
+      },
+      {
+        path: '/mainBusiness/mainBusiness',
+        component: () => import('@/views/mainBusiness/mainBusiness'),
+        name: 'mainBusiness',
+        meta: { title: '主营业务管理', icon: '', noCache: true, roles: ['MER_INFO_SET']  },
+        hidden: true
       },
       {
         path: 'serviceManager',
@@ -333,12 +340,7 @@ export const asyncRouterMap = [
       icon: 'table'
     },
     children: [
-      {
-        path: 'mainBusiness',
-        component: () => import('@/views/mainBusiness/mainBusiness'),
-        name: 'mainBusiness',
-        meta: { title: '商户主营业务管理', icon: '', noCache: true, roles: ['admin']  }
-      }
+      
     ]
   },
   // {
