@@ -51,7 +51,7 @@ const permission = {
       return new Promise(resolve => {
         const { roles } = data
         let accessedRouters
-        if (roles.includes('admin')) {
+        if (roles.includes('AD_MA')) {
           try {
             // 以下是 动态 获取的 路由
             advertPositionList().then(res => {
