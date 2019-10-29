@@ -219,6 +219,16 @@ export default {
             })
             return
           }
+
+          if(this.temp.amount <  0){
+            this.$message({
+              message: '赠币不能低于0',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+            return
+          }
           presentBonus(this.temp).then((response) => {
             if (response.code == 0) {
               this.$notify({
