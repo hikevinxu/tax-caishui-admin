@@ -1014,245 +1014,247 @@
   }
 </style>
 <style lang="scss" >
-.el-dialog__body {
-  width: 1280px;
-  height: 600px;
-  overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  .landPage_pc {
-    .landPagePC {
-      width: 100%;
-      margin: 0 auto;
-      position: relative;
-      .landPagePC-center {
+.create_page {
+  .el-dialog__body {
+    width: 1280px;
+    height: 600px;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    .landPage_pc {
+      .landPagePC {
         width: 100%;
+        margin: 0 auto;
         position: relative;
-        top: 0;
-        left: 50%;
-        transform: translate(-50%, 0);
-      }
-      .headImgContent {
-        position: relative;
-      }
-      .footerImg,
-      .headImg {
-        display: block;
-        width: 100%;
-      }
-      .headContent {
-        width: 1000Px;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 50%;
-        margin-left: -500Px;
-        .form {
-          width: 400Px;
-          background-color: #fff;
+        .landPagePC-center {
+          width: 100%;
+          position: relative;
+          top: 0;
+          left: 50%;
+          transform: translate(-50%, 0);
+        }
+        .headImgContent {
+          position: relative;
+        }
+        .footerImg,
+        .headImg {
+          display: block;
+          width: 100%;
+        }
+        .headContent {
+          width: 1000Px;
+          height: 100%;
           position: absolute;
-          top: 50%;
-          right: 0;
-          transform: translate(0, -50%);
-          margin-top: -30Px;
-          border-radius: 4Px;
-          box-sizing: border-box;
-          padding: 24PX 36Px;
-          .taxCalculator-pc {
-            width: 100%;
-            padding: 24Px 0;
-            .taxCalculator-header {
+          top: 0;
+          left: 50%;
+          margin-left: -500Px;
+          .form {
+            width: 400Px;
+            background-color: #fff;
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translate(0, -50%);
+            margin-top: -30Px;
+            border-radius: 4Px;
+            box-sizing: border-box;
+            padding: 24PX 36Px;
+            .taxCalculator-pc {
               width: 100%;
-              height: 36Px;
-              .title {
-                float: left;
-                font-family: PingFangSC-Medium;
-                font-size: 20Px;
-                color: rgba(0,0,0,0.87);
-                line-height: 36Px;
-              }
-              .tab {
-                padding: 0;
-                margin: 0;
-                float: right;
-                font-family: PingFangSC-Medium;
-                font-size: 14Px;
-                color: #FF7F4A;
-                text-align: left;
-                line-height: 32Px;
-                border: 2Px solid #FF7F4A;
-                background-color: #FF7F4A;
-                border-radius: 18Px;
-                li {
-                  padding: 0;
-                  margin: 0;
-                  float: left;
-                  width: 96Px;
-                  height: 32Px;
-                  border-radius: 16Px;
-                  text-align: center;
-                  color: #fff;
-                  cursor: pointer;
-                  list-style: none;
-                }
-                li.active {
-                  background-color: #fff;
-                  color: #FF7F4A;
-                }
-              }
-            }
-            .taxCalculator-content {
-              width: 100%;
-              .tax-form {
-                padding: 16Px 0;
-                .tax-formItem {
-                  margin-top: 8Px;
-                  position: relative;
-                  display: flex;
-                  label {
-                    display: block;
-                    width: 100Px;
-                    font-family: PingFangSC-Regular;
-                    font-size: 13Px;
-                    color: rgba(0,0,0,0.60);
-                    text-align: left;
-                    line-height: 36Px;
-                  }
-                  input {
-                    flex: 1;
-                    height: 36Px;
-                    padding: 8Px 40Px 8Px 12Px;
-                    box-sizing: border-box;
-                    border: 1px solid rgba(0,0,0,0.12);
-                    border-radius: 2Px;
-                    outline: none;
-                    font-size: 13Px;
-                    color: rgba(0,0,0,0.60);
-                    line-height: 20Px;
-                  }
-                  span {
-                    position: absolute;
-                    right: 12Px;
-                    top: 0;
-                    font-family: PingFangSC-Regular;
-                    font-size: 13Px;
-                    color: rgba(0,0,0,0.60);
-                    text-align: right;
-                    line-height: 36Px;
-                  }
-                }
-              }
-              .tax-bottom {
+              padding: 24Px 0;
+              .taxCalculator-header {
                 width: 100%;
-                height: 88Px;
-                background: #FFEADA;
-                border-radius: 2Px;
-                font-family: PingFangSC-Medium;
-                font-size: 14Px;
-                color: rgba(0,0,0,0.38);
-                text-align: left;
-                line-height: 20Px;
-                box-sizing: border-box;
-                padding: 8Px 0;
-                p {
+                height: 36Px;
+                .title {
+                  float: left;
+                  font-family: PingFangSC-Medium;
+                  font-size: 20Px;
+                  color: rgba(0,0,0,0.87);
+                  line-height: 36Px;
+                }
+                .tab {
                   padding: 0;
                   margin: 0;
-                  display: block;
-                  width: 100%;
-                  line-height: 36Px;
-                  overflow: hidden;
-                  span {
+                  float: right;
+                  font-family: PingFangSC-Medium;
+                  font-size: 14Px;
+                  color: #FF7F4A;
+                  text-align: left;
+                  line-height: 32Px;
+                  border: 2Px solid #FF7F4A;
+                  background-color: #FF7F4A;
+                  border-radius: 18Px;
+                  li {
+                    padding: 0;
+                    margin: 0;
                     float: left;
-                    margin-left: 24Px;
-                    &:last-child {
-                      float: right;
-                      margin-right: 24Px;
-                    }
+                    width: 96Px;
+                    height: 32Px;
+                    border-radius: 16Px;
+                    text-align: center;
+                    color: #fff;
+                    cursor: pointer;
+                    list-style: none;
                   }
-                  &:last-child{
+                  li.active {
+                    background-color: #fff;
                     color: #FF7F4A;
                   }
                 }
               }
-            }
-          }
-          .register,
-          .download,
-          .intention {
-            .formTitle {
-              font-size: 16Px;
-              margin-bottom: 20Px;
-              font-family: Alibaba PuHuiTi;
-              font-weight: 400;
-              color: rgba(252,96,57,1);
-              line-height: 30Px;
-              text-align: center;
-            }
-            .form_item {
-              width: 100%;
-              height: 40Px;
-              box-sizing: border-box;
-              background-color: #fff;
-              margin-bottom: 12Px;
-              cursor: pointer;
-              input {
-                display: block;
+              .taxCalculator-content {
                 width: 100%;
-                height: 100%;
-                box-sizing: border-box;
-                padding: 14Px;
-                line-height: 18Px;
-                font-size: 14Px;
-                font-family:PingFang SC;
+                .tax-form {
+                  padding: 16Px 0;
+                  .tax-formItem {
+                    margin-top: 8Px;
+                    position: relative;
+                    display: flex;
+                    label {
+                      display: block;
+                      width: 100Px;
+                      font-family: PingFangSC-Regular;
+                      font-size: 13Px;
+                      color: rgba(0,0,0,0.60);
+                      text-align: left;
+                      line-height: 36Px;
+                    }
+                    input {
+                      flex: 1;
+                      height: 36Px;
+                      padding: 8Px 40Px 8Px 12Px;
+                      box-sizing: border-box;
+                      border: 1px solid rgba(0,0,0,0.12);
+                      border-radius: 2Px;
+                      outline: none;
+                      font-size: 13Px;
+                      color: rgba(0,0,0,0.60);
+                      line-height: 20Px;
+                    }
+                    span {
+                      position: absolute;
+                      right: 12Px;
+                      top: 0;
+                      font-family: PingFangSC-Regular;
+                      font-size: 13Px;
+                      color: rgba(0,0,0,0.60);
+                      text-align: right;
+                      line-height: 36Px;
+                    }
+                  }
+                }
+                .tax-bottom {
+                  width: 100%;
+                  height: 88Px;
+                  background: #FFEADA;
+                  border-radius: 2Px;
+                  font-family: PingFangSC-Medium;
+                  font-size: 14Px;
+                  color: rgba(0,0,0,0.38);
+                  text-align: left;
+                  line-height: 20Px;
+                  box-sizing: border-box;
+                  padding: 8Px 0;
+                  p {
+                    padding: 0;
+                    margin: 0;
+                    display: block;
+                    width: 100%;
+                    line-height: 36Px;
+                    overflow: hidden;
+                    span {
+                      float: left;
+                      margin-left: 24Px;
+                      &:last-child {
+                        float: right;
+                        margin-right: 24Px;
+                      }
+                    }
+                    &:last-child{
+                      color: #FF7F4A;
+                    }
+                  }
+                }
+              }
+            }
+            .register,
+            .download,
+            .intention {
+              .formTitle {
+                font-size: 16Px;
+                margin-bottom: 20Px;
+                font-family: Alibaba PuHuiTi;
                 font-weight: 400;
-                color:rgba(51,51,51,1);
-                border: 1Px solid rgba(211,211,211,1);
+                color: rgba(252,96,57,1);
+                line-height: 30Px;
+                text-align: center;
+              }
+              .form_item {
+                width: 100%;
+                height: 40Px;
+                box-sizing: border-box;
+                background-color: #fff;
+                margin-bottom: 12Px;
+                cursor: pointer;
+                input {
+                  display: block;
+                  width: 100%;
+                  height: 100%;
+                  box-sizing: border-box;
+                  padding: 14Px;
+                  line-height: 18Px;
+                  font-size: 14Px;
+                  font-family:PingFang SC;
+                  font-weight: 400;
+                  color:rgba(51,51,51,1);
+                  border: 1Px solid rgba(211,211,211,1);
+                  border-radius: 3Px;
+                  outline: none;
+                }
+              }
+              .qrcode {
+                width: 300Px;
+                height: 300Px;
+                margin: 0 auto;
+                background-image: linear-gradient(135deg, #FFAD71 0%, #FF7F4A 100%);
+                #canvas {
+                  width: 100%!important;
+                  height: 100%!important;
+                }
+              }
+              .submitForm {
+                margin-top: 24Px;
+                width: 100%;
+                height: 40Px;
+                background: linear-gradient(0deg,rgba(251,87,52,1) 0%,rgba(255,124,72,1) 100%);
                 border-radius: 3Px;
-                outline: none;
+                cursor: pointer;
+                font-size: 14Px;
+                line-height: 40Px;
+                color: #fff;
+                text-align: center;
               }
-            }
-            .qrcode {
-              width: 300Px;
-              height: 300Px;
-              margin: 0 auto;
-              background-image: linear-gradient(135deg, #FFAD71 0%, #FF7F4A 100%);
-              #canvas {
-                width: 100%!important;
-                height: 100%!important;
+              .buttonUnder {
+                text-align: center;
+                font-family: PingFang SC;
+                font-weight: 400;
+                font-size: 12Px;
+                margin-top: 8Px;
               }
-            }
-            .submitForm {
-              margin-top: 24Px;
-              width: 100%;
-              height: 40Px;
-              background: linear-gradient(0deg,rgba(251,87,52,1) 0%,rgba(255,124,72,1) 100%);
-              border-radius: 3Px;
-              cursor: pointer;
-              font-size: 14Px;
-              line-height: 40Px;
-              color: #fff;
-              text-align: center;
-            }
-            .buttonUnder {
-              text-align: center;
-              font-family: PingFang SC;
-              font-weight: 400;
-              font-size: 12Px;
-              margin-top: 8Px;
             }
           }
         }
-      }
-      .footContent {
-        text-align: center;
-        font-family: PingFang SC;
-        font-weight: 400;
-        font-size: 12Px;
-        line-height: 30Px;
-        padding: 10Px 0 20Px 0;
-        .topText {
+        .footContent {
+          text-align: center;
+          font-family: PingFang SC;
+          font-weight: 400;
+          font-size: 12Px;
           line-height: 30Px;
+          padding: 10Px 0 20Px 0;
+          .topText {
+            line-height: 30Px;
+          }
         }
       }
     }
