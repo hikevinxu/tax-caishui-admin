@@ -17,7 +17,8 @@ const global = {
   // 落地页表单类型
   formTypeList: [
     {name: '海外公司注册', id: 1},
-    {name: '公司注册', id: 2}
+    {name: '公司注册', id: 2},
+    {name: '印度公司注册', id: 3}
   ]
 }
 export default global

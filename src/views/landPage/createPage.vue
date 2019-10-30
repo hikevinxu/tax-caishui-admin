@@ -15,9 +15,6 @@
           <el-input type="text" placeholder="请输入渠道备注" v-model="formData.channelRemark"></el-input>
         </el-form-item>
 				<div  style="margin-bottom: 12px;"><span style="font-size: 16px; border-radius: 5px;">落地页配置</span> </div>
-				<!-- <el-form-item label="落地页url：" prop="url">
-          <el-input type="text" placeholder="" v-model="formData.url" disabled></el-input>
-        </el-form-item> -->
         <el-form-item label="客户端类型：" prop="clientType">
           <el-radio-group v-model="formData.clientType">
             <el-radio label="h5">移动端</el-radio>
@@ -108,17 +105,32 @@
           </el-upload>
           <el-button icon="el-icon-delete" size="small" type="danger" v-show="tailImgUrl" @click="deleteTailImg">删除</el-button>
         </el-form-item>
-        <el-form-item label="风险说明文案颜色：" prop="buttonRemarkColor">
-          <el-color-picker v-model="formData.riskInfoColor" size="medium"></el-color-picker>
+        <el-form-item label="是否显示咨询按钮：">
+          <el-switch v-model="formData.adviceShow"></el-switch>
+        </el-form-item>
+        <el-form-item label="咨询电话：" prop="adviceButtonContent" v-if="formData.adviceShow">
+          <el-input type="text" placeholder="请输入咨询电话" v-model="formData.advicePhone"></el-input>
+		    </el-form-item>
+        <el-form-item label="咨询按钮文案：" prop="adviceButtonContent" v-if="formData.adviceShow">
+          <el-input type="text" placeholder="请输入咨询按钮文案" v-model="formData.adviceButtonContent"></el-input>
+		    </el-form-item>
+        <el-form-item label="咨询按钮背景颜色：" prop="adviceButtonColor" v-if="formData.adviceShow">
+          <el-color-picker v-model="formData.adviceButtonColor" size="medium"></el-color-picker>
+		    </el-form-item>
+        <el-form-item label="咨询按钮文案颜色：" prop="adviceContentColor" v-if="formData.adviceShow">
+          <el-color-picker v-model="formData.adviceContentColor" size="medium"></el-color-picker>
 		    </el-form-item>
         <el-form-item label="风险说明：" prop="riskInfo">
           <el-input type="textarea" :rows="3" placeholder="请输入风险说明" v-model="formData.riskInfo"></el-input>
 		    </el-form-item>
-        <el-form-item label="公司名称、备案号文案颜色：" prop="buttonRemarkColor">
-          <el-color-picker v-model="formData.companyInfoColor" size="medium"></el-color-picker>
+        <el-form-item label="风险说明文案颜色：" prop="buttonRemarkColor">
+          <el-color-picker v-model="formData.riskInfoColor" size="medium"></el-color-picker>
 		    </el-form-item>
         <el-form-item label="公司名称、备案号：" prop="companyInfo">
           <el-input type="textarea" :rows="3" placeholder="请输入公司名称、备案号" v-model="formData.companyInfo"></el-input>
+		    </el-form-item>
+        <el-form-item label="公司名称、备案号文案颜色：" prop="buttonRemarkColor">
+          <el-color-picker v-model="formData.companyInfoColor" size="medium"></el-color-picker>
 		    </el-form-item>
         <el-form-item label="js基础代码：" prop="jsBase">
           <el-input type="textarea" :rows="3" placeholder="请输入js基础代码" v-model="formData.jsBase"></el-input>
@@ -176,38 +188,27 @@
                 </form>
               </div>
               <div class="intentionCollect" v-if="formData.pageType == 3">
-                <div class="intentionCollect_form" v-if="formData.formType == 1">
+                <div class="intentionCollect_form">
                   <div class="title">{{formData.formTitle}}</div>
-                  <div class="form_item">
+                  <div class="form_item" v-if="formData.formType == 1">
                     <label>国家/地区<span>*</span></label>
                     <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请选择"></div>
                   </div>
-                  <div class="form_item">
+                  <div class="form_item" v-if="formData.formType == 1">
                     <label>注册意向<span>*</span></label>
                     <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请选择"></div>
                   </div>
-                  <div class="form_item">
-                    <label>联系电话<span>*</span></label>
-                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="tel" readonly placeholder="请输入"></div>
-                  </div>
-                  <div class="form_item">
-                    <label>如何称呼<span>*</span></label>
-                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请输入"></div>
-                  </div>
-                </div>
-                <div class="intentionCollect_form" v-if="formData.formType == 2">
-                  <div class="title">{{formData.formTitle}}</div>
-                  <div class="form_item">
+                  <div class="form_item" v-if="formData.formType == 2">
                     <label>城市/地区<span>*</span></label>
                     <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="如：杭州-西湖区"></div>
                   </div>
                   <div class="form_item">
-                    <label>联系电话<span>*</span></label>
-                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="tel" readonly placeholder="请输入"></div>
+                    <label>如何称呼</label>
+                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请输入"></div>
                   </div>
                   <div class="form_item">
-                    <label>如何称呼<span>*</span></label>
-                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="text" readonly placeholder="请输入"></div>
+                    <label>联系电话<span>*</span></label>
+                    <div class="select"><input :style="{'background-color': formData.preRegisterBgColor}" type="tel" readonly placeholder="请输入"></div>
                   </div>
                 </div>
               </div>
@@ -219,8 +220,11 @@
 				    <div class="bottom">
 				    	<div class="line1"></div>
 				    	<div class="bottom_text2" v-html="handleText(formData.companyInfo)" :style="{color: formData.companyInfoColor}"></div>
-				    </div>	
+				    </div>
 					</div>
+          <div class="fixedButton" :style="{background: formData.adviceButtonColor, color: formData.adviceContentColor}" v-if="formData.adviceShow">
+            {{formData.adviceButtonContent}}
+          </div>
 				</div>
 			</div>
       <div class="pc-preview" v-if="formData.clientType == 'pc'">
@@ -388,7 +392,13 @@
           formTypeName: '',
           formTitle: '',
           dimensionalText: '',
-          dimensionalColor: '#555555'
+          dimensionalColor: '#555555',
+          // 底部咨询按钮
+          adviceShow: false,
+          advicePhone: '',
+          adviceButtonContent: '',
+          adviceButtonColor: '#1574FF',
+          adviceContentColor: '#FFFFFF'
         },
         headImgUrl: '',
         topImgUrl: '',
@@ -597,7 +607,26 @@
 			right: 100px;
 			width: 360px;
 			height: 680px;
-			flex-shrink: 0;
+      flex-shrink: 0;
+      .fixedButton {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        line-height: 40px;
+        letter-spacing: 4px;
+        outline: none;
+        box-sizing: border-box;
+        font-family: PingFangSC-Regular;
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .container1 {
+        position: relative;
+      }
 			.preview_title {
 				width: 100%;
 				line-height: 40px;
@@ -626,7 +655,7 @@
 		}
 	}
 	.container1 {
-		position: relative;
+    position: relative;
 	}
 	.banner {
 		width: 100%;
@@ -708,13 +737,13 @@
 		line-height: 18px;
 	}
 	.line1 {
-		margin-top: 15px;	
+		margin-top: 5px;	
 		width: 100%;
 		height: 0;
 		border-top: 1px solid rgba(0,0,0,0.12);
 	}
 	.bottom_text2 {
-		margin-top: 10px;
+		margin-top: 5px;
 		font-family: PingFangSC-Regular;
 		font-size: 12px;
 		color: rgba(0,0,0,0.38);

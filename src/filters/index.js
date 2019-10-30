@@ -131,6 +131,9 @@ export function formTypeFilters(status) {
     case 2:
       return '公司注册'
       break;
+    case 3:
+      return '印度公司注册'
+      break;
     default: 
       return ''
       break;
