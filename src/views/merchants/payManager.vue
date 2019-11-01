@@ -1,7 +1,7 @@
 <template>
   <div class="payManager">
     <div class="filter-container">
-      <el-button v-waves class="filter-item" type="warning">返回</el-button>
+      <el-button v-waves class="filter-item" type="warning" @click="back">返回</el-button>
       <el-button v-waves class="filter-item" type="primary" @click="openAddDialog">添加</el-button>
     </div>
     <el-radio-group v-model="tabPosition" @change="tabPositionChange" style="margin: 0 0 20px;">
@@ -161,6 +161,10 @@ export default {
     this.getMerchantServiceTypeList()
   },
   methods: {
+    // 返回按钮
+    back() {
+      this.$router.go(-1)
+    },
     // tab 切换
     tabPositionChange(index) {
       console.log(index)
@@ -171,6 +175,7 @@ export default {
       }
       this.getSearchList()
     },
+    // 从第一页获取列表
     getSearchList() {
       this.listQuery.pageNum = 1
       this.getList()
@@ -186,14 +191,13 @@ export default {
         }
       })
     },
-    // 
+    // 获取主营业务列表
     getMerchantServiceTypeList() {
       let params = {
         merchantId: this.$route.query.id
       }
       merchantServiceTypeList(params).then(res => {
         if(res.code == 0){
-          console.log(res)
           this.serviceTypeList = res.data
         }
       })
@@ -345,6 +349,7 @@ export default {
         }
       })
     },
+    // 修改
     updateData() {
       console.log(this.addDataForm.serviceArea)
       let arr = []
@@ -388,9 +393,11 @@ export default {
         }
       })
     },
+    // 城市选择change事件
     selectAreaChange(val) {
       console.log(val)
     },
+    // 主营业务change事件
     serviceCodeChange(val){
       this.addDataForm.serviceArea = []
       if (val && val != '') {
@@ -402,6 +409,7 @@ export default {
         }
       }
     },
+    // 获取服务区域
     getServiceDistrictTree(val) {
       let params = {
         serviceId: val
