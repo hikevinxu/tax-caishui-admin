@@ -50,6 +50,7 @@ const permission = {
     GenerateRoutes({ commit }, data) {
       return new Promise(resolve => {
         const { roles } = data
+        console.log(roles)
         let accessedRouters
         if (roles.includes('AD_MA')) {
           try {
@@ -70,19 +71,19 @@ const permission = {
                           path: 'businessAdManager' + (i + 1) + '-1/params='+ res.data[i].positionNo +',' + res.data[i].elementNum + ','+ res.data[i].elementType + ',' + res.data[i].relateType + ',2',
                           component: () => import('@/views/Admanager/admanagerList/BussinessAdManager.vue'),
                           name: 'adPosition1-1' + (i + 1),
-                          meta: { title: '商业广告管理', roles: ['admin'] }
+                          meta: { title: '商业广告管理', roles: ['AD_MA'] }
                         },
                         {
                           path: 'fullInfoList' + (i + 1) + '-2/params='+ res.data[i].positionNo +',' + res.data[i].elementNum + ','+ res.data[i].elementType + ',' + res.data[i].relateType,
                           component: () => import('@/views/Admanager/admanagerList/BussinessAdPut.vue'),
                           name: 'adPosition1-2' + (i + 1),
-                          meta: { title: '商业广告投放列表', roles: ['admin'] }
+                          meta: { title: '商业广告投放列表', roles: ['AD_MA'] }
                         },
                         {
                           path: 'systemAd' + (i + 1) + '-3/params='+ res.data[i].positionNo +',' + res.data[i].elementNum + ','+ res.data[i].elementType + ',' + res.data[i].relateType + ',1',
                           component: () => import('@/views/Admanager/admanagerList/SystemAdManager.vue'),
                           name: 'adPosition1-3' + (i + 1),
-                          meta: { title: '系统默认广告管理', roles: ['admin'] }
+                          meta: { title: '系统默认广告管理', roles: ['AD_MA'] }
                         }
                       ]
                     })
@@ -101,18 +102,18 @@ const permission = {
                 }
                 asyncRouterMap.splice(1, 0, nestedRouter)
                 // 以上是 动态 获取的 路由
-                accessedRouters = asyncRouterMap
+                accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
                 commit('SET_ROUTERS', accessedRouters)
                 resolve()
               }
             }).catch(err => {
-              accessedRouters = asyncRouterMap
+              accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
               commit('SET_ROUTERS', accessedRouters)
               resolve()
             })
           }
           catch(err) {
-            accessedRouters = asyncRouterMap
+            accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
             commit('SET_ROUTERS', accessedRouters)
             resolve()
           }
@@ -121,8 +122,6 @@ const permission = {
           commit('SET_ROUTERS', accessedRouters)
           resolve()
         }
-        // commit('SET_ROUTERS', accessedRouters)
-        // resolve()
       })
     }
   }
