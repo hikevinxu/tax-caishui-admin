@@ -101,6 +101,7 @@ const permission = {
                   children: arr
                 }
                 asyncRouterMap.splice(1, 0, nestedRouter)
+                console.log(asyncRouterMap)
                 // 以上是 动态 获取的 路由
                 accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
                 commit('SET_ROUTERS', accessedRouters)
