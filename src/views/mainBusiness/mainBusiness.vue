@@ -864,44 +864,46 @@ export default {
 }
 </script>
 <style lang="scss">
-.el-pagination.is-background .el-pager li:not(.disabled).active{
-  background-color: #FF7F4A;
-}
-.el-pagination.is-background .el-pager li:not(.disabled).active:hover{
-  color: #ffffff;
-}
-.el-pagination.is-background .el-pager li:not(.disabled):hover{
-  color: #FF7F4A;
-}
-.el-button--success{
-  background: #5AB3A4;
-  border-color: #5AB3A4;
-}
-.el-dialog{
-  width: 70%;
-  min-width: 750PX;
-}
-.el-upload {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
-}
-.el-table {
-  .el-table__header {
-    tr {
-      background: #E0E0E0;
-      th {
+.mainBusinesss {
+  .el-pagination.is-background .el-pager li:not(.disabled).active{
+    background-color: #FF7F4A;
+  }
+  .el-pagination.is-background .el-pager li:not(.disabled).active:hover{
+    color: #ffffff;
+  }
+  .el-pagination.is-background .el-pager li:not(.disabled):hover{
+    color: #FF7F4A;
+  }
+  .el-button--success{
+    background: #5AB3A4;
+    border-color: #5AB3A4;
+  }
+  .el-dialog{
+    width: 70%;
+    min-width: 750PX;
+  }
+  .el-upload {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .el-table {
+    .el-table__header {
+      tr {
         background: #E0E0E0;
+        th {
+          background: #E0E0E0;
+        }
       }
     }
-  }
-  thead {
-    font-family: PingFangSC-Regular;
-    font-size: 13px;
-    color: rgba(0,0,0,0.87);
-    text-align: center;
-    line-height: 20px;
+    thead {
+      font-family: PingFangSC-Regular;
+      font-size: 13px;
+      color: rgba(0,0,0,0.87);
+      text-align: center;
+      line-height: 20px;
+    }
   }
 }
 .mainBusinesss {

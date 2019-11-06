@@ -78,8 +78,18 @@
           <el-button v-show="scope.row.companyStatus == 0" style="margin-left: 12px;" type="warning" size="small" @click="handleUp(scope.row)">上架</el-button>
           <el-button v-show="scope.row.companyStatus == 1" style="margin-left: 12px;" type="danger" size="small" @click="handleDown(scope.row)">下架</el-button>
           <el-button style="margin-left: 12px;" type="success" size="small" @click="handleLookDetail(scope.row)">查看</el-button>
-          <el-button style="margin-left: 12px;" type="warning" size="small" @click="goMain(scope.row)">业务管理</el-button>
-          <el-button style="margin-left: 12px;" type="warning" size="small" @click="goServiceManager(scope.row)">服务管理</el-button>
+          <el-dropdown style="margin-left: 12px;" @command="handleCommand">
+            <el-button type="primary" size="small">
+              操作
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item :command="{type: 'goMain', item: scope.row}">业务管理</el-dropdown-item>
+              <el-dropdown-item :command="{type: 'goServiceManager', item: scope.row}">服务管理</el-dropdown-item>
+              <el-dropdown-item :command="{type: 'payManager', item: scope.row}">付费管理</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <!-- <el-button style="margin-left: 12px;" type="warning" size="small" @click="goMain(scope.row)">业务管理</el-button>
+          <el-button style="margin-left: 12px;" type="warning" size="small" @click="goServiceManager(scope.row)">服务管理</el-button> -->
         </template>
       </el-table-column>
 
@@ -419,24 +429,37 @@ export default {
     },
     goMain(row){
       this.$router.push({
-          path: '/mainBusiness/mainBusiness',
-          query: {
-            id: row.companyId
-          }
+        path: '/mainBusiness/mainBusiness',
+        query: {
+          id: row.companyId
+        }
       })
     },
     goServiceManager(row) {
       this.$router.push({
-          path: '/merchants/serviceManager',
-          query: {
-            id: row.companyId
-          }
+        path: '/merchants/serviceManager',
+        query: {
+          id: row.companyId
+        }
       })
+    },
+    payManager(row) {
+      this.$router.push({
+        path: '/merchants/payManager',
+        query: {
+          id: row.id
+        }
+      })
+    },
+    // 操作-下拉菜单
+    handleCommand(command) {
+      console.log(command)
+      this[command.type](command.item)
     }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .filter-container .filter-item{
     margin-bottom: 0px;
 }

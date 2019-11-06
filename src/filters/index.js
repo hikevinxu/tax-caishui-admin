@@ -140,3 +140,17 @@ export function formTypeFilters(status) {
   }
 }
 
+/**
+ * 时间戳-日期格式化
+ * @function timeFormatter
+ * @param status Number 上下架状态码
+ */
+export function timeFormatter(time) {
+  var year=new Date(time).getFullYear()
+  var month=new Date(time).getMonth()+1
+  var date=new Date(time).getDate()
+  var hour=new Date(time).getHours()
+  var minute=new Date(time).getMinutes()
+  var second=new Date(time).getSeconds()
+  return year+"-"+(month < 10 ? '0' + month : month)+"-"+(date < 10 ? '0' + date : date)+" "+(hour < 10 ? '0' + hour : hour)+":"+(minute < 10 ? '0' + minute : minute)+":"+(second < 10 ? '0' + second : second)
+}
