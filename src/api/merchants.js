@@ -144,3 +144,66 @@ export function serviceDetail(params) {
 export function serviceDownRecords(params) {
   return fetchGet('/service/down_records', params)
 }
+
+/**
+ * 商户扣费列表
+ * @function merchantDeductionList
+ * @type 'post'
+ */
+export function merchantDeductionList(params) {
+  return fetchPost('/merchant/deduction/list', params)
+}
+
+/**
+ * 商户服务对应的服务类目列表
+ * @function merchantServiceTypeList
+ * @type 'post'
+ */
+export function merchantServiceTypeList(params) {
+  return fetchGet('/merchant/serviceType/list', params)
+}
+
+/**
+ * 商户扣费配置-新增
+ * @function merchantDeductionAdd
+ * @type 'post'
+ */
+export function merchantDeductionAdd(params) {
+  return fetchPost('/merchant/deduction/add', params)
+}
+
+/**
+ * 商户扣费配置-详情
+ * @function merchantDeductionDetail
+ * @type 'post'
+ */
+export function merchantDeductionDetail(params) {
+  return fetchGet('/merchant/deduction/detail', params)
+}
+
+/**
+ * 商户扣费配置-删除
+ * @function merchantDeductionDelete
+ * @type 'get'
+ */
+export function merchantDeductionDelete(params) {
+  return fetchGet('/merchant/deduction/delete', params)
+}
+
+/**
+ * 商户扣费配置-修改
+ * @function merchantDeductionUpdate
+ * @type 'post'
+ */
+export function merchantDeductionUpdate(params) {
+  return fetchPost('/merchant/deduction/update', params)
+}
+
+/**
+ * 服务下服务区域树结构
+ * @function serviceDistrictTree
+ * @type 'get'
+ */
+export function serviceDistrictTree(params) {
+  return fetchGet('/service/districtTree', params)
+}

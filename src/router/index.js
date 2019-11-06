@@ -92,7 +92,7 @@ export const asyncRouterMap = [
     path: '/userManager',
     component: Layout,
     redirect: '/userManager/index',
-    name: 'merchants',
+    name: 'userManager',
     meta: {
       title: '用户管理',
       icon: 'table',
@@ -102,7 +102,7 @@ export const asyncRouterMap = [
       {
         path: 'index',
         component: () => import('@/views/userManager/userManager'),
-        name: 'userManager',
+        name: 'userManagerIndex',
         meta: { title: '用户管理', noCache: true, roles: ['USER_MA'] }
       },
       {
@@ -146,7 +146,7 @@ export const asyncRouterMap = [
         path: '/mainBusiness/mainBusiness',
         component: () => import('@/views/mainBusiness/mainBusiness'),
         name: 'mainBusiness',
-        meta: { title: '主营业务管理', icon: '', noCache: true, roles: ['MER_INFO_SET']  },
+        meta: { title: '主营业务管理', icon: '', noCache: true, roles: ['MER_INFO_SET'], path: '/merchants/merchantsAmg'  },
         hidden: true
       },
       {
@@ -163,6 +163,13 @@ export const asyncRouterMap = [
         meta: { title: '添加/编辑服务', icon: '', noCache: true, roles: ['MER_INFO_SET'], path: '/merchants/merchantsAmg' },
         hidden: true
       },
+      {
+        path: 'payManager',
+        component: () => import('@/views/merchants/payManager.vue'),
+        name: 'payManager',
+        meta: { title: '付费管理', icon: '', noCache: true, roles: ['MER_INFO_SET'], path: '/merchants/merchantsAmg' },
+        hidden: true
+      }
     ]
   },
   {
@@ -288,7 +295,7 @@ export const asyncRouterMap = [
   {
     path: '/levelOne',
     component: Layout,
-    redirect: '/serviceCategory/levelOne',
+    redirect: '/serviceCategory/index',
     name: 'levelOne',
     meta: {
       title: '业务管理',
@@ -297,9 +304,9 @@ export const asyncRouterMap = [
     },
     children: [
       {
-        path: 'levelOne',
+        path: 'index',
         component: () => import('@/views/serviceCategory/levelOne'),
-        name: 'levelOne',
+        name: 'levelOneIndex',
         meta: { title: '一级业务管理', icon: '', noCache: true, roles: ['SERVICE_CATALOG_MA']  }
       },
       {
@@ -330,23 +337,9 @@ export const asyncRouterMap = [
       {
         path: 'newBusiness',
         component: () => import('@/views/newBusiness/newBusiness'),
-        name: 'newBusiness',
+        name: 'newBusinessIndex',
         meta: { title: '新业务申请', icon: '', noCache: true, roles: ['BUSINESS_APPLY']  }
       }
-    ]
-  },
-  {
-    path: '/mainBusiness',
-    component: Layout,
-    redirect: '/mainBusiness/mainBusiness',
-    name: 'mainBusiness',
-    hidden: true,
-    meta: {
-      title: '商户主营业务管理',
-      icon: 'table'
-    },
-    children: [
-      
     ]
   },
   // {
@@ -385,6 +378,25 @@ export const asyncRouterMap = [
         component: () => import('@/views/salesManager/index'),
         name: 'index',
         meta: { title: '销售推广邀请管理', icon: '', noCache: true, roles: ['SALER_MANAGER_MA']  }
+      }
+    ]
+  },
+  {
+    path: '/indexSyncMa',
+    component: Layout,
+    redirect: '/indexSyncMa/index',
+    name: 'indexSyncMa',
+    meta: {
+      title: '索引同步管理',
+      icon: 'table',
+      roles: ['INDEX_SYNC_MA']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/indexSyncManager/indexSyncManager'),
+        name: 'indexSyncManager',
+        meta: { title: '索引同步管理', icon: '', noCache: true, roles: ['INDEX_SYNC_MA']  }
       }
     ]
   },
