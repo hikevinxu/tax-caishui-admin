@@ -16,11 +16,6 @@
       fit
       highlight-current-row
       style="width: 100%;">
-      <el-table-column label="序号" prop="id" align="center" width="80px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.sortIndex }}</span>
-        </template>
-      </el-table-column>
 
       <el-table-column label="二级业务名称" prop="id" align="center" width="150px">
         <template slot-scope="scope">
@@ -34,27 +29,36 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="三级业务数量" align="center" width="120px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.levelThreeCount }}</span>
-        </template>
-      </el-table-column>
-
       <el-table-column label="状态" width="120px" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.shelf == true">{{ scope.row.shelf | shelfFilters }}</el-tag>
           <el-tag type="danger" v-else>{{ scope.row.shelf | shelfFilters }}</el-tag>
         </template>
       </el-table-column>
+
+      <el-table-column label="排序索引" align="center" width="120px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sortIndex }}</span>
+        </template>
+      </el-table-column>
       
       <el-table-column :label="$t('table.actions')" align="center" min-width="250" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-          <!-- <el-button style="margin-left: 10px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.shelf == false">上架</el-button> -->
-          <!-- <el-button style="margin-left: 10px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.shelf == true">下架</el-button> -->
-          <el-button style="margin-left: 10px;" type="primary" size="small" @click="handleIncr(scope.row)">排序上升</el-button>
-          <el-button style="margin-left: 10px;" type="success" size="small" @click="handleDecr(scope.row)">排序下降</el-button>
-          <!-- <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)" v-if="scope.row.shelf == false">删除</el-button> -->
+          <el-button style="margin-left: 10px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.shelf == false">上架</el-button>
+          <el-button style="margin-left: 10px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.shelf == true">下架</el-button>
+          <el-dropdown style="margin-left: 10px;"  @command="handleCommand">
+            <el-button type="primary" size="small">
+              排序操作
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item :command="{type: 'handleIncr', item: scope.row}">排序上升</el-dropdown-item>
+                <el-dropdown-item :command="{type: 'handleDecr', item: scope.row}">排序下降</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <!-- <el-button style="margin-left: 10px;" type="primary" size="small" @click="handleIncr(scope.row)">排序上升</el-button>
+          <el-button style="margin-left: 10px;" type="success" size="small" @click="handleDecr(scope.row)">排序下降</el-button> -->
+          <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)" v-if="scope.row.shelf == false">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -69,7 +73,7 @@
         </el-select>
         </el-form-item>
 
-        <el-form-item label="二级业务名称：" prop="name" v-show="textMap[dialogStatus]== '新建'">
+        <el-form-item label="二级业务名称：" prop="name">
           <el-input v-model="temp.name" placeholder="请输入业务名称" type="text" />
         </el-form-item>
 
@@ -81,13 +85,13 @@
           <el-input v-model="temp.descr" placeholder="请输入业务介绍" type="textarea" autosize/>
         </el-form-item>
 
-        <el-form-item label="是否叶子结点：" prop="leafNode" v-show="textMap[dialogStatus]== '新建'">
+        <!-- <el-form-item label="是否叶子结点：" prop="leafNode" v-show="textMap[dialogStatus]== '新建'">
           <el-select  style="width: 200px" v-model="temp.leafNode" clearable placeholder="请选择是否叶子结点">
             <el-option v-for="(item,index) in leafNodeList" :key="index" :label="item.name" :value="item.val"> </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
 
-        <span style="color: red;">（如果该业务非叶子节点，请尽快添加该业务的子节点，避免数据出错）</span>
+        <!-- <span style="color: red;">（如果该业务非叶子节点，请尽快添加该业务的子节点，避免数据出错）</span> -->
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -99,7 +103,7 @@
 </template>
 
 <script>
-import { serviceTypeList,serviceTypeInfo,serviceTypeSave,serviceTypeDown,serviceTypeUp,serviceTypeDecr,serviceTypeIncr,serviceTypeUpdate } from '@/api/service'
+import { serviceTypeList,serviceTypeInfo,serviceTypeSave,serviceTypeDown,serviceTypeUp,serviceTypeDecr,serviceTypeIncr,serviceTypeUpdate, serviceTypeDelete } from '@/api/service'
 import { businessTypeList } from '@/api/homePageSetting'
 import { jumpTypeFilters, shelfFilters, pageUrlFilters } from '@/filters/index'
 import global from '@/utils/global'
@@ -146,8 +150,7 @@ export default {
         id: '',
         icon: '',
         serviceCode: '',
-        name: '',
-        leafNode: false
+        name: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -296,6 +299,10 @@ export default {
         })
       // })
     },
+    handleCommand(command) {
+      console.log(command)
+      this[command.type](command.item)
+    },
     //重置表单
     resetTemp() {
       this.temp = {
@@ -304,8 +311,7 @@ export default {
         parentCode: '',
         name: '',
         level: 2,
-        descr: '',
-        leafNode: false
+        descr: ''
       }
       this.uploadImg.imgUrl = ''
       this.uploadImg.fileId = ''
@@ -325,15 +331,12 @@ export default {
         if (valid) {
           this.loading = true
           let params = {
-            // id: '',
             icon: this.uploadImg.fileId,
             parentCode: this.temp.parentCode,
             name: this.temp.name,
             descr: this.temp.descr,
-            level: 2,
-            leafNode: this.temp.leafNode
+            level: 2
           }
-          // console.log(params)
           params = qs.stringify(params)
           serviceTypeSave(params).then((response) => {
             if (response.code == 0) {
@@ -359,7 +362,6 @@ export default {
           })
           .catch(err => {
             this.loading = false
-            this.dialogFormVisible = false
           })
         }
       })
@@ -434,20 +436,14 @@ export default {
         let query = {
           id: id
         }
-        serviceTagDelete(query).then(response => {
+        let params = qs.stringify(query)
+        serviceTypeDelete(params).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
               message: '删除成功',
               type: 'success',
               duration: 2000
-            })
-          } else {
-            this.$message({
-              message: '删除失败',
-              type: 'error',
-              showClose: true,
-              duration: 1000
             })
           }
           this.getList()
@@ -461,7 +457,6 @@ export default {
       serviceTypeList().then(res => {
         if(res.code == 0) {
           this.firstCodeList = res.data
-          console.log(res)
         }
       })
     },
