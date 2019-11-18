@@ -13,51 +13,54 @@
       fit
       highlight-current-row
       style="width: 100%;">
-      <el-table-column label="序号" prop="id" align="center" width="80px">
+      <!-- <el-table-column label="序号" prop="id" align="center" width="80px">
         <template slot-scope="scope">
           <span>{{ scope.row.sortIndex }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
-      <el-table-column label="一级业务名称" prop="id" align="center" width="150px">
+      <el-table-column label="一级业务名称" prop="id" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="叶子类型" align="center" width="120px">
+      <el-table-column label="二级业务数量" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.leafLevel }}</span>
+          <span>{{ scope.row.childCount }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="二级业务数量" align="center" width="120px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.levelTwoCount }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="三级业务数量" align="center" width="120px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.levelThreeCount }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="状态" width="120px" align="center">
+      <el-table-column label="状态" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.shelf == true">{{ scope.row.shelf | shelfFilters }}</el-tag>
           <el-tag type="danger" v-else>{{ scope.row.shelf | shelfFilters }}</el-tag>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="排序索引" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sortIndex }}</span>
         </template>
       </el-table-column>
       
       <el-table-column :label="$t('table.actions')" align="center" min-width="250" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-          <!-- <el-button style="margin-left: 10px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.shelf == false">上架</el-button> -->
-          <!-- <el-button style="margin-left: 10px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.shelf == true">下架</el-button> -->
-          <el-button style="margin-left: 10px;" type="primary" size="small" @click="handleIncr(scope.row)">排序上升</el-button>
-          <el-button style="margin-left: 10px;" type="success" size="small" @click="handleDecr(scope.row)">排序下降</el-button>
-          <!-- <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)" v-if="scope.row.shelf == false">删除</el-button> -->
+          <el-button style="margin-left: 10px;" type="success" size="small" @click="handleUp(scope.row)" v-if="scope.row.shelf == false">上架</el-button>
+          <el-button style="margin-left: 10px;" type="warning" size="small" @click="handleDown(scope.row)" v-if="scope.row.shelf == true">下架</el-button>
+          <el-dropdown style="margin-left: 10px;"  @command="handleCommand">
+            <el-button type="primary" size="small">
+              排序操作
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item :command="{type: 'handleIncr', item: scope.row}">排序上升</el-dropdown-item>
+                <el-dropdown-item :command="{type: 'handleDecr', item: scope.row}">排序下降</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <!-- <el-button style="margin-left: 10px;" type="primary" size="small" @click="handleIncr(scope.row)">排序上升</el-button>
+          <el-button style="margin-left: 10px;" type="success" size="small" @click="handleDecr(scope.row)">排序下降</el-button> -->
+          <el-button style="margin-left: 10px;" type="danger" size="small" @click="handleDelete(scope.row)" v-if="scope.row.shelf == false">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -66,14 +69,14 @@
 
     <el-dialog width="800px" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="150px" style="margin-left:50px;">
-        <el-form-item label="一级业务名称：" prop="name" v-show="textMap[dialogStatus]== '新建'">
+        <el-form-item label="一级业务名称：" prop="name">
           <el-input v-model="temp.name" placeholder="请输入业务名字" />
         </el-form-item>
 
         <el-form-item label="业务介绍：">
           <el-input v-model="temp.descr" placeholder="请输入业务介绍" type="textarea" autosize/>
         </el-form-item>
-        <span style="color: red;">（一级业务默认非叶子结点，请尽快添加该业务的子节点，避免数据出错）</span>
+        <!-- <span style="color: red;">（一级业务默认非叶子结点，请尽快添加该业务的子节点，避免数据出错）</span> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -84,7 +87,7 @@
 </template>
 
 <script>
-import { serviceTypeList,serviceTypeInfom,serviceTypeSave,serviceTypeDown,serviceTypeUp,serviceTypeDecr,serviceTypeIncr,serviceTypeUpdate } from '@/api/service'
+import { serviceTypeList,serviceTypeInfom,serviceTypeSave,serviceTypeDown,serviceTypeUp,serviceTypeDecr,serviceTypeIncr,serviceTypeUpdate, serviceTypeDelete } from '@/api/service'
 import { businessTypeList } from '@/api/homePageSetting'
 import { jumpTypeFilters, shelfFilters, pageUrlFilters } from '@/filters/index'
 import global from '@/utils/global'
@@ -298,21 +301,11 @@ export default {
               })
               this.loading = false
               this.dialogFormVisible = false
-            } else {
-              this.$message({
-                message: response.data.msg,
-                type: 'error',
-                showClose: true,
-                duration: 1000
-              })
-              this.loading = false
-              this.dialogFormVisible = false
             }
             this.getList()
           })
           .catch(err => {
             this.loading = false
-            this.dialogFormVisible = false
           })
         }
       })
@@ -333,7 +326,6 @@ export default {
       this.loading = true
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          // console.log(params)
           let temp = qs.stringify(this.temp)
           serviceTypeUpdate(temp).then((response) => {
             if (response.code == 0) {
@@ -345,21 +337,11 @@ export default {
               })
               this.loading = false
               this.dialogFormVisible = false
-            } else {
-              this.$message({
-                message: "修改失败",
-                type: 'error',
-                showClose: true,
-                duration: 1000
-              })
-              this.loading = false
-              this.dialogFormVisible = false
             }
             this.getList()
           })
           .catch(err => {
             this.loading = false
-            this.dialogFormVisible = false
           })
         }
       })
@@ -372,7 +354,7 @@ export default {
           id: id
         }
         query = qs.stringify(query)
-        serviceTagDelete(query).then(response => {
+        serviceTypeDelete(query).then(response => {
           if (response.code == 0) {
             this.$notify({
               title: '成功',
@@ -391,6 +373,10 @@ export default {
           this.getList()
         })
       })
+    },
+    handleCommand(command) {
+      console.log(command)
+      this[command.type](command.item)
     },
     firstCodeChange(value) {
       this.showThird = false
