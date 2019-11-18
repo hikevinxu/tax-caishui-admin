@@ -349,7 +349,7 @@ export default {
     // 删除
     handleDelete(row) {
       const id = row.id
-      this.$confirm('确认删除?', '提示', {}).then(() => {
+      this.$confirm('该操作会删除所关联的服务和相关广告位，请检查，确认删除？', '提示', {}).then(() => {
         let query = {
           id: id
         }
