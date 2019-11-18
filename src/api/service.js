@@ -9,7 +9,7 @@ import qs from 'qs'
  * @param pageSize Number
  */
 export function serviceTypeList(params) {
-  return fetchGet('/serviceType/list/now', params)
+  return fetchGet('/serviceType/list', params)
 }
 
 /**
@@ -31,7 +31,16 @@ export function serviceTypeInfo(params) {
  * @param pageSize Number
  */
 export function serviceTypeSave(params) {
-  return fetchPost('/serviceType/save', params)
+  return fetchPost('/serviceType/add', params)
+}
+
+/**
+ * 服务类目删除
+ * @function serviceTypeDelete
+ * @type 'POST'
+ */
+export function serviceTypeDelete(params) {
+  return fetchPost('/serviceType/delete', params)
 }
 
 /**
