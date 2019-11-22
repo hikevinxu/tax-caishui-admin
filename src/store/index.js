@@ -4,7 +4,7 @@ import app from './modules/app'
 import errorLog from './modules/errorLog'
 import permission from './modules/permission'
 import tagsView from './modules/tagsView'
-import landPage from './modules/landPage'
+import searchParams from './modules/searchParams'
 import user from './modules/user'
 import getters from './getters'
 
@@ -17,7 +17,7 @@ const store = new Vuex.Store({
     permission,
     tagsView,
     user,
-    landPage
+    searchParams
   },
   getters
 })

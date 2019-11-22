@@ -108,3 +108,12 @@ export function permissionObtainPermissions(params) {
 export function permissionSaveRolePermissions(params) {
   return fetchPost('/permission/saveRolePermissions', params)
 }
+
+/**
+ * 查询所有有效的用户列表
+ * @function adminUserUserList
+ * @type 'get'
+ */
+export function adminUserUserList(params) {
+  return fetchGet('/adminUser/userList', params)
+}

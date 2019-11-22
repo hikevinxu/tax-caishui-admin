@@ -17,7 +17,9 @@ const getters = {
   permission_routers: state => state.permission.routers,
   addRouters: state => state.permission.addRouters,
   errorLogs: state => state.errorLog.logs,
-  landPageQuery: state => state.landPage.landPageQuery,
-  companyName: state => state.landPage.companyName
+  // 落地页页面搜索参数管理
+  landPageQuery: state => state.searchParams.landPageQuery,
+  // 商户信息配置页面搜索参数管理
+  merchantInfoPageQuery: state => state.searchParams.merchantInfoPageQuery
 }
 export default getters

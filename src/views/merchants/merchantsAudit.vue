@@ -1,7 +1,7 @@
 <template>
-  <div class="app-container">
+  <div class="app-container merchantAuditPage">
     <div class="filter-container">
-      <el-input style="width: 250px;" v-model="listQuery.name" placeholder="请输入公司名字" />
+      <el-input class="filter-item" style="width: 250px;" v-model="listQuery.name" placeholder="请输入公司名字" />
       <el-select v-model="listQuery.type" placeholder="机构类型" style="width: 150px" class="filter-item">
         <el-option v-for="(item,index) in types" :key="item+index" :label="item.name" :value="item.value"/>
       </el-select>
@@ -9,11 +9,6 @@
         <el-option v-for="(item,index) in statusList" :key="item+index" :label="item.name" :value="item.id"/>
       </el-select>
       <el-button v-waves class="filter-item" type="primary" @click="getList">筛选</el-button>
-      <!-- <el-date-picker
-        v-model="listQuery.submitTime"
-        type="datetime"
-        placeholder="选择日期时间">
-      </el-date-picker> -->
     </div>
 
     <el-table
@@ -108,7 +103,7 @@
           <span class="label">登录手机号：</span>
           <span>{{ merchantDetail.loginPhone }}</span>
         </div>
-        <div class="line">
+        <div class="line" v-if="merchantDetail.logo && merchantDetail.logo != ''">
           <span class="label">机构logo：</span>
           <img @click="imageShow($event)" :src="merchantDetail.logo" alt="" srcset="">
         </div>
@@ -136,7 +131,7 @@
           <span class="label">电子邮箱：</span>
           <span>{{ merchantDetail.email }}</span>
         </div>
-        <div class="line">
+        <div class="line" v-if="merchantDetail.publicityImgs && merchantDetail.publicityImgs.length > 0">
           <span class="label">介绍图：</span>
           <div class="imgList">
             <img @click="imageShow($event)" style="margin-right: 10px;" v-for="(item, index) in merchantDetail.publicityImgs" :src="item" alt="" srcset="" :key="index">
@@ -149,17 +144,19 @@
           <span class="label">工商注册号：</span>
           <span>{{ merchantDetail.businessLicenseNo }}</span>
         </div>
-        <div class="line">
-          <span class="label">营业执照：</span>
-          <img @click="imageShow($event)" :src="merchantDetail.businessLicenseImg" alt="" srcset="">
-        </div>
-        <div class="line">
-          <span class="label">法人手持身份证（正面）：</span>
-          <img @click="imageShow($event)" :src="merchantDetail.handheldIdCardImg" alt="" srcset="">
-        </div>
-        <div class="line">
-          <span class="label">其他资质证书：</span>
-          <img @click="imageShow($event)" :src="merchantDetail.otherCertificateImg" alt="" srcset="">
+        <div class="pic">
+          <div class="picItem" v-if="merchantDetail.businessLicenseImg && merchantDetail.businessLicenseImg != ''">
+            <span class="label">营业执照：</span>
+            <img @click="imageShow($event)" :src="merchantDetail.businessLicenseImg" alt="" srcset="">
+          </div>
+          <div class="picItem" v-if="merchantDetail.handheldIdCardImg && merchantDetail.handheldIdCardImg != ''">
+            <span class="label">法人手持身份证（正面）：</span>
+            <img @click="imageShow($event)" :src="merchantDetail.handheldIdCardImg" alt="" srcset="">
+          </div>
+          <div class="picItem" v-if="merchantDetail.otherCertificateImg && merchantDetail.otherCertificateImg != ''">
+            <span class="label">其他资质证书：</span>
+            <img @click="imageShow($event)" :src="merchantDetail.otherCertificateImg" alt="" srcset="">
+          </div>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -452,61 +449,80 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.filter-container .filter-item{
-    margin-bottom: 0px !important;
-    vertical-align: baseline;
-}
-
-.el-dialog__body{
-  padding-top: 0px !important;
-}
-
-.header{
-  position: absolute;
-  left: 100px;
-  top: 0;
-  .pass{
+<style lang="scss" scoped>
+.merchantAuditPage {
+  .header{
+    position: absolute;
+    left: 100px;
+    top: 0;
+    .pass{
+      display: flex;
+      font-size: 14px;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 1px solid #67c23a;
+      transform: rotateZ(-45deg);
+    }
+    .noPass{
+      display: flex;
+      font-size: 14px;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 1px solid red;
+      transform: rotateZ(-45deg);
+    }
+  }
+  .qualification {
+    .pic {
+      overflow: hidden;
+      .picItem {
+        float: left;
+        width: 30%;
+        border: 1px solid #ccc;
+        height: 200px;
+        .label{
+          display: block;
+          height: 40px;
+          line-height: 40px;
+          font-weight: bold;
+          text-align: center;
+          display: block;
+          border-bottom: 1px solid #ccc;
+        }
+        img{
+          display: block;
+          width: 150px;
+          height: 100px;
+          margin: 0 auto;
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+  .line{
     display: flex;
-    font-size: 14px;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 1px solid #67c23a;
-    transform: rotateZ(-45deg);
-    // margin-bottom: -0px;
-  }
-  .noPass{
-    display: flex;
-    font-size: 14px;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 1px solid red;
-    transform: rotateZ(-45deg);
-  }
-}
-.line{
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 10px;
-  .label{
-    font-weight: bold;
-    display: block;
-    // width: 150px;
-  }
-  .imgList{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  img{
-    width: 100px;
-    height: 80px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    .label{
+      font-weight: bold;
+      display: block;
+      // width: 150px;
+    }
+    .imgList{
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    img{
+      width: 100px;
+      height: 80px;
+    }
   }
 }
 </style>

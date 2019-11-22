@@ -140,7 +140,7 @@ export const asyncRouterMap = [
         path: '/giving/giving',
         component: () => import('@/views/giving/giving'),
         name: 'giving',
-        meta: { title: '商户赠送金币', icon: '', noCache: true, roles: ['MER_INFO_MA']}
+        meta: { title: '商户金币管理', icon: '', noCache: true, roles: ['MER_INFO_MA']}
       },
       {
         path: '/mainBusiness/mainBusiness',

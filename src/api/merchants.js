@@ -207,3 +207,22 @@ export function merchantDeductionUpdate(params) {
 export function serviceDistrictTree(params) {
   return fetchGet('/service/districtTree', params)
 }
+
+/**
+ * 绑定负责人
+ * @function merchantBindPerson
+ * @type 'Post'
+ */
+export function merchantBindPerson(params) {
+  return fetchPost('/merchant/bind/person', params)
+}
+
+/**
+ * 解绑负责人
+ * @function merchantUnbindPerson
+ * @type 'Post'
+ */
+export function merchantUnbindPerson(params) {
+  let paramsString = qs.stringify(params)
+  return fetchPost('/merchant/unbind/person', paramsString)
+}
