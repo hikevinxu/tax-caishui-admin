@@ -114,6 +114,6 @@ export function permissionSaveRolePermissions(params) {
  * @function adminUserUserList
  * @type 'get'
  */
-export function adminUserUserList(params) {
-  return fetchGet('/adminUser/userList', params)
+export function merchantUserList(params) {
+  return fetchGet('/merchant/userList', params)
 }

@@ -275,7 +275,7 @@
 
 <script>
 import { merchantList, merchantUp, merchantDetail, merchantDown, merchantApplyTypes, merchantBindPerson, merchantUnbindPerson } from '@/api/merchants'
-import { adminUserUserList } from '@/api/userManager'
+import { merchantUserList } from '@/api/userManager'
 import { operateList } from '@/api/global'
 import waves from '@/directive/waves' // Waves directive
 import permission from '@/directive/permission/index.js' // 权限判断指令
@@ -404,7 +404,7 @@ export default {
     this.getList()
     this.getTypes()
     if (checkPermission(['MERCHANT_FILTER_MA'])) {
-      this.getAdminUserList()
+      this.getMerchantUserList()
     }
   },
   methods: {
@@ -425,8 +425,8 @@ export default {
       this.getList()
     },
     // 获取全部负责人
-    getAdminUserList() {
-      adminUserUserList().then(res => {
+    getMerchantUserList() {
+      merchantUserList().then(res => {
         if(res.code == 0) {
           this.adminUserArr = res.data
         }

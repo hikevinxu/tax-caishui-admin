@@ -146,7 +146,7 @@
 
 <script>
 import { obtainAccountPage, obtainBonusItemPage, presentBonus, bonusItemRecharge, bonusItemObtainBonusPage, bonusItemClearBonus } from '@/api/giving'
-import { adminUserUserList } from '@/api/userManager'
+import { merchantUserList } from '@/api/userManager'
 import waves from '@/directive/waves' // Waves directive
 import permission from '@/directive/permission/index.js' // 权限判断指令
 import checkPermission from '@/utils/permission'
@@ -236,7 +236,7 @@ export default {
   },
   created() {
     if (checkPermission(['MERCHANT_FILTER_MA'])) {
-      this.getAdminUserList()
+      this.getMerchantUserList()
     }
     this.getList()
   },
@@ -447,8 +447,8 @@ export default {
       })
     },
     // 获取全部负责人
-    getAdminUserList() {
-      adminUserUserList().then(res => {
+    getMerchantUserList() {
+      merchantUserList().then(res => {
         if(res.code == 0) {
           this.adminUserArr = res.data
         }
