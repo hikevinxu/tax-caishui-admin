@@ -149,6 +149,7 @@ import { obtainAccountPage, obtainBonusItemPage, presentBonus, bonusItemRecharge
 import { adminUserUserList } from '@/api/userManager'
 import waves from '@/directive/waves' // Waves directive
 import permission from '@/directive/permission/index.js' // 权限判断指令
+import checkPermission from '@/utils/permission'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import Upload from '@/components/Upload/uploadImgTemp'
 import { isInteger } from '@/utils/validate'
@@ -234,7 +235,9 @@ export default {
     }
   },
   created() {
-    this.getAdminUserList()
+    if (checkPermission(['MERCHANT_FILTER_MA'])) {
+      this.getAdminUserList()
+    }
     this.getList()
   },
   methods: {

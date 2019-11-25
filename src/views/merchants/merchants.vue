@@ -279,6 +279,7 @@ import { adminUserUserList } from '@/api/userManager'
 import { operateList } from '@/api/global'
 import waves from '@/directive/waves' // Waves directive
 import permission from '@/directive/permission/index.js' // 权限判断指令
+import checkPermission from '@/utils/permission'
 import imgPreview from '@/components/imgPreView'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
@@ -402,7 +403,9 @@ export default {
     this.listQuery = this.$store.getters.merchantInfoPageQuery
     this.getList()
     this.getTypes()
-    this.getAdminUserList()
+    if (checkPermission(['MERCHANT_FILTER_MA'])) {
+      this.getAdminUserList()
+    }
   },
   methods: {
     // 获取列表
