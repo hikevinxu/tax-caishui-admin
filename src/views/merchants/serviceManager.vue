@@ -41,10 +41,27 @@
               <el-button style="color: #FF7F4A;" v-if="scope.row.status == 2" @click="serviceShelfUp(scope.row)" type="text" size="small">上架</el-button>
               <el-button style="color: #5AB3A4;" v-if="scope.row.status == 1" @click="serviceShelfDown(scope.row)" type="text" size="small">下架</el-button>
               <el-button style="color: #5AB3A4;" v-if="scope.row.status != 1" type="text" size="small" @click="editService(scope.row)">编辑</el-button>
+              <el-button type="text" size="small" @click="lookDetail(scope.row)">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
         <pagination :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
+      </div>
+      <div class="dialog">
+        <el-dialog title="查看" :visible.sync="lookDetailDialog" width="500px">
+          <div class="detail">
+            <div class="detailItem">
+              <label>关联业务</label>
+              <span>{{seviceAreaDetail.relateName}}</span>
+            </div>
+            <div class="detailItem">
+              <label>服务区域</label>
+              <span class="tree">
+                <el-tree :data="seviceAreaDetail.addressTree" :default-expand-all="true" :props="defaultProps"></el-tree>
+              </span>
+            </div>
+          </div>
+        </el-dialog>
       </div>
     </div>
   </div>
@@ -82,7 +99,16 @@ export default {
         shelf: false
       },
       total: 0,
-      list: []
+      list: [],
+      lookDetailDialog: false,
+      seviceAreaDetail: {
+        relateName: '',
+        addressTree: []
+      },
+      defaultProps: {
+        children: 'childs',
+        label: 'name'
+      }
     }
   },
   created() {
@@ -138,6 +164,22 @@ export default {
     },
     editService(row) {
       this.$router.push('/merchants/serviceEdit?id=' + row.id + '&companyId=' + this.$route.query.id)
+    },
+    // 打开查看弹框
+    lookDetail(row) {
+      this.seviceAreaDetail = {
+        relateName: '',
+        addressTree: []
+      }
+      this.lookDetailDialog = true
+      let params = {
+        id: row.id
+      }
+      serviceManager.merchantServiceView(params).then(res => {
+        if(res.code == 0){
+          this.seviceAreaDetail = res.data
+        }
+      })
     }
   }
 }
@@ -180,6 +222,36 @@ export default {
       }
       .addService:hover {
         background: #5AB3B4;
+      }
+    }
+  }
+  .dialog {
+    .detail{
+      .detailItem {
+        width: 100%;
+        margin: 10px 0;
+        overflow: hidden;
+        label {
+          margin-right: 20px;
+          float: left;
+          line-height: 26px;
+        }
+        span {
+          display: block;
+          line-height: 26px;
+          float: left;
+          width: 350px;
+          max-height: 500px;
+        }
+        span.tree {
+          overflow: scroll;
+          overflow-x: hidden;
+          // &::-webkit-scrollbar {
+          //   width: 0;
+          //   height: 0;
+          //   background-color: transparent;
+          // }
+        }
       }
     }
   }

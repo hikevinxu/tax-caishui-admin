@@ -77,4 +77,12 @@ export default {
   serviceTemplate (params) {
     return fetchGet('/merchant/service/template', params)
   },
+  /**
+   * 查看
+   * @function merchantServiceView
+   * @type 'Post'
+   */
+  merchantServiceView (params) {
+    return fetchGet('/merchant/service/view', params)
+  },
 }
