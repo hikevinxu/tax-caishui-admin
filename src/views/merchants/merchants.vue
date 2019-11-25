@@ -29,7 +29,7 @@
       <el-button v-waves class="filter-item" type="primary" @click="getDetailList">筛选</el-button>
     </div>
     <div class="table">
-      <div class="table-top">
+      <div class="table-top" v-permission="['BIND_MERCHANT_PRINCIPAL']">
         <div v-if="bulkBinding == false">
           <el-button v-waves type="primary" @click="bulkBinding = true">批量绑定负责人</el-button>
         </div>
