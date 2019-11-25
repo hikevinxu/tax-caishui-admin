@@ -9,6 +9,12 @@
       <el-select class="filter-item" v-model="listQuery.givingRange" clearable @change="givingRangeChange" placeholder="请选择账户赠币范围">
         <el-option v-for="item in range" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
+      <el-select v-permission="['MERCHANT_FILTER_MA']" class="filter-item" style="width: 300px;" v-model="listQuery.personId" filterable clearable @change="getSearchList" placeholder="请选择负责人">
+        <el-option v-for="item in adminUserArr" :key="item.id" :label="item.name" :value="item.id">
+          <span style="float: left">{{ item.name }}</span>
+          <span style="float: right; color: #8492a6; font-size: 13px">{{ item.email }}</span>
+        </el-option>
+      </el-select>
       <el-button v-waves class="filter-item" type="primary" @click="getList">筛选</el-button>
     </div>
 
@@ -54,12 +60,19 @@
             <span>{{ scope.row.bonusBalance }}</span>
           </template>
         </el-table-column>
+
+        <el-table-column label="负责人" align="center">
+          <template slot-scope="scope">
+          <span>{{ scope.row.personName ? scope.row.personName : '-' }}</span>
+          </template>
+        </el-table-column>
       
-      <el-table-column :label="$t('table.actions')" align="center" width="350">
+      <el-table-column :label="$t('table.actions')" align="center" width="400">
         <template slot-scope="scope">
+          <el-button v-permission="['RECHARGE_OPE']" type="danger" size="mini" @click="clearBonus(scope.row)">退款清零</el-button>
           <el-button v-permission="['RECHARGE_OPE']" type="primary" size="mini" @click="handleRecharge(scope.row)">充值金币</el-button>
           <el-button v-permission="['BONUS_OPE']" type="warning" size="mini" @click="handleGiving(scope.row)">赠送赠币</el-button>
-          <el-button type="danger" size="mini" @click="handleOperation(scope.row)">操作记录</el-button>
+          <el-button type="info" size="mini" @click="handleOperation(scope.row)">操作记录</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -132,7 +145,8 @@
 </template>
 
 <script>
-import { obtainAccountPage, obtainBonusItemPage, presentBonus, bonusItemRecharge, bonusItemObtainBonusPage } from '@/api/giving'
+import { obtainAccountPage, obtainBonusItemPage, presentBonus, bonusItemRecharge, bonusItemObtainBonusPage, bonusItemClearBonus } from '@/api/giving'
+import { adminUserUserList } from '@/api/userManager'
 import waves from '@/directive/waves' // Waves directive
 import permission from '@/directive/permission/index.js' // 权限判断指令
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -170,7 +184,8 @@ export default {
         startAmount: '',
         endAmount: '',
         startBonusAmount: '',
-        endBonusAmount: ''
+        endBonusAmount: '',
+        personId: ''
       },
       listOperaQuery: {
         accountId: '',
@@ -214,10 +229,12 @@ export default {
           {validator: isInteger, trigger: 'change'},
           {validator: isInteger, trigger: 'blur'}
         ]
-      }
+      },
+      adminUserArr: []
     }
   },
   created() {
+    this.getAdminUserList()
     this.getList()
   },
   methods: {
@@ -401,6 +418,38 @@ export default {
         accountId: '',
         amount: null
       }
+    },
+    // 退款清零
+    clearBonus(row) {
+      const id = row.id
+      this.$alert('<p>该操作会使<span style="color: red">' + row.name + '</span>的所有金币清零</p>', '退款清零', {
+        dangerouslyUseHTMLString: true
+      }).then(() => {
+        let params = {
+          accountId: row.id
+        }
+        bonusItemClearBonus(params).then(res => {
+          if(res.code == 0){
+            this.$notify({
+              title: '成功',
+              message: '清零成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.getList()
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    // 获取全部负责人
+    getAdminUserList() {
+      adminUserUserList().then(res => {
+        if(res.code == 0) {
+          this.adminUserArr = res.data
+        }
+      })
     },
     // 打开操作记录弹框
     handleOperation(row){

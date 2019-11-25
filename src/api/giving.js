@@ -1,4 +1,5 @@
 import { fetchGet, fetchPost } from './request'
+import qs from 'qs'
 
 /**
  * 账户详情列表
@@ -43,4 +44,14 @@ export function bonusItemRecharge(params) {
  */
 export function bonusItemObtainBonusPage(params) {
   return fetchPost('/bonusItem/obtainBonusPage', params)
+}
+
+/**
+ * 退款清零
+ * @function bonusItemClearBonus
+ * @type 'Post'
+ */
+export function bonusItemClearBonus(params) {
+  let paramsString = qs.stringify(params)
+  return fetchPost('/bonusItem/clear/bonus', paramsString)
 }
