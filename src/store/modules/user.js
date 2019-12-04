@@ -111,7 +111,6 @@ const user = {
               data: userMap.admin
             }
             const data = response.data
-            console.log(data)
             commit('SET_ROLES', data.roles)
             commit('SET_NAME', data.name)
             commit('SET_AVATAR', data.avatar)

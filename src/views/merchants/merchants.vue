@@ -149,70 +149,77 @@
 
     </div>
     <!-- 审核弹框 -->
-    <el-dialog :visible.sync="dialogAuditVisible" title="基本信息">
+    <el-dialog class="auditDialog" :visible.sync="dialogAuditVisible" title="商户信息">
       <div class="basicInformation">
+        <el-divider content-position="left">基本信息</el-divider>
         <div class="line">
-          <span class="label">机构名称：</span>
+          <div class="label"><span>机构名称：</span></div>
           <span>{{ merchantDetail.companyInfo.name }}</span>
         </div>
         <div class="line">
-          <span class="label">机构类型：</span>
+          <div class="label"><span>机构类型：</span></div>
           <span>{{ merchantDetail.companyInfo.type | typesFiters }}</span>
         </div>
         <div class="line">
-          <span class="label">登录手机号：</span>
+          <div class="label"><span>登录手机号：</span></div>
           <span>{{ merchantDetail.loginPhone }}</span>
         </div>
-        <div class="line" v-if="merchantDetail.companyInfo.logo">
-          <span class="label">机构logo：</span>
-          <img @click="imageShow($event)" :src="merchantDetail.companyInfo.logo" alt="" srcset="">
+        <div class="line logo" v-if="merchantDetail.companyInfo.logo">
+          <div class="label"><span>机构logo：</span></div>
+          <span>
+            <img @click="imageShow($event)" :src="merchantDetail.companyInfo.logo" alt="" srcset="">
+          </span>
         </div>
         <div class="line">
-          <span class="label">详细地址：</span>
+          <div class="label"><span>详细地址：</span></div>
           <span>{{ merchantDetail.companyInfo.address }}</span>
         </div>
         <div class="line">
-          <span class="label">地址定位：</span>
+          <div class="label"><span>地址定位：</span></div>
           <span>{{ merchantDetail.companyInfo.location }}</span>
         </div>
         <div class="line">
-          <span class="label">服务时间：</span>
+          <div class="label"><span>服务时间：</span></div>
           <span>{{ merchantDetail.companyInfo.workTime }}</span>
         </div>
-        <div class="line">
-          <span class="label">服务电话：</span>
-          <span v-for="(item, index) in merchantDetail.companyInfo.phones" :key="index">{{item}}</span>
+        <div class="line phone">
+          <div class="label"><span>服务电话：</span></div>
+          <span>
+            <el-tag style="margin: 0 5px" v-for="(item, index) in merchantDetail.companyInfo.phones" :key="index">{{item}}</el-tag>
+          </span>
         </div>
-        <div class="line">
-          <span class="label">品牌标签：</span>
-          <span v-for="(item, index) in merchantDetail.companyInfo.brandTags" :key="index">{{item}}</span>
+        <div class="line phone">
+          <div class="label"><span>品牌标签：</span></div>
+          <span>
+            <el-tag style="margin: 0 5px" v-for="(item, index) in merchantDetail.companyInfo.brandTags" :key="index">{{item}}</el-tag>
+          </span>
         </div>
-        <div class="line" v-if="merchantDetail.companyInfo.publicityImgs.length > 0">
-          <span class="label">介绍图：</span>
-          <div class="imgList">
-            <img @click="imageShow($event)" style="margin-right: 10px;" v-for="(item, index) in merchantDetail.companyInfo.publicityImgs" :src="item.img" alt="" srcset="" :key="index">
-          </div>
+        <div class="line publicityImgs" v-if="merchantDetail.companyInfo.publicityImgs.length > 0">
+          <div class="label"><span>介绍图：</span></div>
+          <span class="imgList">
+            <span>
+              <img @click="imageShow($event)" style="margin-right: 10px;" v-for="(item, index) in merchantDetail.companyInfo.publicityImgs" :src="item.img" alt="" srcset="" :key="index">
+            </span>
+          </span>
         </div>
       </div>
       <div class="qualification">
-        <h2 class="title">资质信息</h2>
+        <el-divider content-position="left">资质信息</el-divider>
         <div class="line">
-          <span class="label">工商注册号：</span>
+          <div class="label"><span>工商注册号：</span></div>
           <span>{{ merchantDetail.businessLicenseNo }}</span>
         </div>
-        <div class="pic">
-          <div class="picItem" v-if="merchantDetail.businessLicenseImg && merchantDetail.businessLicenseImg != ''">
-            <span class="label">营业执照</span>
-            <img @click="imageShow($event)" :src="merchantDetail.businessLicenseImg" alt="" srcset="">
-          </div>
-          <div class="picItem" v-if="merchantDetail.handheldIdCardImg && merchantDetail.handheldIdCardImg != ''">
-            <span class="label">法人手持身份证（正面）</span>
-            <img @click="imageShow($event)" :src="merchantDetail.handheldIdCardImg" alt="" srcset="">
-          </div>
-          <div class="picItem" v-if="merchantDetail.otherCertificateImg && merchantDetail.otherCertificateImg != ''">
-            <span class="label">其他资质证书</span>
-            <img @click="imageShow($event)" :src="merchantDetail.otherCertificateImg" alt="" srcset="">
-          </div>
+        <div class="line logo" v-if="merchantDetail.businessLicenseImg && merchantDetail.businessLicenseImg != ''">
+          <div class="label"><span>营业执照：</span></div>
+          <span><img @click="imageShow($event)" :src="merchantDetail.businessLicenseImg" alt="" srcset=""></span>
+        </div>
+        <div class="line logo" v-if="merchantDetail.handheldIdCardImg && merchantDetail.handheldIdCardImg != ''">
+          <div class="label"><span>法人手持身份证（正面）：</span></div>
+          <span><img @click="imageShow($event)" :src="merchantDetail.handheldIdCardImg" alt="" srcset=""></span>
+        </div>
+        <div class="line logo" v-if="merchantDetail.otherCertificateImg && merchantDetail.otherCertificateImg != ''">
+          <div class="label"><span>其他资质证书：</span></div>
+          <span><img @click="imageShow($event)" :src="merchantDetail.otherCertificateImg" alt="" srcset=""></span>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -739,49 +746,67 @@ export default {
       margin: 0;
     }
   }
-  .qualification {
-    .pic {
-      overflow: hidden;
-      .picItem {
-        float: left;
-        width: 30%;
-        border: 1px solid #ccc;
-        height: 200px;
-        .label{
-          display: block;
-          height: 40px;
-          line-height: 40px;
-          font-weight: bold;
-          text-align: center;
-          display: block;
-          border-bottom: 1px solid #ccc;
-        }
-        img{
-          display: block;
-          width: 150px;
-          height: 100px;
-          margin: 0 auto;
-          margin-top: 20px;
-        }
+  .line {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ccc;
+    border-bottom: 0;
+    >.label{
+      width: 150px;
+      padding: 10px;
+      font-weight: bold;
+      border-right: 1px solid #ccc;
+      background: #f5f5f5;
+      position: relative;
+      span {
+        display: block;
+        text-align: center;
+        width: 100%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
       }
     }
-  }
-  .line{
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 10px;
-    .label{
-      font-weight: bold;
-      display: block;
+    >span {
+      flex: 1;
+      min-height: 40px;
+      padding: 10px;
+      text-align: center;
+      img {
+        height: 80px;
+      }
     }
     .imgList{
       display: flex;
       flex-wrap: wrap;
       align-items: center;
     }
-    img{
-      width: 100px;
-      height: 80px;
+    &:last-child{
+      border-bottom: 1px solid #ccc;
+    }
+  }
+  .publicityImgs.line {
+    .imgList {
+      width: 100%;
+      >span {
+        position: relative;
+        left: 50%;
+        top: 0;
+        transform: translate(-50%, 0);
+        img {
+          height: 80px;
+        }
+      }
+    }
+  }
+}
+</style>
+<style lang="scss">
+.merchants_page {
+  .auditDialog {
+    .el-dialog__body {
+      padding-top: 0px;
     }
   }
 }

@@ -64,3 +64,51 @@ export function isInteger (rule, value, callback) {
     }
   }, 100)
 }
+
+/* 询价单定价 */
+export function isPrice (rule, value, callback) {
+  if(!value) {
+    return callback(new Error('请输入0<x<=3000内的正整数'))
+  }
+  setTimeout(() => {
+    if(!Number(value)) {
+      callback(new Error('请输入0<x<=3000内的正整数'))
+    } else {
+      const re = /^[0-9]*[1-9][0-9]*$/
+      const reCheck = re.test(value)
+      if(!reCheck) {
+        callback(new Error('请输入0<x<=3000内的正整数'))
+      }else {
+        if (Number(value) > 3000) {
+          callback(new Error('请输入0<x<=3000内的正整数'))
+        } else {
+          callback()
+        }
+      }
+    }
+  }, 100)
+}
+
+/* 城市费率 */
+export function isCityRate (rule, value, callback) {
+  if(!value) {
+    return callback(new Error('请输入0<x<=1000内的正整数'))
+  }
+  setTimeout(() => {
+    if(!Number(value)) {
+      callback(new Error('请输入0<x<=1000内的正整数'))
+    } else {
+      const re = /^[0-9]*[1-9][0-9]*$/
+      const reCheck = re.test(value)
+      if(!reCheck) {
+        callback(new Error('请输入0<x<=1000内的正整数'))
+      }else {
+        if (Number(value) > 1000) {
+          callback(new Error('请输入0<x<=1000内的正整数'))
+        } else {
+          callback()
+        }
+      }
+    }
+  }, 100)
+}

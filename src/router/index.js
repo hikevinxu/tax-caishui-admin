@@ -173,6 +173,37 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/inquiryPricingMa',
+    component: Layout,
+    redirect: '/inquiryPricingMa/service',
+    name: 'inquiryPricingMa',
+    meta: {
+      title: '询价单定价管理',
+      icon: 'table',
+      roles: ['MER_AUDIT', 'MER_INFO_SET']
+    },
+    children: [
+      {
+        path: 'service',
+        component: () => import('@/views/inquiryPricingMa/servicePricingMa.vue'),
+        name: 'servicePricingMa',
+        meta: { title: '类目定价管理', icon: '', noCache: true, roles: ['MER_AUDIT']  }
+      },
+      {
+        path: 'particular',
+        component: () => import('@/views/inquiryPricingMa/particularItem.vue'),
+        name: 'particularItem',
+        meta: { title: '特定项定价管理', icon: '', noCache: true, roles: ['MER_AUDIT']  }
+      },
+      {
+        path: 'cityPricing',
+        component: () => import('@/views/inquiryPricingMa/cityPricingMa.vue'),
+        name: 'cityPricingMa',
+        meta: { title: '城市定价管理', icon: '', noCache: true, roles: ['MER_INFO_SET']  }
+      }
+    ]
+  },
+  {
     path: '/merchantsService',
     component: Layout,
     redirect: '/merchantsService/serviceList',
