@@ -73,17 +73,21 @@
             <el-cascader v-if="action == 'created'" style="width: 250px" v-model="servicePricingForm.intentionCodeList" @change="intentionCodeDialogChange" :options="intentionCodeList" clearable :props="propsDialog" :show-all-levels="false"  placeholder="请选择业务需求"></el-cascader>
             <span v-else><el-tag>{{ servicePricingForm.parentName + '-' + servicePricingForm.serviceName }}</el-tag></span>
           </el-form-item>
-          <el-form-item label="选择项" prop="extendCode">
-            <el-select v-if="action == 'created'" v-model="servicePricingForm.extendCode" clearable @change="extendCodeChange" placeholder="请选择选择项" style="width: 250px" class="filter-item">
+          <el-form-item v-if="action == 'created'" label="选择项" prop="extendCode">
+            <el-select v-model="servicePricingForm.extendCode" clearable @change="extendCodeChange" placeholder="请选择选择项" style="width: 250px" class="filter-item">
               <el-option v-for="(item,index) in extendList" :key="'extendList'+index" :label="item.name" :value="item.code"/>
             </el-select>
-            <span v-else><el-tag>{{ servicePricingForm.extendName }}</el-tag></span>
           </el-form-item>
-          <el-form-item label="选择值" prop="extendValueCodes">
-            <el-select v-if="action == 'created'" v-model="servicePricingForm.extendValueCodes" clearable multiple placeholder="请选择特殊定价的值" style="width: 250px" class="filter-item">
+          <el-form-item v-else label="选择项">
+            <span><el-tag>{{ servicePricingForm.extendName }}</el-tag></span>
+          </el-form-item>
+          <el-form-item v-if="action == 'created'" label="选择值" prop="extendValueCodes">
+            <el-select v-model="servicePricingForm.extendValueCodes" clearable multiple placeholder="请选择特殊定价的值" style="width: 250px" class="filter-item">
               <el-option v-for="(item,index) in extendValueList" :key="'extendValueList'+index" :label="item.name" :value="item.code"/>
             </el-select>
-            <span v-else><el-tag>{{ servicePricingForm.extendValueName }}</el-tag></span>
+          </el-form-item>
+          <el-form-item v-else label="选择值">
+            <span><el-tag>{{ servicePricingForm.extendValueName }}</el-tag></span>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

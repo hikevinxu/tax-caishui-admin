@@ -55,17 +55,21 @@
               <template slot="append"> % </template>
             </el-input>
           </el-form-item>
-          <el-form-item label="省" prop="provinceCode">
-            <el-select v-if="action == 'created'" v-model="cityPricingForm.provinceCode" clearable @change="provinceCodeChange" placeholder="请选择省份" style="width: 200px" class="filter-item">
+          <el-form-item v-if="action == 'created'" label="省" prop="provinceCode">
+            <el-select v-model="cityPricingForm.provinceCode" clearable @change="provinceCodeChange" placeholder="请选择省份" style="width: 200px" class="filter-item">
               <el-option v-for="(item,index) in provinceList" :key="'province'+index" :label="item.name" :value="item.code"/>
             </el-select>
-            <span v-else><el-tag>{{ cityPricingForm.provinceName }}</el-tag></span>
           </el-form-item>
-          <el-form-item label="市" prop="cityCodes">
-            <el-select v-if="action == 'created'" v-model="cityPricingForm.cityCodes" clearable multiple placeholder="请选择城市" style="width: 200px" class="filter-item">
+          <el-form-item v-else label="省">
+            <span><el-tag>{{ cityPricingForm.provinceName }}</el-tag></span>
+          </el-form-item>
+          <el-form-item v-if="action == 'created'" label="市" prop="cityCodes">
+            <el-select v-model="cityPricingForm.cityCodes" clearable multiple placeholder="请选择城市" style="width: 200px" class="filter-item">
               <el-option v-for="(item,index) in cityList" :key="'city'+index" :label="item.name" :value="item.code"/>
             </el-select>
-            <span v-else><el-tag>{{ cityPricingForm.cityName }}</el-tag></span>
+          </el-form-item>
+          <el-form-item v-else label="市">
+            <span><el-tag>{{ cityPricingForm.cityName }}</el-tag></span>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

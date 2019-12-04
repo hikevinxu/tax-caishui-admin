@@ -63,11 +63,13 @@
             </el-select>
             <span v-else><el-tag>{{ servicePricingForm.parentName }}</el-tag></span>
           </el-form-item>
-          <el-form-item label="选择二级类目" prop="serviceCodes">
-            <el-select v-if="action == 'created'" v-model="servicePricingForm.serviceCodes" multiple clearable placeholder="请选择二级类目" style="width: 250px" class="filter-item">
+          <el-form-item v-if="action == 'created'" label="选择二级类目" prop="serviceCodes">
+            <el-select v-model="servicePricingForm.serviceCodes" multiple clearable placeholder="请选择二级类目" style="width: 250px" class="filter-item">
               <el-option v-for="(item,index) in secondServiceList" :key="'secondServiceCode'+index" :label="item.name" :value="item.code"/>
             </el-select>
-            <span v-else><el-tag>{{ servicePricingForm.serviceName }}</el-tag></span>
+          </el-form-item>
+          <el-form-item v-else label="选择二级类目">
+            <span><el-tag>{{ servicePricingForm.serviceName }}</el-tag></span>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
