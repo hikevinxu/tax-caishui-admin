@@ -213,9 +213,9 @@ export default {
       // 范围筛选
       range: [
         {value: 1, label: '0'},
-        {value: 2, label: '0-3000'},
-        {value: 3, label: '3000-8000'},
-        {value: 4, label: '8000以上'}
+        {value: 2, label: '1-3001'},
+        {value: 3, label: '3001-8000'},
+        {value: 4, label: '8001以上'}
       ],
       // 充值金币
       dialogRecharge: false,
@@ -248,13 +248,13 @@ export default {
         this.listQuery.startAmount = 0
         this.listQuery.endAmount = 0
       }else if(val == 2) {
-        this.listQuery.startAmount = 0
+        this.listQuery.startAmount = 1
         this.listQuery.endAmount = 3000
       }else if(val == 3) {
-        this.listQuery.startAmount = 3000
+        this.listQuery.startAmount = 3001
         this.listQuery.endAmount = 8000
       }else if(val == 4) {
-        this.listQuery.startAmount = 8000
+        this.listQuery.startAmount = 8001
         this.listQuery.endAmount = ''
       }else {
         this.listQuery.startAmount = ''
