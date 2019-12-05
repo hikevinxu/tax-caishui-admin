@@ -268,13 +268,13 @@ export default {
         this.listQuery.startBonusAmount = 0
         this.listQuery.endBonusAmount = 0
       }else if(val == 2) {
-        this.listQuery.startBonusAmount = 0
+        this.listQuery.startBonusAmount = 1
         this.listQuery.endBonusAmount = 3000
       }else if(val == 3) {
-        this.listQuery.startBonusAmount = 3000
+        this.listQuery.startBonusAmount = 3001
         this.listQuery.endBonusAmount = 8000
       }else if(val == 4) {
-        this.listQuery.startBonusAmount = 8000
+        this.listQuery.startBonusAmount = 8001
         this.listQuery.endBonusAmount = ''
       } else {
         this.listQuery.startBonusAmount = ''
