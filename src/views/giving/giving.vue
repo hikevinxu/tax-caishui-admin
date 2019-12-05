@@ -213,7 +213,7 @@ export default {
       // 范围筛选
       range: [
         {value: 1, label: '0'},
-        {value: 2, label: '1-3001'},
+        {value: 2, label: '1-3000'},
         {value: 3, label: '3001-8000'},
         {value: 4, label: '8001以上'}
       ],
