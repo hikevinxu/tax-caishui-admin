@@ -143,7 +143,7 @@
       <div class="qualification">
         <el-divider content-position="left">资质信息</el-divider>
         <div class="line">
-          <div class="label"><span>工商注册号：</span></div>
+          <div class="label"><span>统一社会信用代码：</span></div>
           <span>{{ merchantDetail.businessLicenseNo }}</span>
         </div>
         <div class="line logo" v-if="merchantDetail.businessLicenseImg && merchantDetail.businessLicenseImg != ''">
