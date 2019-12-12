@@ -82,6 +82,12 @@
           </template>
         </el-table-column>
 
+        <el-table-column label="登录手机号" align="center" width="150px">
+          <template slot-scope="scope">
+          <span>{{ scope.row.loginPhone }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column label="联系电话" align="center" width="150px">
           <template slot-scope="scope">
           <span>{{ scope.row.contactPhone }}</span>
