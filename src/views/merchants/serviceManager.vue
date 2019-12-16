@@ -14,7 +14,7 @@
           style="width: 100%">
           <el-table-column type="index" label="序号" align="center" width="80">
           </el-table-column>
-          <el-table-column label="关联类目" align="center">
+          <el-table-column label="服务类目" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.serviceName }}</span>
             </template>

@@ -219,7 +219,7 @@ export default {
           this.serviceCode = res.data.serviceCode
           let parentCodes = res.data.parentCodes
           let serviceDistrictList = res.data.serviceDistrictList
-          serviceManager.serviceItemTrees({companyId: this.$route.query.companyId}).then(res => {
+          serviceManager.serviceTypeTrees({companyId: this.$route.query.companyId}).then(res => {
             if(res.code == 0){
               this.firstServiceCodeList = res.data
               if (parentCodes.length == 1) {
@@ -295,10 +295,15 @@ export default {
       })
     },
     getServiceType(){
-      let params = {
-        companyId: this.$route.query.companyId
-      }
-      serviceManager.serviceItemTrees(params).then(res => {
+      // let params = {
+      //   companyId: this.$route.query.companyId
+      // }
+      // serviceManager.serviceItemTrees(params).then(res => {
+      //   if(res.code == 0){
+      //     this.firstServiceCodeList = res.data
+      //   }
+      // })
+      serviceManager.serviceTypeTrees().then(res => {
         if(res.code == 0){
           this.firstServiceCodeList = res.data
         }
@@ -326,6 +331,11 @@ export default {
       this.serviceCode = ''
       this.thirdServiceCode = ''
       this.thirdServiceCodeList = []
+      this.handleProcessDuration = ''
+      this.handleMaterial = ''
+      this.deliveryMaterial = ''
+      this.deliveryDuration = ''
+      this.title = ''
       if (this.secondServiceCode && this.secondServiceCode != '') {
         this.serviceCode = this.secondServiceCode
         if(!this.$route.query.id) {

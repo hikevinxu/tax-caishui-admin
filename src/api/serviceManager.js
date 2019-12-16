@@ -85,4 +85,12 @@ export default {
   merchantServiceView (params) {
     return fetchGet('/merchant/service/view', params)
   },
+  /**
+   * 服务类型数据
+   * @function serviceTypeTrees
+   * @type 'GET'
+   */
+  serviceTypeTrees (data) {
+    return fetchGet('/serviceType/trees', data)
+  }
 }
